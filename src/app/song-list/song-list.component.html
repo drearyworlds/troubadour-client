@@ -3,11 +3,16 @@
     <div class="header-row">
         <div class="header-cell">Artist</div>
         <div class="header-cell">Title</div>
+        <div class="header-cell">Album</div>
+        <div class="header-cell">Year</div>
+        <div class="header-cell">Active</div>
     </div>
-    <div class="row" *ngFor="let song of songs" (click)="onSelect(song)">
+    <div class="row" *ngFor="let song of songs"
+        routerLink="/song-detail/{{song.id}}">
         <div class="cell">{{song.artist}}</div>
         <div class="cell">{{song.title}}</div>
+        <div class="cell">{{song.album}}</div>
+        <div class="cell">{{song.year}}</div>
+        <div class="cell">{{song.active}}</div>
     </div>
 </div>
-
-<app-song-detail [song]="selectedSong"></app-song-detail>

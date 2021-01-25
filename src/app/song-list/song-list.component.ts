@@ -12,30 +12,17 @@ import { MessageService } from '../message.service';
 export class SongListComponent implements OnInit {
   songs? : Song[]
 
-  selectedSong?: Song
-
   constructor(
     private songService: SongService,
     private messageService: MessageService) {
   }
 
   ngOnInit(): void {
-    this.getSongs();
+    this.getSongList();
   }
 
-  getSongs(): void {
-    this.songService.getSongs()
+  getSongList(): void {
+    this.songService.getSongList()
       .subscribe(songs => this.songs = songs);
-
-    if (this.songs) {
-      this.selectedSong = this.songs.find((song) => {
-        return song.id == 0;
-      });  
-    }
-  }
-
-  onSelect(song: Song): void {
-    this.selectedSong = song;
-    this.messageService.add(`SongListComponent: Selected song id=${song.id}`);
   }
 }
