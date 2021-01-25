@@ -22,10 +22,14 @@ export class SongListComponent implements OnInit {
   }
 
   getSongs(): void {
-    this.songs = this.songService.getSongs();
-    this.selectedSong = this.songs.find((song)=> {
-      return song.id == 0;
-    });  
+    this.songService.getSongs()
+      .subscribe(songs => this.songs = songs);
+
+    if (this.songs) {
+      this.selectedSong = this.songs.find((song) => {
+        return song.id == 0;
+      });  
+    }
   }
 
   onSelect(song: Song): void {

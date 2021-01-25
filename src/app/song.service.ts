@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Song } from './song';
 import { SONGS } from './mock-songs';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { SONGS } from './mock-songs';
 export class SongService {
   constructor() { }
 
-  getSongs(): Song[] {
-    return SONGS;
+  getSongs(): Observable<Song[]> {
+    return of(SONGS);
   }
 }
