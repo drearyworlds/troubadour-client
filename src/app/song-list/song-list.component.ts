@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Song } from '../song'
 import { SONGS } from '../mock-songs';
+import { SongService } from '../song.service';
 
 @Component({
   selector: 'app-song-list',
@@ -9,17 +10,23 @@ import { SONGS } from '../mock-songs';
 })
 
 export class SongListComponent implements OnInit {
-  songs = SONGS;
+  songs? : Song[]
 
-  constructor() { }
+  selectedSong?: Song
 
-  ngOnInit(): void {
-    // read JSON file and load songs
+  constructor(private songService: SongService) {
   }
 
-  selectedSong?: Song = this.songs.find((song)=> {
-    return song.id == 0;
-  });
+  ngOnInit(): void {
+    this.getSongs();
+  }
+
+  getSongs(): void {
+    this.songs = this.songService.getSongs();
+    this.selectedSong = this.songs.find((song)=> {
+      return song.id == 0;
+    });  
+  }
 
   onSelect(song: Song): void {
     this.selectedSong = song;
