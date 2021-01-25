@@ -3,12 +3,12 @@ import { Song } from '../song'
 import { SONGS } from '../mock-songs';
 
 @Component({
-  selector: 'app-current-song',
-  templateUrl: './current-song.component.html',
-  styleUrls: ['./current-song.component.css']
+  selector: 'app-song-list',
+  templateUrl: './song-list.component.html',
+  styleUrls: ['./song-list.component.css']
 })
 
-export class CurrentSongComponent implements OnInit {
+export class SongListComponent implements OnInit {
   songs = SONGS;
 
   constructor() { }
