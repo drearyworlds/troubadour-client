@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Song } from '../song'
-import { SONGS } from '../mock-songs';
 import { SongService } from '../song.service';
+import { MessageService } from '../message.service';
 
 @Component({
   selector: 'app-song-list',
@@ -14,7 +14,9 @@ export class SongListComponent implements OnInit {
 
   selectedSong?: Song
 
-  constructor(private songService: SongService) {
+  constructor(
+    private songService: SongService,
+    private messageService: MessageService) {
   }
 
   ngOnInit(): void {
@@ -34,5 +36,6 @@ export class SongListComponent implements OnInit {
 
   onSelect(song: Song): void {
     this.selectedSong = song;
+    this.messageService.add(`SongListComponent: Selected song id=${song.id}`);
   }
 }
