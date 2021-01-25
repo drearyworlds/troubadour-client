@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Song } from './song';
+import { Song } from '../json-schema/song';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from './message.service';

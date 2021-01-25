@@ -7,6 +7,7 @@
     <div class="header-cell">Year</div>
     <div class="header-cell">Capo</div>
     <div class="header-cell">Tuning</div>
+    <div class="header-cell">Pick</div>
   </div>
   <ng-container *ngFor="let song of songs">
     <div
@@ -20,6 +21,7 @@
       <div class="cell">{{ song.year }}</div>
       <div class="cell">{{ song.capo }}</div>
       <div class="cell">{{ song.tuning }}</div>
+      <div class="cell">{{ song.pick }}</div>
     </div>
   </ng-container>
 </div>

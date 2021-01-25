@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { Song } from '../song';
+import { Song } from '../../json-schema/song';
 import { SongService } from '../song.service';
 import { getSafePropertyAccessString } from '@angular/compiler';
 

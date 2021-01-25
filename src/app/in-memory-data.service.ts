@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { InMemoryDbService } from 'angular-in-memory-web-api';
-import { Song } from './song';
-import SongAndBeerList from '../../songAndBeerList.json';
+import { Song } from '../json-schema/song';
+import SongList from '../../data/songList.json';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InMemoryDataService implements InMemoryDbService {
   createDb() {
-    const songs : Song[] = SongAndBeerList.songs
+    const songs : Song[] = SongList.songs
     
     // Assign indices
     songs.forEach(function(song, index){
