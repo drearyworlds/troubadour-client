@@ -20,7 +20,7 @@
 
 .cell,
 .header-cell {
-  --number-of-columns: 5;
+  --number-of-columns: 7;
   --top-bottom-padding: 3px;
   --left-right-padding: 1.8%;
   --border-width: 1px;

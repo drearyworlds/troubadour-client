@@ -1,38 +1,33 @@
 import { Injectable } from '@angular/core';
 import { InMemoryDbService } from 'angular-in-memory-web-api';
 import { Song } from './song';
+import SongAndBeerList from '../../songAndBeerList.json';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InMemoryDataService implements InMemoryDbService {
   createDb() {
-    const songs = [
-      {
-        id: 1,
-        title: 'Doing the Unstuck',
-        artist: 'The Cure',
-        album: 'Wish',
-        year: 1992,
-        active: true
-    },{
-        id: 2,
-        title: 'Friday, I\'m in Love',
-        artist: 'The Cure',
-        album: 'Wish',
-        year: 1992,
-        active: true
-    }
-    ];
-    return {songs};
-  }
+    const songs : Song[] = SongAndBeerList.songs
+    
+    // Assign indices
+    songs.forEach(function(song, index){
+      if (song.active) {
+        // Assign the index as the ID
+        song.id = index + 1;
+      }
+    });
 
-  // Overrides the genId method to ensure that a song always has an id.
-  // If the songs array is empty,
-  // the method below returns the initial number (11).
-  // if the songs array is not empty, the method below returns the highest
-  // song id + 1.
-  genId(songs: Song[]): number {
-    return songs.length > 0 ? Math.max(...songs.map(song => song.id)) + 1 : 11;
+    songs.sort((s1, s2) => {
+      if (s1.artist < s2.artist) {
+        return -1;
+      } else if (s1.artist > s2.artist) {
+        return 1;
+      } else {
+        return 0;
+      }
+    })
+
+    return {songs};
   }
 }

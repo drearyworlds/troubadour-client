@@ -1,18 +1,25 @@
 <h2>Song List</h2>
 <div class="table">
-    <div class="header-row">
-        <div class="header-cell">Artist</div>
-        <div class="header-cell">Title</div>
-        <div class="header-cell">Album</div>
-        <div class="header-cell">Year</div>
-        <div class="header-cell">Active</div>
+  <div class="header-row">
+    <div class="header-cell">Artist</div>
+    <div class="header-cell">Title</div>
+    <div class="header-cell">Album</div>
+    <div class="header-cell">Year</div>
+    <div class="header-cell">Capo</div>
+    <div class="header-cell">Tuning</div>
+  </div>
+  <ng-container *ngFor="let song of songs">
+    <div
+      class="row"
+      *ngIf="song.active"
+      routerLink="/song-detail/{{ song.id }}"
+    >
+      <div class="cell">{{ song.artist }}</div>
+      <div class="cell">{{ song.title }}</div>
+      <div class="cell">{{ song.album }}</div>
+      <div class="cell">{{ song.year }}</div>
+      <div class="cell">{{ song.capo }}</div>
+      <div class="cell">{{ song.tuning }}</div>
     </div>
-    <div class="row" *ngFor="let song of songs"
-        routerLink="/song-detail/{{song.id}}">
-        <div class="cell">{{song.artist}}</div>
-        <div class="cell">{{song.title}}</div>
-        <div class="cell">{{song.album}}</div>
-        <div class="cell">{{song.year}}</div>
-        <div class="cell">{{song.active}}</div>
-    </div>
+  </ng-container>
 </div>

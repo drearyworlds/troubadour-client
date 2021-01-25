@@ -11,6 +11,7 @@ import { MessageService } from '../message.service';
 
 export class SongListComponent implements OnInit {
   songs? : Song[]
+  hideall : boolean = true
 
   constructor(
     private songService: SongService,
