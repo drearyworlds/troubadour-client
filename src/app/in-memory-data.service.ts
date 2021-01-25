@@ -8,26 +8,26 @@ import SongList from '../../data/songList.json';
 })
 export class InMemoryDataService implements InMemoryDbService {
   createDb() {
-    const songs : Song[] = SongList.songs
+     const songs : Song[] = SongList.songs
     
-    // Assign indices
-    songs.forEach(function(song, index){
-      if (song.active) {
-        // Assign the index as the ID
-        song.id = index + 1;
-      }
-    });
+     // Assign indices
+     songs.forEach(function(song, index){
+       if (song.active) {
+         // Assign the index as the ID
+         song.id = index + 1;
+       }
+     });
 
-    songs.sort((s1, s2) => {
-      if (s1.artist < s2.artist) {
-        return -1;
-      } else if (s1.artist > s2.artist) {
-        return 1;
-      } else {
-        return 0;
-      }
-    })
+     songs.sort((s1, s2) => {
+       if (s1.artist < s2.artist) {
+         return -1;
+       } else if (s1.artist > s2.artist) {
+         return 1;
+       } else {
+         return 0;
+       }
+     })
 
-    return {songs};
-  }
+     return {songs};
+   }
 }
