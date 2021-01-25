@@ -1,0 +1,9 @@
+<h2>Song List</h2>
+<ul class="songs">
+    <li *ngFor="let song of songs" (click)="onSelect(song)">
+        <span class="badge">title: </span>{{song.title}}
+        <span class="badge">artist: </span>{{song.artist}}
+    </li>
+</ul>
+
+<app-song-detail [song]="selectedSong"></app-song-detail>
