@@ -13,7 +13,7 @@
     <div
       class="row"
       *ngIf="song.active"
-      routerLink="/song-detail/{{ song.id }}"
+      (click)="songClicked(song)"
     >
       <div class="cell">{{ song.artist }}</div>
       <div class="cell">{{ song.title }}</div>

@@ -17,23 +17,23 @@ export class SongDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private songService: SongService,
     private location: Location
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getSong();
   }
 
   getSong(): void {
-    var id = this.route.snapshot.paramMap.get('id')
-    if (id) {
-      const songId = +id
+    // var id = this.route.snapshot.paramMap.get('id')
+    // if (id) {
+    //   const songId = +id
 
-      this.songService.getSong(songId)
-        .subscribe(song => this.song = song);
-      }
-    }
+    //   this.songService.getSong(songId)
+    //     .subscribe(song => this.song = song);
+    //   }
+  }
 
-    goBack(): void {
-      this.location.back();
-    }
+  goBack(): void {
+    this.location.back();
+  }
 }

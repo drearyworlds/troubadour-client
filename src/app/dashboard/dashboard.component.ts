@@ -18,6 +18,6 @@ export class DashboardComponent implements OnInit {
 
   getSongs(): void {
     var songList = this.songService.getSongList()
-    songList.subscribe(songs => this.topSongs = songs.slice(0, 5));
+    songList.subscribe(songList => this.topSongs = songList.songs.slice(0, 5));
   }
 }
