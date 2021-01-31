@@ -1,43 +1,43 @@
 import { Injectable } from '@angular/core';
-import { Song } from '../json-schema/song';
+import { Drink } from '../json-schema/drink';
 import { StatusResponse } from '../json-schema/statusResponse'
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from './message.service';
 import { catchError, map, tap } from 'rxjs/operators';
 
-interface SongList {
-  songs : Song[];
+interface DrinkList {
+  drinks : Drink[];
 }
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class SongService {
+export class DrinkService {
   // URL to web api
   private HOST = "192.168.0.128";
   //private HOST = "localhost";
-  private getSongListUrl =       `http://${this.HOST}:3000/songlist`;
-  private updateCurrentSongUrl = `http://${this.HOST}:3000/currentsong/update`;
-  private songList?: Observable<SongList>;
+  private getDrinkListUrl =       `http://${this.HOST}:3000/drinklist`;
+  private updateCurrentDrinkUrl = `http://${this.HOST}:3000/currentdrink/update`;
+  private drinkList?: Observable<DrinkList>;
   private updateStatusResponse?: Observable<StatusResponse>
 
   constructor(
     private http: HttpClient,
     private messageService: MessageService) { }
 
-  getSongList(): Observable<SongList> {
-    this.songList = this.http.get<SongList>(this.getSongListUrl)
+  getDrinkList(): Observable<DrinkList> {
+    this.drinkList = this.http.get<DrinkList>(this.getDrinkListUrl)
     .pipe(
-      tap(_ => this.log('fetched song list')),
-      catchError(this.handleError<SongList>('getSongList'))
+      tap(_ => this.log('fetched drink list')),
+      catchError(this.handleError<DrinkList>('getDrinkList'))
     );
-    return this.songList;
+    return this.drinkList;
   }
 
-  setCurrentSong(currentSong : Song): Observable<StatusResponse> {
-    const currentSongString : string = JSON.stringify(currentSong)
+  setCurrentDrink(currentDrink : Drink): Observable<StatusResponse> {
+    const currentDrinkString : string = JSON.stringify(currentDrink)
 
     const httpOptions = {
       headers: new HttpHeaders({
@@ -45,28 +45,28 @@ export class SongService {
       })
     };
 
-    this.updateStatusResponse = this.http.post<StatusResponse>(this.updateCurrentSongUrl, currentSongString, httpOptions)
+    this.updateStatusResponse = this.http.post<StatusResponse>(this.updateCurrentDrinkUrl, currentDrinkString, httpOptions)
     .pipe(
-      tap(_ => this.log('fetched current song')),
-      catchError(this.handleError<StatusResponse>('setCurrentSong'))
+      tap(_ => this.log('fetched current drink')),
+      catchError(this.handleError<StatusResponse>('setCurrentDrink'))
     );
 
     return this.updateStatusResponse;
   }
 
-  /** GET song by id. Will 404 if id not found */
-  // getSong(id: number): Observable<Song> {
-  //   const url = `${this.getSongListUrl}/${id}`;
+  /** GET drink by id. Will 404 if id not found */
+  // getDrink(id: number): Observable<Drink> {
+  //   const url = `${this.getDrinkListUrl}/${id}`;
 
-  //   return this.http.get<Song>(url).pipe(
-  //     tap(_ => this.log(`fetched song id=${id}`)),
-  //     catchError(this.handleError<Song>(`getSong id=${id}`))
+  //   return this.http.get<Drink>(url).pipe(
+  //     tap(_ => this.log(`fetched drink id=${id}`)),
+  //     catchError(this.handleError<Drink>(`getDrink id=${id}`))
   //   );
   // }
 
-  /** Log a SongService message with the MessageService */
+  /** Log a DrinkService message with the MessageService */
   private log(message: string) {
-    this.messageService.add(`SongService: ${message}`);
+    this.messageService.add(`DrinkService: ${message}`);
   }
 
   /**

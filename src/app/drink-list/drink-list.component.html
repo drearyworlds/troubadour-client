@@ -1,0 +1,20 @@
+<h2>Drink List</h2>
+<div class="table">
+  <div class="header-row">
+    <div class="header-cell">Name</div>
+    <div class="header-cell">Style</div>
+    <div class="header-cell">Brewery</div>
+    <div class="header-cell">City</div>
+  </div>
+  <ng-container *ngFor="let drink of drinks">
+    <div
+      class="row"
+      (click)="drinkClicked(drink)"
+    >
+      <div class="cell">{{ drink.name }}</div>
+      <div class="cell">{{ drink.style }}</div>
+      <div class="cell">{{ drink.brewery }}</div>
+      <div class="cell">{{ drink.city }}</div>
+    </div>
+  </ng-container>
+</div>

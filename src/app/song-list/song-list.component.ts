@@ -37,6 +37,7 @@ export class SongListComponent implements OnInit {
     this.songService.setCurrentSong(clickedSong)
       .subscribe(response => this.success = response.success)
 
-    this.messageService.add(`Success: ${this.success}`)
+      //TODO: Figure out why success doesn't return true
+    // this.messageService.add(`Success: ${this.success}`)
   }
 }
