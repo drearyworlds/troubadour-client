@@ -7,7 +7,7 @@ import { MessageService } from './message.service';
 import { catchError, map, tap } from 'rxjs/operators';
 
 interface SongList {
-  songs : Song[];
+  songs: Song[];
 }
 
 @Injectable({
@@ -16,9 +16,8 @@ interface SongList {
 
 export class SongService {
   // URL to web api
-  private HOST = "192.168.0.128";
-  //private HOST = "localhost";
-  private getSongListUrl =       `http://${this.HOST}:3000/songlist`;
+  private HOST = "localhost";
+  private getSongListUrl = `http://${this.HOST}:3000/songlist`;
   private updateCurrentSongUrl = `http://${this.HOST}:3000/currentsong/update`;
   private songList?: Observable<SongList>;
   private updateStatusResponse?: Observable<StatusResponse>
@@ -29,27 +28,27 @@ export class SongService {
 
   getSongList(): Observable<SongList> {
     this.songList = this.http.get<SongList>(this.getSongListUrl)
-    .pipe(
-      tap(_ => this.log('fetched song list')),
-      catchError(this.handleError<SongList>('getSongList'))
-    );
+      .pipe(
+        tap(_ => this.log('fetched song list')),
+        catchError(this.handleError<SongList>('getSongList'))
+      );
     return this.songList;
   }
 
-  setCurrentSong(currentSong : Song): Observable<StatusResponse> {
-    const currentSongString : string = JSON.stringify(currentSong)
+  setCurrentSong(currentSong: Song): Observable<StatusResponse> {
+    const currentSongString: string = JSON.stringify(currentSong)
 
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        'Content-Type': 'application/json'
       })
     };
 
     this.updateStatusResponse = this.http.post<StatusResponse>(this.updateCurrentSongUrl, currentSongString, httpOptions)
-    .pipe(
-      tap(_ => this.log('fetched current song')),
-      catchError(this.handleError<StatusResponse>('setCurrentSong'))
-    );
+      .pipe(
+        tap(_ => this.log('fetched current song')),
+        catchError(this.handleError<StatusResponse>('setCurrentSong'))
+      );
 
     return this.updateStatusResponse;
   }
