@@ -13,7 +13,7 @@
     <div
       class="row"
       *ngIf="song.active"
-      (click)="songClicked(song)"
+      routerLink="/chords-lyrics/{{song.artist}}/{{song.title}}"
     >
       <div class="cell">{{ song.artist }}</div>
       <div class="cell">{{ song.title }}</div>

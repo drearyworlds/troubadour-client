@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Song } from '../json-schema/song';
-import { StatusResponse } from '../json-schema/statusResponse'
+import { StatusResponse } from '../json-schema/statusResponse';
 import { Observable, of } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { MessageService } from './message.service';
 import { catchError, map, tap } from 'rxjs/operators';
 
@@ -11,57 +11,68 @@ interface SongList {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class SongService {
   // URL to web api
-  private HOST = "localhost";
+  private HOST = '192.168.0.128';
   private getSongListUrl = `http://${this.HOST}:3000/songlist`;
   private updateCurrentSongUrl = `http://${this.HOST}:3000/currentsong/update`;
-  private songList?: Observable<SongList>;
-  private updateStatusResponse?: Observable<StatusResponse>
+  private getSongChordsLyricsUrl = `http://${this.HOST}:3000/songlyrics`;
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService) { }
+    private messageService: MessageService
+  ) {}
 
   getSongList(): Observable<SongList> {
-    this.songList = this.http.get<SongList>(this.getSongListUrl)
+    const songList: Observable<SongList> = this.http
+      .get<SongList>(this.getSongListUrl)
       .pipe(
-        tap(_ => this.log('fetched song list')),
+        tap((_) => this.log('fetched song list')),
         catchError(this.handleError<SongList>('getSongList'))
       );
-    return this.songList;
+    return songList;
+  }
+
+  getChordsLyrics(artist: string, title: string): Observable<string> {
+    let options: { params?: HttpParams, responseType: 'text' } = {
+      params: new HttpParams().append('artist', artist).append('title', title),
+      responseType: 'text'
+    }
+
+    let chordsLyrics: Observable<string> = this.http
+      .get(this.getSongChordsLyricsUrl, options)
+      .pipe(
+        tap((_) => this.log('fetched song chords/lyrics')),
+        catchError(this.handleError<string>('getSongChordsLyrics'))
+      );
+
+    return chordsLyrics;
   }
 
   setCurrentSong(currentSong: Song): Observable<StatusResponse> {
-    const currentSongString: string = JSON.stringify(currentSong)
+    const currentSongString: string = JSON.stringify(currentSong);
 
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
+        'Content-Type': 'application/json',
+      }),
     };
 
-    this.updateStatusResponse = this.http.post<StatusResponse>(this.updateCurrentSongUrl, currentSongString, httpOptions)
+    const updateStatusResponse: Observable<StatusResponse> = this.http
+      .post<StatusResponse>(
+        this.updateCurrentSongUrl,
+        currentSongString,
+        httpOptions
+      )
       .pipe(
-        tap(_ => this.log('fetched current song')),
+        tap((_) => this.log('fetched current song')),
         catchError(this.handleError<StatusResponse>('setCurrentSong'))
       );
 
-    return this.updateStatusResponse;
+    return updateStatusResponse;
   }
-
-  /** GET song by id. Will 404 if id not found */
-  // getSong(id: number): Observable<Song> {
-  //   const url = `${this.getSongListUrl}/${id}`;
-
-  //   return this.http.get<Song>(url).pipe(
-  //     tap(_ => this.log(`fetched song id=${id}`)),
-  //     catchError(this.handleError<Song>(`getSong id=${id}`))
-  //   );
-  // }
 
   /** Log a SongService message with the MessageService */
   private log(message: string) {
@@ -76,7 +87,6 @@ export class SongService {
    */
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-
       // TODO: send the error to remote logging infrastructure
       console.error(error); // log to console instead
 

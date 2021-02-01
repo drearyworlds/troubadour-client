@@ -7,13 +7,15 @@ import { AppComponent } from './app.component';
 import { SongListComponent } from './song-list/song-list.component';
 import { DrinkListComponent } from './drink-list/drink-list.component';
 import { MessagesComponent } from './messages/messages.component';
+import { ChordsLyricsComponent } from './chords-lyrics/chords-lyrics.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SongListComponent,
     DrinkListComponent,
-    MessagesComponent
+    MessagesComponent,
+    ChordsLyricsComponent
   ],
   imports: [
     BrowserModule,

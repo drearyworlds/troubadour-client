@@ -8,4 +8,5 @@ export interface Song {
     tuning: string;
     pick: boolean;
     active: boolean;
+    chordsLyricsFile: string;
 }
