@@ -1,0 +1,14 @@
+* {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px
+}
+
+.lyricsContainer {
+    -webkit-column-count: 2;
+       -moz-column-count: 2;
+            column-count: 2;
+ 
+    -webkit-column-gap: 0px;
+       -moz-column-gap: 0px;
+            column-gap: 0px;
+ }

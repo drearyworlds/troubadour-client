@@ -3,7 +3,6 @@ import { Drink } from '../../json-schema/drink'
 import { StatusResponse } from '../../json-schema/statusResponse'
 import { DrinkService } from '../drink.service';
 import { MessageService } from '../message.service';
-import { isSuccess } from 'angular-in-memory-web-api';
 
 @Component({
   selector: 'app-drink-list',
