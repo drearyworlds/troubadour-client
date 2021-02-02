@@ -1,55 +1,57 @@
 import { Injectable } from '@angular/core';
 import { Drink } from '../json-schema/drink';
-import { StatusResponse } from '../json-schema/statusResponse'
+import { StatusResponse } from '../json-schema/statusResponse';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from './message.service';
 import { catchError, map, tap } from 'rxjs/operators';
+import { HOST } from './constants';
 
 interface DrinkList {
-  drinks : Drink[];
+  drinks: Drink[];
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class DrinkService {
-  // URL to web api
-  private HOST = "192.168.0.128";
-  //private HOST = "localhost";
-  private getDrinkListUrl =       `http://${this.HOST}:3000/drinklist`;
-  private updateCurrentDrinkUrl = `http://${this.HOST}:3000/currentdrink/update`;
+  private getDrinkListUrl = `http://${HOST}:3000/drinklist`;
+  private updateCurrentDrinkUrl = `http://${HOST}:3000/currentdrink/update`;
   private drinkList?: Observable<DrinkList>;
-  private updateStatusResponse?: Observable<StatusResponse>
+  private updateStatusResponse?: Observable<StatusResponse>;
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService) { }
+    private messageService: MessageService
+  ) {}
 
   getDrinkList(): Observable<DrinkList> {
-    this.drinkList = this.http.get<DrinkList>(this.getDrinkListUrl)
-    .pipe(
-      tap(_ => this.log('fetched drink list')),
+    this.drinkList = this.http.get<DrinkList>(this.getDrinkListUrl).pipe(
+      tap((_) => this.log('fetched drink list')),
       catchError(this.handleError<DrinkList>('getDrinkList'))
     );
     return this.drinkList;
   }
 
-  setCurrentDrink(currentDrink : Drink): Observable<StatusResponse> {
-    const currentDrinkString : string = JSON.stringify(currentDrink)
+  setCurrentDrink(currentDrink: Drink): Observable<StatusResponse> {
+    const currentDrinkString: string = JSON.stringify(currentDrink);
 
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json'
-      })
+        'Content-Type': 'application/json',
+      }),
     };
 
-    this.updateStatusResponse = this.http.post<StatusResponse>(this.updateCurrentDrinkUrl, currentDrinkString, httpOptions)
-    .pipe(
-      tap(_ => this.log('fetched current drink')),
-      catchError(this.handleError<StatusResponse>('setCurrentDrink'))
-    );
+    this.updateStatusResponse = this.http
+      .post<StatusResponse>(
+        this.updateCurrentDrinkUrl,
+        currentDrinkString,
+        httpOptions
+      )
+      .pipe(
+        tap((_) => this.log('fetched current drink')),
+        catchError(this.handleError<StatusResponse>('setCurrentDrink'))
+      );
 
     return this.updateStatusResponse;
   }
@@ -77,7 +79,6 @@ export class DrinkService {
    */
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-
       // TODO: send the error to remote logging infrastructure
       console.error(error); // log to console instead
 

@@ -27,7 +27,7 @@
     "@fluentui/web-components": "^0.10.6",
     "angular-in-memory-web-api": "^0.11.0",
     "bootstrap": "^5.0.0-beta1",
-    "component": "^1.1.0",
+    "component": "^0.19.9",
     "file-saver": "^2.0.5",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { MessageService } from './message.service';
 import { catchError, map, tap } from 'rxjs/operators';
+import { HOST } from './constants';
 
 interface SongList {
   songs: Song[];
@@ -14,11 +15,9 @@ interface SongList {
   providedIn: 'root',
 })
 export class SongService {
-  // URL to web api
-  private HOST = '192.168.0.128';
-  private getSongListUrl = `http://${this.HOST}:3000/songlist`;
-  private updateCurrentSongUrl = `http://${this.HOST}:3000/currentsong/update`;
-  private getSongChordsLyricsUrl = `http://${this.HOST}:3000/songlyrics`;
+  private getSongListUrl = `http://${HOST}:3000/songlist`;
+  private updateCurrentSongUrl = `http://${HOST}:3000/currentsong/update`;
+  private getSongChordsLyricsUrl = `http://${HOST}:3000/songlyrics`;
 
   constructor(
     private http: HttpClient,
@@ -36,10 +35,10 @@ export class SongService {
   }
 
   getChordsLyrics(artist: string, title: string): Observable<string> {
-    let options: { params?: HttpParams, responseType: 'text' } = {
+    let options: { params?: HttpParams; responseType: 'text' } = {
       params: new HttpParams().append('artist', artist).append('title', title),
-      responseType: 'text'
-    }
+      responseType: 'text',
+    };
 
     let chordsLyrics: Observable<string> = this.http
       .get(this.getSongChordsLyricsUrl, options)

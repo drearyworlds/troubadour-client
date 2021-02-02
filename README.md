@@ -1,6 +1,6 @@
-# CurrentSong
+# Troubadour Client
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.1.1.
+Troubadour is an open-source that combines an Angular web application front-end and a NodeJS/Express back-end to allow selection of current song/drink, display chords and lyrics, and update visual overlays on Streamlabs OBS. This repository contains the client portion of the project.
 
 ## Development server
 

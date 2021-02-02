@@ -1,16 +1,16 @@
 /* Application-wide Styles */
 * {
-  background-color: #181a1b;
-  color: #dad7d2;
+  background-color: rgb(30,30,30);
+  color: rgb(230,230,230);
 }
 
 h1 {
-  color: #369;
+  color: rgb(0,127,212);
   font-family: Arial, Helvetica, sans-serif;
   font-size: 250%;
 }
 h2,h3 {
-  color: #369;
+  color: rgb(0,127,212);
   font-family: Arial, Helvetica, sans-serif;
   font-weight: lighter;
 }
@@ -20,7 +20,7 @@ body {
 body,
 input[type="text"],
 button {
-  color: #333;
+  color: rgb(182,182,182);
   font-family: Cambria, Georgia, serif;
 }
 /* everywhere else */

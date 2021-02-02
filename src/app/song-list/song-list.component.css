@@ -8,13 +8,13 @@
 }
 
 .row:hover {
-  color: #039be5;
-  background-color: #22f;
+  color: rgb(182,182,182);
+  background-color: rgb(0,127,212);
   cursor: pointer;
 }
 
 .header-cell {
-  background-color: #ddd;
+  background-color: rgb(182,182,182);
   font-weight: bold;
 }
 
@@ -24,7 +24,7 @@
   --top-bottom-padding: 3px;
   --left-right-padding: 1.8%;
   --border-width: 1px;
-  border: 1px solid #999999;
+  border: 1px solid rgb(0,127,212);
   float: left;
   height: 17px;
   overflow: hidden;
