@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from './message.service';
 import { catchError, map, tap } from 'rxjs/operators';
-import { HOST } from './constants';
+import { ConfigurationService } from './configuration.service';
 
 interface DrinkList {
   drinks: Drink[];
@@ -14,15 +14,17 @@ interface DrinkList {
 @Injectable({
   providedIn: 'root',
 })
+
 export class DrinkService {
-  private getDrinkListUrl = `http://${HOST}:3000/drinklist`;
-  private updateCurrentDrinkUrl = `http://${HOST}:3000/currentdrink/update`;
+  private getDrinkListUrl = `http://${this.config.serverHost}:${this.config.serverPort}/drinklist`;
+  private updateCurrentDrinkUrl = `http://${this.config.serverHost}:${this.config.serverPort}/currentdrink/update`;
   private drinkList?: Observable<DrinkList>;
   private updateStatusResponse?: Observable<StatusResponse>;
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private config: ConfigurationService,
   ) {}
 
   getDrinkList(): Observable<DrinkList> {

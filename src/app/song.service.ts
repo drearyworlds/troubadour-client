@@ -4,8 +4,8 @@ import { StatusResponse } from '../json-schema/statusResponse';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { MessageService } from './message.service';
-import { catchError, map, tap } from 'rxjs/operators';
-import { HOST } from './constants';
+import { catchError, tap } from 'rxjs/operators';
+import { ConfigurationService } from './configuration.service';
 
 interface SongList {
   songs: Song[];
@@ -15,14 +15,15 @@ interface SongList {
   providedIn: 'root',
 })
 export class SongService {
-  private getSongListUrl = `http://${HOST}:3000/songlist`;
-  private updateCurrentSongUrl = `http://${HOST}:3000/currentsong/update`;
-  private getSongChordsLyricsUrl = `http://${HOST}:3000/songlyrics`;
+  private getSongListUrl = `http://${this.config.serverHost}:${this.config.serverPort}/songlist`;
+  private updateCurrentSongUrl = `http://${this.config.serverHost}:${this.config.serverPort}/currentsong/update`;
+  private getSongChordsLyricsUrl = `http://${this.config.serverHost}:${this.config.serverPort}/songlyrics`;
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService
-  ) {}
+    private messageService: MessageService,
+    private config: ConfigurationService
+  ) { }
 
   getSongList(): Observable<SongList> {
     const songList: Observable<SongList> = this.http
