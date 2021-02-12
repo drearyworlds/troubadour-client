@@ -46,5 +46,5 @@ testem.log
 Thumbs.db
 
 # Data files
-/data/*.json
-/config.json
+**/data/*.json
+**/config.json
