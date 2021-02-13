@@ -2,24 +2,44 @@
   width: 100%;
 }
 
-.header-row,
-.row {
+.rowHeader,
+.rowActive {
   clear: both;
 }
 
-.row:hover {
-  color: rgb(182, 182, 182);
+.rowInactive {
+  clear: both;
+}
+
+.rowActive:hover {
   background-color: rgb(0, 127, 212);
   cursor: pointer;
 }
 
-.header-cell {
+.rowInactive:hover {
+  background-color: rgb(100, 22, 22);
+  cursor: pointer;
+}
+
+.cellHeader {
+  color: #ffffff;
   background-color: rgb(182, 182, 182);
   font-weight: bold;
 }
 
-.cell,
-.header-cell {
+.cellActive {
+  color: #dddddd;
+  cursor: pointer;
+}
+
+.cellInactive {
+  color: #ff7777;
+  cursor: pointer;
+}
+
+.cellHeader,
+.cellActive,
+.cellInactive {
   --number-of-fixed-columns: 1;
   --number-of-variable-columns: 3;
 
@@ -51,7 +71,7 @@
   background-color: inherit;
 }
 
-.fixed-column {
+.cellFixedWidth {
   width: var(--fixed-column-width);
 }
 

@@ -1,27 +1,17 @@
 <h2>Song List</h2>
 <div class="table">
-  <div class="header-row">
-    <div class="header-cell">Artist</div>
-    <div class="header-cell">Title</div>
-    <div class="header-cell">Album</div>
-    <div class="header-cell fixed-column">Year</div>
-    <!-- <div class="header-cell">Capo</div>
-    <div class="header-cell">Tuning</div>
-    <div class="header-cell">Pick</div> -->
+  <div [ngClass]="getHeaderRowDivClass()">
+    <div [ngClass]="getHeaderCellDivClass(false)">Artist</div>
+    <div [ngClass]="getHeaderCellDivClass(true)">Year</div>
+    <div [ngClass]="getHeaderCellDivClass(false)">Album</div>
+    <div [ngClass]="getHeaderCellDivClass(false)">Title</div>
   </div>
   <ng-container *ngFor="let song of songs">
-    <div
-      class="row"
-      *ngIf="song.active"
-      routerLink="/chords-lyrics/{{song.artist}}/{{song.title}}"
-    >
-      <div class="cell">{{ song.artist }}</div>
-      <div class="cell">{{ song.title }}</div>
-      <div class="cell">{{ song.album }}</div>
-      <div class="cell fixed-column">{{ song.year }}</div>
-      <!-- <div class="cell">{{ song.capo }}</div>
-      <div class="cell">{{ song.tuning }}</div>
-      <div class="cell">{{ song.pick }}</div> -->
+    <div [ngClass]="getRowDivClass(song.active)" routerLink="/lyrics/{{song.artist}}/{{song.title}}">
+      <div [ngClass]="getCellDivClass(song.active, false)">{{ song.artist }}</div>
+      <div [ngClass]="getCellDivClass(song.active, true)" >{{ song.year }}</div>
+      <div [ngClass]="getCellDivClass(song.active, false)">{{ song.album }}</div>
+      <div [ngClass]="getCellDivClass(song.active, false)">{{ song.title }}</div>
     </div>
   </ng-container>
 </div>

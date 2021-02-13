@@ -29,7 +29,7 @@ export class DrinkService {
 
   getDrinkList(): Observable<DrinkList> {
     this.drinkList = this.http.get<DrinkList>(this.getDrinkListUrl).pipe(
-      tap((_) => this.log('fetched drink list')),
+      tap((_) => this.log('Fetched drink list')),
       catchError(this.handleError<DrinkList>('getDrinkList'))
     );
     return this.drinkList;
@@ -51,7 +51,7 @@ export class DrinkService {
         httpOptions
       )
       .pipe(
-        tap((_) => this.log('fetched current drink')),
+        tap((_) => this.log('Fetched current drink')),
         catchError(this.handleError<StatusResponse>('setCurrentDrink'))
       );
 
@@ -63,7 +63,7 @@ export class DrinkService {
   //   const url = `${this.getDrinkListUrl}/${id}`;
 
   //   return this.http.get<Drink>(url).pipe(
-  //     tap(_ => this.log(`fetched drink id=${id}`)),
+  //     tap(_ => this.log(`Fetched drink id=${id}`)),
   //     catchError(this.handleError<Drink>(`getDrink id=${id}`))
   //   );
   // }

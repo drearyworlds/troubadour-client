@@ -16,10 +16,38 @@ export class SongListComponent implements OnInit {
   constructor(
     private songService: SongService,
     private messageService: MessageService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getSongList();
+  }
+
+  getHeaderRowDivClass() {
+    return {
+      'rowHeader': true
+    }
+  }
+
+  getRowDivClass(active: boolean) {
+    return {
+      'rowActive': active,
+      'rowInactive': !active
+    }
+  }
+
+  getHeaderCellDivClass(fixed : boolean) {
+    return {
+      'cellHeader': true,
+      'cellFixedWidth': fixed
+    }
+  }
+
+  getCellDivClass(active: boolean, fixed : boolean) {
+    return {
+      'cellActive': active,
+      'cellInactive': !active,
+      'cellFixedWidth': fixed
+    }
   }
 
   songComparator(song1: Song, song2: Song) {
@@ -28,19 +56,24 @@ export class SongListComponent implements OnInit {
     let song1SortTitle = song1.title;
     let song2SortTitle = song2.title;
 
-    if (song1SortArtist.match("A ", )) {
+    // Put active songs above inactive songs
+    if (song1.active != song2.active) {
+      return song1.active ? -1 : 1;
+    }
+
+    if (song1SortArtist.match("A ",)) {
       song1SortArtist = song1SortArtist.substring(2)
-    } else if (song1SortArtist.match("An ", )) {
+    } else if (song1SortArtist.match("An ",)) {
       song1SortArtist = song1SortArtist.substring(3)
-    } else if (song1SortArtist.match("The ", )) {
+    } else if (song1SortArtist.match("The ",)) {
       song1SortArtist = song1SortArtist.substring(4)
     }
 
-    if (song2SortArtist.match("A ", )) {
+    if (song2SortArtist.match("A ",)) {
       song2SortArtist = song2SortArtist.substring(2)
-    } else if (song2SortArtist.match("An ", )) {
+    } else if (song2SortArtist.match("An ",)) {
       song2SortArtist = song2SortArtist.substring(3)
-    } else if (song2SortArtist.match("The ", )) {
+    } else if (song2SortArtist.match("The ",)) {
       song2SortArtist = song2SortArtist.substring(4)
     }
 
@@ -60,20 +93,19 @@ export class SongListComponent implements OnInit {
 
   getSongList(): void {
     this.songService
-      .getSongList()
+      .getList()
       .subscribe(
         (songList) => (this.songs = songList.songs.sort(this.songComparator))
       );
   }
 
   songClicked(clickedSong: Song): void {
-    console.log('I clicked a song');
     this.messageService.add(`Clicked a song: ${clickedSong.title}`);
     this.songService
-      .setCurrentSong(clickedSong)
-      .subscribe((response) => (this.success = response.success));
-
-    //TODO: Figure out why success doesn't return true
-    // this.messageService.add(`Success: ${this.success}`)
+      .setCurrent(clickedSong)
+      .subscribe((response: StatusResponse) => {
+        this.success = response.success
+        this.messageService.add(`Success: ${this.success}`)
+      });
   }
 }

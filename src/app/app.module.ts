@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { SongListComponent } from './song-list/song-list.component';
 import { DrinkListComponent } from './drink-list/drink-list.component';
 import { MessagesComponent } from './messages/messages.component';
-import { ChordsLyricsComponent } from './chords-lyrics/chords-lyrics.component';
+import { LyricsComponent } from './lyrics/lyrics.component';
 import { APP_INITIALIZER } from '@angular/core';
 import { ConfigurationService } from './configuration.service';
 import { of, Observable, ObservableInput } from '../../node_modules/rxjs';
@@ -45,7 +45,7 @@ function load(http: HttpClient, config: ConfigurationService): (() => Promise<bo
     SongListComponent,
     DrinkListComponent,
     MessagesComponent,
-    ChordsLyricsComponent
+    LyricsComponent
   ],
   imports: [
     BrowserModule,

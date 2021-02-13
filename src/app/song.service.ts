@@ -15,9 +15,10 @@ interface SongList {
   providedIn: 'root',
 })
 export class SongService {
-  private getSongListUrl = `http://${this.config.serverHost}:${this.config.serverPort}/songlist`;
-  private updateCurrentSongUrl = `http://${this.config.serverHost}:${this.config.serverPort}/currentsong/update`;
-  private getSongChordsLyricsUrl = `http://${this.config.serverHost}:${this.config.serverPort}/songlyrics`;
+  private URL_GET_SONG_LIST: string = `http://${this.config.serverHost}:${this.config.serverPort}/songlist`;
+  private URL_UPDATE_CURRENT_SONG: string = `http://${this.config.serverHost}:${this.config.serverPort}/currentsong/update`;
+  private URL_GET_SONG_DATA: string = `http://${this.config.serverHost}:${this.config.serverPort}/songdata`;
+  private URL_GET_SONG_LYRICS: string = `http://${this.config.serverHost}:${this.config.serverPort}/songlyrics`;
 
   constructor(
     private http: HttpClient,
@@ -25,33 +26,49 @@ export class SongService {
     private config: ConfigurationService
   ) { }
 
-  getSongList(): Observable<SongList> {
+  getList(): Observable<SongList> {
     const songList: Observable<SongList> = this.http
-      .get<SongList>(this.getSongListUrl)
+      .get<SongList>(this.URL_GET_SONG_LIST)
       .pipe(
-        tap((_) => this.log('fetched song list')),
+        tap((_) => this.log('Fetched song list')),
         catchError(this.handleError<SongList>('getSongList'))
       );
     return songList;
   }
 
-  getChordsLyrics(artist: string, title: string): Observable<string> {
+  getData(artist: string, title: string): Observable<string> {
     let options: { params?: HttpParams; responseType: 'text' } = {
       params: new HttpParams().append('artist', artist).append('title', title),
       responseType: 'text',
     };
 
-    let chordsLyrics: Observable<string> = this.http
-      .get(this.getSongChordsLyricsUrl, options)
+    let songData: Observable<string> = this.http
+      .get(this.URL_GET_SONG_DATA, options)
       .pipe(
-        tap((_) => this.log('fetched song chords/lyrics')),
-        catchError(this.handleError<string>('getSongChordsLyrics'))
+        tap((_) => this.log('Fetched data')),
+        catchError(this.handleError<string>('getData'))
       );
 
-    return chordsLyrics;
+    return songData;
   }
 
-  setCurrentSong(currentSong: Song): Observable<StatusResponse> {
+  getLyrics(artist: string, title: string): Observable<string> {
+    let options: { params?: HttpParams; responseType: 'text' } = {
+      params: new HttpParams().append('artist', artist).append('title', title),
+      responseType: 'text',
+    };
+
+    let lyrics: Observable<string> = this.http
+      .get(this.URL_GET_SONG_LYRICS, options)
+      .pipe(
+        tap((_) => this.log('Fetched lyrics')),
+        catchError(this.handleError<string>('getLyrics'))
+      );
+
+    return lyrics;
+  }
+
+  setCurrent(currentSong: Song): Observable<StatusResponse> {
     const currentSongString: string = JSON.stringify(currentSong);
 
     const httpOptions = {
@@ -62,12 +79,12 @@ export class SongService {
 
     const updateStatusResponse: Observable<StatusResponse> = this.http
       .post<StatusResponse>(
-        this.updateCurrentSongUrl,
+        this.URL_UPDATE_CURRENT_SONG,
         currentSongString,
         httpOptions
       )
       .pipe(
-        tap((_) => this.log('fetched current song')),
+        tap((_) => this.log('Updated current song')),
         catchError(this.handleError<StatusResponse>('setCurrentSong'))
       );
 
