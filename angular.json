@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "current-song": {
+    "songlistclient": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/current-song",
+            "outputPath": "dist/songlistclient",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -66,18 +66,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "current-song:build"
+            "browserTarget": "songlistclient:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "current-song:build:production"
+              "browserTarget": "songlistclient:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "current-song:build"
+            "browserTarget": "songlistclient:build"
           }
         },
         "test": {
@@ -114,16 +114,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "current-song:serve"
+            "devServerTarget": "songlistclient:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "current-song:serve:production"
+              "devServerTarget": "songlistclient:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "current-song"
+  "defaultProject": "songlistclient"
 }
