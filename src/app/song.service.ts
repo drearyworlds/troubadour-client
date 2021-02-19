@@ -68,7 +68,7 @@ export class SongService {
     return lyrics;
   }
 
-  setCurrent(currentSong: Song): Observable<StatusResponse> {
+  setCurrentSong(currentSong: Song): Observable<StatusResponse> {
     const currentSongString: string = JSON.stringify(currentSong);
 
     const httpOptions = {

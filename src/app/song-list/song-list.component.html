@@ -7,7 +7,8 @@
     <div [ngClass]="getHeaderCellDivClass(false)">Title</div>
   </div>
   <ng-container *ngFor="let song of songs">
-    <div [ngClass]="getRowDivClass(song.active)" routerLink="/lyrics/{{song.artist}}/{{song.title}}">
+    <div [ngClass]="getRowDivClass(song.active)" routerLink="/lyrics/{{song.artist}}/{{song.title}}"
+    (click)="songClicked(song)">
       <div [ngClass]="getCellDivClass(song.active, false)">{{ song.artist }}</div>
       <div [ngClass]="getCellDivClass(song.active, true)" >{{ song.year }}</div>
       <div [ngClass]="getCellDivClass(song.active, false)">{{ song.album }}</div>
