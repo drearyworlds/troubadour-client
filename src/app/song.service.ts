@@ -16,7 +16,7 @@ interface SongList {
 })
 export class SongService {
   private URL_GET_SONG_LIST: string = `http://${this.config.serverHost}:${this.config.serverPort}/song/list`;
-  private URL_UPDATE_CURRENT_SONG: string = `http://${this.config.serverHost}:${this.config.serverPort}/song/current/update`;
+  private URL_UPDATE_CURRENT_SONG: string = `http://${this.config.serverHost}:${this.config.serverPort}/song/current`;
   private URL_GET_SONG_DATA: string = `http://${this.config.serverHost}:${this.config.serverPort}/song/data`;
   private URL_GET_SONG_LYRICS: string = `http://${this.config.serverHost}:${this.config.serverPort}/song/lyrics`;
 
