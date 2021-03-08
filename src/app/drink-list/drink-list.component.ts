@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Drink } from '../../json-schema/drink'
-import { StatusResponse } from '../../json-schema/statusResponse'
 import { DrinkService } from '../drink.service';
 import { MessageService } from '../message.service';
 
@@ -31,11 +30,27 @@ export class DrinkListComponent implements OnInit {
   }
 
   drinkClicked(clickedDrink: Drink): void {
-    this.messageService.add(`Clicked a drink: ${clickedDrink.name}`)
+    this.logVerbose(`Clicked a drink: ${clickedDrink.name}`)
     this.drinkService.setCurrentDrink(clickedDrink)
-      .subscribe(response => this.success = response.success)
+      .subscribe(response => {
+        this.logSuccess(`Set current drink to ${clickedDrink.name}`)
+        this.success = response.success
+      })
+  }
 
-      //TODO: Figure out why success doesn't return true
-    // this.messageService.add(`Success: ${this.success}`)
+  private logFailure(message: string) {
+    this.messageService.logFailure(message, this.constructor.name);
+  }
+
+  private logSuccess(message: string) {
+    this.messageService.logSuccess(message, this.constructor.name);
+  }
+
+  private logInfo(message: string) {
+    this.messageService.logInfo(message, this.constructor.name);
+  }
+
+  private logVerbose(message: string) {
+    this.messageService.logVerbose(message, this.constructor.name);
   }
 }

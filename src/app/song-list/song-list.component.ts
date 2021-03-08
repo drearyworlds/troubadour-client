@@ -92,29 +92,43 @@ export class SongListComponent implements OnInit {
     return 1;
   }
 
+
   getSongList(): void {
     this.songService
       .getList()
-      .subscribe(
-        (songList) => (this.songs = songList.songs.sort(this.songComparator))
-      );
+      .subscribe((songList) => {
+        this.songs = songList.songs.sort(this.songComparator);
+        this.logSuccess('Fetched song list');
+      });
   }
 
   setAsCurrent(songToSet: Song): void {
-    this.messageService.add(`Clicked a song: ${songToSet.title}`);
+    this.logVerbose(`Clicked a song: ${songToSet.title}`);
     this.songService
       .setCurrentSong(songToSet)
       .subscribe((response: StatusResponse) => {
         this.success = response.success
-        this.log(`Success: ${this.success}`)
+        this.logSuccess(`Current song set to: ${songToSet.title}`)
       });
   }
 
   addToQueue(songToQueue: Song) {
-    alert("mock add to queue")
+    this.logFailure("addToQueue not yet implemented")
   }
 
-  private log(message: string) {
-    this.messageService.add(`SongListComponent: ${message}`);
+  private logFailure(message: string) {
+    this.messageService.logFailure(message, this.constructor.name);
+  }
+
+  private logSuccess(message: string) {
+    this.messageService.logSuccess(message, this.constructor.name);
+  }
+
+  private logInfo(message: string) {
+    this.messageService.logInfo(message, this.constructor.name);
+  }
+
+  private logVerbose(message: string) {
+    this.messageService.logVerbose(message, this.constructor.name);
   }
 }

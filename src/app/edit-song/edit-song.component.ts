@@ -28,9 +28,9 @@ export class EditSongComponent implements OnInit {
 
     this.songService.getDataBySongId(songId)
       .subscribe(song => {
-        this.log(`song: ${song}`)
+        this.logVerbose(`song: ${song}`)
         this.song = JSON.parse(song);
-        this.log(JSON.stringify(this.song))
+        this.logSuccess(`Retrieved song data for: ${this.song?.title}`)
       });
   }
 
@@ -38,14 +38,25 @@ export class EditSongComponent implements OnInit {
     if (this.song) {
       this.songService.saveSongData(this.song)
         .subscribe((response: StatusResponse) => {
-          this.log(`Saved songID: ${this.song?.id}`)
-          this.log(`response: ${response}`)
+          this.logSuccess(`Saved song data for: ${this.song?.title}`)
+          this.logVerbose(`response: ${JSON.stringify(response)}`)
         });
     }
   }
 
-  /** Log a EditSongComponent message with the MessageService */
-  private log(message: string) {
-    this.messageService.add(`EditSongComponent: ${message}`);
+  private logFailure(message: string) {
+    this.messageService.logFailure(message, this.constructor.name);
+  }
+  
+  private logSuccess(message: string) {
+    this.messageService.logSuccess(message, this.constructor.name);
+  }
+
+  private logInfo(message: string) {
+    this.messageService.logInfo(message, this.constructor.name);
+  }
+
+  private logVerbose(message: string) {
+    this.messageService.logVerbose(message, this.constructor.name);
   }
 }

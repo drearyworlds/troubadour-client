@@ -27,7 +27,7 @@ export class SongService {
     const songList: Observable<SongList> = this.http
       .get<SongList>(this.URL_SONG_LIST)
       .pipe(
-        tap((_) => this.log('Fetched song list')),
+        tap((_) => this.logVerbose('Fetched song list')),
         catchError(this.handleError<SongList>('getSongList'))
       );
     return songList;
@@ -42,7 +42,7 @@ export class SongService {
     let songData: Observable<string> = this.http
       .get(this.URL_SONG_DATA, options)
       .pipe(
-        tap((_) => this.log('Fetched data')),
+        tap((_) => this.logVerbose('Fetched song data')),
         catchError(this.handleError<string>('getData'))
       );
 
@@ -58,7 +58,7 @@ export class SongService {
     let songData: Observable<string> = this.http
       .get(this.URL_SONG_DATA, options)
       .pipe(
-        tap((_) => this.log('Fetched data')),
+        tap((_) => this.logVerbose('Fetched data')),
         catchError(this.handleError<string>('getData'))
       );
 
@@ -74,7 +74,7 @@ export class SongService {
     let lyrics: Observable<string> = this.http
       .get(this.URL_GET_SONG_LYRICS, options)
       .pipe(
-        tap((_) => this.log('Fetched lyrics')),
+        tap((_) => this.logVerbose('Fetched lyrics')),
         catchError(this.handleError<string>('getLyrics'))
       );
 
@@ -97,7 +97,7 @@ export class SongService {
         httpOptions
       )
       .pipe(
-        tap((_) => this.log('Updated current song')),
+        tap((_) => this.logVerbose('Saved current song')),
         catchError(this.handleError<StatusResponse>('saveSongData'))
       );
 
@@ -120,7 +120,7 @@ export class SongService {
         httpOptions
       )
       .pipe(
-        tap((_) => this.log('Updated current song')),
+        tap((_) => this.logVerbose(`Set current song to ${currentSong.title}`)),
         catchError(this.handleError<StatusResponse>('setCurrentSong'))
       );
 
@@ -128,8 +128,8 @@ export class SongService {
   }
 
   async importSongList(songListFile: File): Promise<Observable<StatusResponse>> {
-    this.log("importSongList")
-    this.log(`songListFile: ${songListFile}`)
+    this.logVerbose("importSongList")
+    this.logVerbose(`songListFile: ${songListFile}`)
     let songList = await songListFile.text();
 
     const httpOptions = {
@@ -145,16 +145,11 @@ export class SongService {
         httpOptions
       )
       .pipe(
-        tap((_) => this.log('Imported song list')),
+        tap((_) => this.logVerbose('Imported song list')),
         catchError(this.handleError<StatusResponse>('importSongList'))
       );
 
     return updateStatusResponse;
-  }
-
-  /** Log a SongService message with the MessageService */
-  private log(message: string) {
-    this.messageService.add(`SongService: ${message}`);
   }
 
   /**
@@ -165,14 +160,27 @@ export class SongService {
    */
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-
-      // TODO: better job of transforming error for user consumption
-      this.log(`${operation} failed: ${error.message}`);
+      // Log failure
+      this.logFailure(`${operation} failed: ${error.message}`);
 
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
+  }
+
+  private logFailure(message: string) {
+    this.messageService.logFailure(message, this.constructor.name);
+  }
+
+  private logSuccess(message: string) {
+    this.messageService.logSuccess(message, this.constructor.name);
+  }
+
+  private logInfo(message: string) {
+    this.messageService.logInfo(message, this.constructor.name);
+  }
+
+  private logVerbose(message: string) {
+    this.messageService.logVerbose(message, this.constructor.name);
   }
 }

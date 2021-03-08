@@ -29,7 +29,7 @@ export class DrinkService {
 
   getDrinkList(): Observable<DrinkList> {
     this.drinkList = this.http.get<DrinkList>(this.getDrinkListUrl).pipe(
-      tap((_) => this.log('Fetched drink list')),
+      tap((_) => this.logSuccess('Fetched drink list')),
       catchError(this.handleError<DrinkList>('getDrinkList'))
     );
     return this.drinkList;
@@ -51,7 +51,7 @@ export class DrinkService {
         httpOptions
       )
       .pipe(
-        tap((_) => this.log('Fetched current drink')),
+        tap((_) => this.logSuccess('Fetched current drink')),
         catchError(this.handleError<StatusResponse>('setCurrentDrink'))
       );
 
@@ -68,11 +68,6 @@ export class DrinkService {
   //   );
   // }
 
-  /** Log a DrinkService message with the MessageService */
-  private log(message: string) {
-    this.messageService.add(`DrinkService: ${message}`);
-  }
-
   /**
    * Handle Http operation that failed.
    * Let the app continue.
@@ -81,14 +76,27 @@ export class DrinkService {
    */
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-
-      // TODO: better job of transforming error for user consumption
-      this.log(`${operation} failed: ${error.message}`);
+      // Log the error
+      this.logFailure(`${operation} failed: ${error.message}`);
 
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
+  }
+
+  private logFailure(message: string) {
+    this.messageService.logFailure(message, this.constructor.name);
+  }
+  
+  private logSuccess(message: string) {
+    this.messageService.logSuccess(message, this.constructor.name);
+  }
+
+  private logInfo(message: string) {
+    this.messageService.logInfo(message, this.constructor.name);
+  }
+
+  private logVerbose(message: string) {
+    this.messageService.logVerbose(message, this.constructor.name);
   }
 }

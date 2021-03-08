@@ -29,10 +29,10 @@ export class LyricsComponent implements OnInit {
       this.songService.getDataBySongId(songId)
         .subscribe(song => {
           this.song = JSON.parse(song);
-          this.log(JSON.stringify(this.song))
+          this.logVerbose(JSON.stringify(this.song))
         });
     } else {
-      this.log("No id passed in. Trying artist and title instead")
+      this.logFailure("No id passed in. Trying artist and title instead")
 
       const artist = this.route.snapshot.paramMap.get('artist')
       const title = this.route.snapshot.paramMap.get('title')
@@ -41,16 +41,27 @@ export class LyricsComponent implements OnInit {
         this.songService.getDataByArtistTitle(artist, title)
           .subscribe(song => {
             this.song = JSON.parse(song);
-            this.log(JSON.stringify(this.song))
+            this.logVerbose(JSON.stringify(this.song))
           });
       } else {
-        this.log("No artist and title passed in")
+        this.logFailure("No artist and title passed in")
       }
     }
   }
 
-  /** Log a LyricsComponent message with the MessageService */
-  private log(message: string) {
-    this.messageService.add(`LyricsComponent: ${message}`);
+  private logFailure(message: string) {
+    this.messageService.logFailure(message, this.constructor.name);
+  }
+  
+  private logSuccess(message: string) {
+    this.messageService.logSuccess(message, this.constructor.name);
+  }
+
+  private logInfo(message: string) {
+    this.messageService.logInfo(message, this.constructor.name);
+  }
+
+  private logVerbose(message: string) {
+    this.messageService.logVerbose(message, this.constructor.name);
   }
 }

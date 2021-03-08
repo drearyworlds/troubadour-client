@@ -15,29 +15,31 @@ import { map, catchError } from 'rxjs/operators';
 import { SsQueueComponent } from './ss-queue/ss-queue.component';
 import { EditSongComponent } from './edit-song/edit-song.component';
 import { ImportExportComponent } from './import-export/import-export.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 function load(http: HttpClient, config: ConfigurationService): (() => Promise<boolean>) {
   return (): Promise<boolean> => {
     return new Promise<boolean>((resolve: (a: boolean) => void): void => {
-       http.get('./config.json')
-         .pipe(
-           map((x: ConfigurationService) => {
-             console.log("Found the config.json")
-             config.serverHost = x.serverHost;
-             config.serverPort = x.serverPort;
+      http.get('./config.json')
+        .pipe(
+          map((x: ConfigurationService) => {
+            console.log("Found the config.json")
+            config.serverHost = x.serverHost;
+            config.serverPort = x.serverPort;
 
-             resolve(true);
-           }),
-           catchError((x: { status: number }, caught: Observable<void>): ObservableInput<{}> => {
+            resolve(true);
+          }),
+          catchError((x: { status: number }, caught: Observable<void>): ObservableInput<{}> => {
             console.log(`Caught error: ${x.status}`)
-             if (x.status !== 404) {
-               resolve(false);
-             }
-             
-             resolve(true);
-             return of({});
-           })
-         ).subscribe();
+            if (x.status !== 404) {
+              resolve(false);
+            }
+
+            resolve(true);
+            return of({});
+          })
+        ).subscribe();
     });
   };
 }
@@ -57,7 +59,9 @@ function load(http: HttpClient, config: ConfigurationService): (() => Promise<bo
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [{
     provide: APP_INITIALIZER,
@@ -67,8 +71,7 @@ function load(http: HttpClient, config: ConfigurationService): (() => Promise<bo
       HttpClient,
       ConfigurationService
     ],
-  }
-  ],
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

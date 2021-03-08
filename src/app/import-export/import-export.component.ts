@@ -28,10 +28,8 @@ export class ImportExportComponent implements OnInit {
       (await this.songService.importSongList(fileToImport))
         .subscribe((response: StatusResponse) => {
           this.success = response.success
-          this.log(`Success: ${this.success}`)
-          alert("done!")
+          this.logSuccess("Song list imported")
         });
-
     }
   }
 
@@ -51,13 +49,26 @@ export class ImportExportComponent implements OnInit {
           element.setAttribute('download', "songList.json");
           element.style.display = 'none';
           document.body.appendChild(element);
-          element.click(); // simulate click
+          // simulate click
+          element.click();
           document.body.removeChild(element);
         }
       );
   }
 
-  private log(message: string) {
-    this.messageService.add(`ImportExportComponent: ${message}`);
+  private logFailure(message: string) {
+    this.messageService.logFailure(message, this.constructor.name);
+  }
+  
+  private logSuccess(message: string) {
+    this.messageService.logSuccess(message, this.constructor.name);
+  }
+
+  private logInfo(message: string) {
+    this.messageService.logInfo(message, this.constructor.name);
+  }
+
+  private logVerbose(message: string) {
+    this.messageService.logVerbose(message, this.constructor.name);
   }
 }
