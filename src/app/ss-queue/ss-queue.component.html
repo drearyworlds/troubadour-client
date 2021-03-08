@@ -14,7 +14,8 @@
       <div [ngClass]="getCellDivClass(true, false)">{{ entry.song.title }}</div>
       <div [ngClass]="getCellDivClass(true, false)">{{ entry.requests[0].name }}</div>
       <div [ngClass]="getCellDivClass(true, false)">
-        <span (click)="markAsPlayed(entry)">Mark as played</span> | <span (click)="removeFromQueue(entry)">Remove from queue</span>
+        <span class="action-button" (click)="markAsPlayed(entry)">Mark played</span> |
+        <span class="action-button" (click)="removeFromQueue(entry)">Remove</span>
       </div>
     </div>
   </ng-container>

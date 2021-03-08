@@ -62,7 +62,8 @@
 
   border: var(--border-width) solid rgb(0, 127, 212);
   float: left;
-  height: 17px;
+  height: 34px;
+  line-height: 34px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -73,6 +74,11 @@
 
 .cellFixedWidth {
   width: var(--fixed-column-width);
+}
+
+.action-button:hover {
+  color: blue;
+  background-color: antiquewhite;
 }
 
 .table:after {

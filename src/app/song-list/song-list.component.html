@@ -17,7 +17,9 @@
       <div [ngClass]="getCellDivClass(song.active, true)" routerLink="/lyrics/{{song.id}}">{{ song.year }}</div>
       <div [ngClass]="getCellDivClass(song.active, false)" routerLink="/lyrics/{{song.id}}">{{ song.album }}</div>
       <div [ngClass]="getCellDivClass(true, false)">
-        <span (click)="addToQueue(song)">Add to queue</span> | <span (click)="setAsCurrent(song)">Set as current</span> | <span routerLink="/edit/{{song.id}}">Edit Song Data</span>
+        <span class="action-button" (click)="addToQueue(song)">Queue</span> |
+        <span class="action-button" routerLink="/lyrics/{{song.id}}" (click)="setAsCurrent(song)">Play</span> |
+        <span class="action-button" routerLink="/edit/{{song.id}}">Edit</span>
       </div>
     </div>
   </ng-container>
