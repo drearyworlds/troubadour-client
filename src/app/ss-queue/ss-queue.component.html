@@ -1,0 +1,21 @@
+<h2>StreamerSongList Queue</h2>
+<div class="table">
+  <div [ngClass]="getHeaderRowDivClass()">
+    <div [ngClass]="getHeaderCellDivClass(true)">Position</div>
+    <div [ngClass]="getHeaderCellDivClass(false)">Artist</div>
+    <div [ngClass]="getHeaderCellDivClass(false)">Title</div>
+    <div [ngClass]="getHeaderCellDivClass(false)">Requested By</div>
+    <div [ngClass]="getHeaderCellDivClass(false)">Actions</div>
+  </div>
+  <ng-container *ngFor="let entry of entries">
+    <div [ngClass]="getRowDivClass(true)">
+      <div [ngClass]="getCellDivClass(true, true)" >{{ entry.position }}</div>
+      <div [ngClass]="getCellDivClass(true, false)">{{ entry.song.artist }}</div>
+      <div [ngClass]="getCellDivClass(true, false)">{{ entry.song.title }}</div>
+      <div [ngClass]="getCellDivClass(true, false)">{{ entry.requests[0].name }}</div>
+      <div [ngClass]="getCellDivClass(true, false)">
+        <span (click)="markAsPlayed(entry)">Mark as played</span> | <span (click)="removeFromQueue(entry)">Remove from queue</span>
+      </div>
+    </div>
+  </ng-container>
+</div>

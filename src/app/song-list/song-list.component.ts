@@ -12,6 +12,7 @@ import { MessageService } from '../message.service';
 export class SongListComponent implements OnInit {
   songs?: Song[];
   success?: boolean;
+  fileName?: string;
 
   constructor(
     private songService: SongService,
@@ -35,14 +36,14 @@ export class SongListComponent implements OnInit {
     }
   }
 
-  getHeaderCellDivClass(fixed : boolean) {
+  getHeaderCellDivClass(fixed: boolean) {
     return {
       'cellHeader': true,
       'cellFixedWidth': fixed
     }
   }
 
-  getCellDivClass(active: boolean, fixed : boolean) {
+  getCellDivClass(active: boolean, fixed: boolean) {
     return {
       'cellActive': active,
       'cellInactive': !active,
@@ -99,13 +100,21 @@ export class SongListComponent implements OnInit {
       );
   }
 
-  songClicked(clickedSong: Song): void {
-    this.messageService.add(`Clicked a song: ${clickedSong.title}`);
+  setAsCurrent(songToSet: Song): void {
+    this.messageService.add(`Clicked a song: ${songToSet.title}`);
     this.songService
-      .setCurrentSong(clickedSong)
+      .setCurrentSong(songToSet)
       .subscribe((response: StatusResponse) => {
         this.success = response.success
-        this.messageService.add(`Success: ${this.success}`)
+        this.log(`Success: ${this.success}`)
       });
+  }
+
+  addToQueue(songToQueue: Song) {
+    alert("mock add to queue")
+  }
+
+  private log(message: string) {
+    this.messageService.add(`SongListComponent: ${message}`);
   }
 }

@@ -1,12 +1,8 @@
-export interface Song {
+import { SsSong } from './ss-objects'
+
+export interface Song extends SsSong {
     id?: number;
-    artist: string;
-    title: string;
-    album: string;
-    year: number;
-    capo: number;
     tuning: string;
     pick: boolean;
-    active: boolean;
-    lyricsFile: string;
+    composer : string;
 }

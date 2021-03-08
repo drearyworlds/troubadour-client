@@ -11,7 +11,6 @@ import { Song } from '../../json-schema/song'
 })
 export class LyricsComponent implements OnInit {
   public song?: Song;
-  public lyrics: string = "";
 
   constructor(
     private route: ActivatedRoute,
@@ -20,24 +19,34 @@ export class LyricsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getDataAndLyrics()
+    this.getSongData()
   }
 
-  getDataAndLyrics(): void {
-    const artist = this.route.snapshot.paramMap.get('artist') || "";
-    const title = this.route.snapshot.paramMap.get('title') || "";
+  getSongData(): void {
+    const songId = +(this.route.snapshot.paramMap.get('id') || 0)
 
-    this.songService.getData(artist, title)
-      .subscribe(song => {
-        this.song = JSON.parse(song);
-        this.log(JSON.stringify(this.song))
-      });
+    if (songId) {
+      this.songService.getDataBySongId(songId)
+        .subscribe(song => {
+          this.song = JSON.parse(song);
+          this.log(JSON.stringify(this.song))
+        });
+    } else {
+      this.log("No id passed in. Trying artist and title instead")
 
-    this.songService.getLyrics(artist, title)
-      .subscribe(lyrics => {
-        this.lyrics = lyrics;
-        this.log(this.lyrics.substring(0, 14) || 'lyrics: null')
-      });
+      const artist = this.route.snapshot.paramMap.get('artist')
+      const title = this.route.snapshot.paramMap.get('title')
+
+      if (artist && title) {
+        this.songService.getDataByArtistTitle(artist, title)
+          .subscribe(song => {
+            this.song = JSON.parse(song);
+            this.log(JSON.stringify(this.song))
+          });
+      } else {
+        this.log("No artist and title passed in")
+      }
+    }
   }
 
   /** Log a LyricsComponent message with the MessageService */

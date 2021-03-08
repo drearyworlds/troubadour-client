@@ -1,13 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { SsQueueComponent } from './ss-queue/ss-queue.component';
 import { SongListComponent } from './song-list/song-list.component';
 import { DrinkListComponent } from './drink-list/drink-list.component';
 import { LyricsComponent } from './lyrics/lyrics.component';
+import { EditSongComponent } from './edit-song/edit-song.component'
+import { ImportExportComponent } from './import-export/import-export.component';
+import { MessagesComponent } from './messages/messages.component';
 
 const routes: Routes = [
+  { path: 'ss-queue', component: SsQueueComponent },
   { path: 'song-list', component: SongListComponent },
   { path: 'drink-list', component: DrinkListComponent },
-  { path: 'lyrics/:artist/:title', component: LyricsComponent },
+  { path: 'lyrics/:id', component: LyricsComponent },
+  { path: 'edit/:id', component: EditSongComponent },
+  { path: 'import-export', component: ImportExportComponent },
+  { path: 'messages', component: MessagesComponent },
   { path: '', redirectTo: '/song-list', pathMatch: 'full' }
 ];
 

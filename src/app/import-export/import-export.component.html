@@ -1,0 +1,14 @@
+<h2>Import/Export Song List</h2>
+
+<h3>Import</h3>
+<div>
+    <div>Import song list from JSON file</div>
+    <div>
+        <input type="file" (change)="importSongList($event)">
+    </div>
+</div>
+
+<h3>Export</h3>
+<div class="exportButton" (click)="exportSongList()">
+    <div>Export song list to JSON file (excludes lyrics)</div>
+</div>

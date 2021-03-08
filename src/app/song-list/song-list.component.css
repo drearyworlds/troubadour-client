@@ -40,8 +40,8 @@
 .cellHeader,
 .cellActive,
 .cellInactive {
-  --number-of-fixed-columns: 1;
-  --number-of-variable-columns: 3;
+  --number-of-fixed-columns: 2;
+  --number-of-variable-columns: 4;
 
   --top-bottom-padding: 3px;
   --left-right-padding: 0.5%;

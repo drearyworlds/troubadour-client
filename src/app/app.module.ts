@@ -12,6 +12,9 @@ import { APP_INITIALIZER } from '@angular/core';
 import { ConfigurationService } from './configuration.service';
 import { of, Observable, ObservableInput } from '../../node_modules/rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { SsQueueComponent } from './ss-queue/ss-queue.component';
+import { EditSongComponent } from './edit-song/edit-song.component';
+import { ImportExportComponent } from './import-export/import-export.component';
 
 function load(http: HttpClient, config: ConfigurationService): (() => Promise<boolean>) {
   return (): Promise<boolean> => {
@@ -26,11 +29,11 @@ function load(http: HttpClient, config: ConfigurationService): (() => Promise<bo
              resolve(true);
            }),
            catchError((x: { status: number }, caught: Observable<void>): ObservableInput<{}> => {
+            console.log(`Caught error: ${x.status}`)
              if (x.status !== 404) {
                resolve(false);
              }
-             config.serverHost = 'localhost';
-             config.serverPort = 3000;
+             
              resolve(true);
              return of({});
            })
@@ -45,7 +48,10 @@ function load(http: HttpClient, config: ConfigurationService): (() => Promise<bo
     SongListComponent,
     DrinkListComponent,
     MessagesComponent,
-    LyricsComponent
+    LyricsComponent,
+    SsQueueComponent,
+    EditSongComponent,
+    ImportExportComponent
   ],
   imports: [
     BrowserModule,
