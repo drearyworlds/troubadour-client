@@ -61,6 +61,14 @@ export class SsQueueComponent implements OnInit {
   }
 
   markAsPlayed(entry: SsQueueEntry) {
+    this.ssService
+      .markAsPlayed(entry)
+      .subscribe(
+        () => {
+          this.logSuccess('entry marked as played');
+        }
+      );
+
     this.logFailure("markAsPlayed not yet implemented")
   }
 

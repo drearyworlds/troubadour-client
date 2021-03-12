@@ -27,6 +27,7 @@ function load(http: HttpClient, config: ConfigurationService): (() => Promise<bo
             console.log("Found the config.json")
             config.serverHost = x.serverHost;
             config.serverPort = x.serverPort;
+            config.streamerSonglistToken = x.streamerSonglistToken;
 
             resolve(true);
           }),

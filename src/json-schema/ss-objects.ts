@@ -12,10 +12,12 @@ export interface SsSong {
 }
 
 interface SsRequest {
+    id: number;
     name: string;
 }
 
 export interface SsQueueEntry {
+    id : number;
     song: SsSong;
     position: number;
     requests: SsRequest[];

@@ -5,4 +5,5 @@ export interface Song extends SsSong {
     tuning: string;
     pick: boolean;
     composer : string;
+    suggestedBy: string;
 }

@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { SsQueueEntry } from '../json-schema/ss-objects';
 import { Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { MessageService } from './message.service';
 import { catchError, tap } from 'rxjs/operators';
+import { ConfigurationService } from './configuration.service';
+import { StatusResponse } from '../json-schema/statusResponse';
 
 interface SongQueue {
   list: SsQueueEntry[];
@@ -13,21 +15,51 @@ interface SongQueue {
   providedIn: 'root',
 })
 export class SsService {
-  private URL_GET_SS_QUEUE: string = `https://api.streamersonglist.com/v1/streamers/drearyworlds/queue`;
+  private static URL_GET_QUEUE: string = `https://api.streamersonglist.com/v1/streamers/drearyworlds/queue`;
+  private static URL_MARK_QUEUE_ENTRY_AS_PLAYED: string = `https://api.streamersonglist.com/v1/streamers/drearyworlds/queue/{queueId}/played`
 
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
+    private configService: ConfigurationService
   ) { }
 
   getQueue(): Observable<SongQueue> {
     const songQueue: Observable<SongQueue> = this.http
-      .get<SongQueue>(this.URL_GET_SS_QUEUE)
+      .get<SongQueue>(SsService.URL_GET_QUEUE)
       .pipe(
         tap((_) => this.logVerbose('Fetched song queue')),
         catchError(this.handleError<SongQueue>('getSongQueue'))
       );
     return songQueue;
+  }
+
+  markAsPlayed(entry: SsQueueEntry) : Observable<StatusResponse> {
+    let id: any = entry.id;
+    const url = SsService.URL_MARK_QUEUE_ENTRY_AS_PLAYED.replace(/{queueId}/g, id);
+
+    this.logVerbose(`id: ${id}`)
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.configService.streamerSonglistToken}`
+      }),
+    };
+
+    const statusResponse: Observable<StatusResponse> = this.http
+      .post<StatusResponse>(
+        url,
+        null,
+        httpOptions)
+      .pipe(
+        tap((_) => this.logVerbose(`Marked entry (${id}) as played`)),
+        catchError(this.handleError<StatusResponse>('markAsPlayed'))
+      );
+
+    this.logVerbose(`markAsPlayed response: ${statusResponse}`)
+
+    return statusResponse;
   }
 
   /**
