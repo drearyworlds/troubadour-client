@@ -1,20 +1,26 @@
 <h2>Drink List</h2>
+
 <div class="table">
-  <div class="header-row">
-    <div class="header-cell">Name</div>
-    <div class="header-cell">Style</div>
-    <div class="header-cell">Brewery</div>
-    <div class="header-cell">City</div>
+  <div [ngClass]="getHeaderRowDivClass()">
+    <div [ngClass]="getHeaderCellDivClass(true)">ID</div>
+    <div [ngClass]="getHeaderCellDivClass(false)">Name</div>
+    <div [ngClass]="getHeaderCellDivClass(false)">Style</div>
+    <div [ngClass]="getHeaderCellDivClass(false)">Brewery</div>
+    <div [ngClass]="getHeaderCellDivClass(false)">City</div>
+    <div [ngClass]="getHeaderCellDivClass(false)">Actions</div>
   </div>
+
   <ng-container *ngFor="let drink of drinks">
-    <div
-      class="row"
-      (click)="drinkClicked(drink)"
-    >
-      <div class="cell">{{ drink.name }}</div>
-      <div class="cell">{{ drink.style }}</div>
-      <div class="cell">{{ drink.brewery }}</div>
-      <div class="cell">{{ drink.city }}</div>
+    <div [ngClass]="getHeaderRowDivClass()">
+      <div [ngClass]="getCellDivClass(true)">{{ drink.id }}</div>
+      <div [ngClass]="getCellDivClass(false)">{{ drink.name }}</div>
+      <div [ngClass]="getCellDivClass(false)">{{ drink.style }}</div>
+      <div [ngClass]="getCellDivClass(false)">{{ drink.brewery }}</div>
+      <div [ngClass]="getCellDivClass(false)">{{ drink.city }}</div>
+      <div [ngClass]="getCellDivClass(false)">
+        <span class="action-button" (click)="setAsCurrent(drink)">Drink</span> |
+        <span class="action-button" routerLink="/edit-drink/{{drink.id}}">Edit</span>
+      </div>
     </div>
   </ng-container>
 </div>

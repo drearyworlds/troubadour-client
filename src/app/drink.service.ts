@@ -16,8 +16,8 @@ interface DrinkList {
 })
 
 export class DrinkService {
-  private getDrinkListUrl = `http://${this.config.serverHost}:${this.config.serverPort}/drinklist`;
-  private updateCurrentDrinkUrl = `http://${this.config.serverHost}:${this.config.serverPort}/currentdrink/update`;
+  private URL_DRINK_LIST: string = `http://${this.config.serverHost}:${this.config.serverPort}/drink/list`;
+  private URL_UPDATE_CURRENT_DRINK: string = `http://${this.config.serverHost}:${this.config.serverPort}/drink/current`;
   private drinkList?: Observable<DrinkList>;
   private updateStatusResponse?: Observable<StatusResponse>;
 
@@ -27,9 +27,9 @@ export class DrinkService {
     private config: ConfigurationService,
   ) {}
 
-  getDrinkList(): Observable<DrinkList> {
-    this.drinkList = this.http.get<DrinkList>(this.getDrinkListUrl).pipe(
-      tap((_) => this.logSuccess('Fetched drink list')),
+  getList(): Observable<DrinkList> {
+    this.drinkList = this.http.get<DrinkList>(this.URL_DRINK_LIST).pipe(
+      tap((_) => this.logVerbose('Fetched drink list')),
       catchError(this.handleError<DrinkList>('getDrinkList'))
     );
     return this.drinkList;
@@ -46,27 +46,42 @@ export class DrinkService {
 
     this.updateStatusResponse = this.http
       .post<StatusResponse>(
-        this.updateCurrentDrinkUrl,
+        this.URL_UPDATE_CURRENT_DRINK,
         currentDrinkString,
         httpOptions
       )
       .pipe(
-        tap((_) => this.logSuccess('Fetched current drink')),
+        tap((_) => this.logVerbose('Fetched current drink')),
         catchError(this.handleError<StatusResponse>('setCurrentDrink'))
       );
 
     return this.updateStatusResponse;
   }
 
-  /** GET drink by id. Will 404 if id not found */
-  // getDrink(id: number): Observable<Drink> {
-  //   const url = `${this.getDrinkListUrl}/${id}`;
+  async importDrinkList(drinkListFile: File): Promise<Observable<StatusResponse>> {
+    this.logVerbose("importDrinkList")
+    this.logVerbose(`drinkListFile: ${drinkListFile}`)
+    let drinkList = await drinkListFile.text();
 
-  //   return this.http.get<Drink>(url).pipe(
-  //     tap(_ => this.log(`Fetched drink id=${id}`)),
-  //     catchError(this.handleError<Drink>(`getDrink id=${id}`))
-  //   );
-  // }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
+
+    const updateStatusResponse: Observable<StatusResponse> = this.http
+      .post<StatusResponse>(
+        this.URL_DRINK_LIST,
+        drinkList,
+        httpOptions
+      )
+      .pipe(
+        tap((_) => this.logVerbose('Imported drink list')),
+        catchError(this.handleError<StatusResponse>('importDrinkList'))
+      );
+
+    return updateStatusResponse;
+  }
 
   /**
    * Handle Http operation that failed.

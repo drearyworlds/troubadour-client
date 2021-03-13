@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Song } from '../../json-schema/song';
-import { StatusResponse } from '../../json-schema/statusResponse';
 import { SongService } from '../song.service';
+import { StatusResponse } from '../../json-schema/statusResponse';
 import { MessageService } from '../message.service';
 
 @Component({
@@ -103,7 +103,7 @@ export class SongListComponent implements OnInit {
   }
 
   setAsCurrent(songToSet: Song): void {
-    this.logVerbose(`Clicked a song: ${songToSet.title}`);
+    this.logVerbose(`Setting song as current: ${songToSet.title}`);
     this.songService
       .setCurrentSong(songToSet)
       .subscribe((response: StatusResponse) => {

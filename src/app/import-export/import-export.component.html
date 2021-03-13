@@ -12,3 +12,16 @@
 <div class="exportButton" (click)="exportSongList()">
     <div>Export song list to JSON file (excludes lyrics)</div>
 </div>
+
+<h3>Import drink list</h3>
+<div>
+    <div>Import drink list from JSON file</div>
+    <div>
+        <input type="file" (change)="importDrinkList($event)">
+    </div>
+</div>
+
+<h3>Export drink list</h3>
+<div class="exportButton" (click)="exportDrinkList()">
+    <div>Export drink list to JSON file</div>
+</div>

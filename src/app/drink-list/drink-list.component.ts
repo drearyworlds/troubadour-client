@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Drink } from '../../json-schema/drink'
 import { DrinkService } from '../drink.service';
+import { StatusResponse } from '../../json-schema/statusResponse'
 import { MessageService } from '../message.service';
 
 @Component({
@@ -24,18 +25,49 @@ export class DrinkListComponent implements OnInit {
     this.getDrinkList();
   }
 
-  getDrinkList(): void {
-    this.drinkService.getDrinkList()
-      .subscribe(drinkList => this.drinks = drinkList.drinks);
+  getHeaderRowDivClass() {
+    return {
+      'rowHeader': true
+    }
   }
 
-  drinkClicked(clickedDrink: Drink): void {
-    this.logVerbose(`Clicked a drink: ${clickedDrink.name}`)
-    this.drinkService.setCurrentDrink(clickedDrink)
-      .subscribe(response => {
-        this.logSuccess(`Set current drink to ${clickedDrink.name}`)
+  getRowDivClass() {
+    return {
+      'rowActive': true
+    }
+  }
+
+  getHeaderCellDivClass(fixed: boolean) {
+    return {
+      'cellHeader': true,
+      'cellFixedWidth': fixed
+    }
+  }
+
+  getCellDivClass(fixed: boolean) {
+    return {
+      'cellActive': true,
+      'cellFixedWidth': fixed
+    }
+  }
+
+  getDrinkList(): void {
+    this.drinkService
+      .getList()
+      .subscribe((drinkList) => {
+        this.drinks = drinkList.drinks;
+        this.logSuccess('Fetched drink list');
+      });
+  }
+
+  setAsCurrent(drinkToSet: Drink): void {
+    this.logVerbose(`Setting drink as current: ${drinkToSet.name}`);
+    this.drinkService
+      .setCurrentDrink(drinkToSet)
+      .subscribe((response: StatusResponse) => {
         this.success = response.success
-      })
+        this.logSuccess(`Current song set to: ${drinkToSet.name}`)
+      });
   }
 
   private logFailure(message: string) {

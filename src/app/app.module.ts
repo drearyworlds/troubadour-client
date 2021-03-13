@@ -17,6 +17,7 @@ import { EditSongComponent } from './edit-song/edit-song.component';
 import { ImportExportComponent } from './import-export/import-export.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { EditDrinkComponent } from './edit-drink/edit-drink.component';
 
 function load(http: HttpClient, config: ConfigurationService): (() => Promise<boolean>) {
   return (): Promise<boolean> => {
@@ -54,7 +55,8 @@ function load(http: HttpClient, config: ConfigurationService): (() => Promise<bo
     LyricsComponent,
     SsQueueComponent,
     EditSongComponent,
-    ImportExportComponent
+    ImportExportComponent,
+    EditDrinkComponent
   ],
   imports: [
     BrowserModule,
