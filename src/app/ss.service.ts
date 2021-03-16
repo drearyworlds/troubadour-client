@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SsQueueEntry } from '../json-schema/ss-objects';
+import { SsQueueEntry, SsSong } from '../json-schema/ss-objects';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { MessageService } from './message.service';
@@ -16,13 +16,25 @@ interface SongQueue {
 })
 export class SsService {
   private static URL_GET_QUEUE: string = `https://api.streamersonglist.com/v1/streamers/drearyworlds/queue`;
+  private static URL_GET_SONGLIST: string = `https://api.streamersonglist.com/v1/streamers/drearyworlds/songs`;
   private static URL_MARK_QUEUE_ENTRY_AS_PLAYED: string = `https://api.streamersonglist.com/v1/streamers/drearyworlds/queue/{queueId}/played`
+  private static URL_ADD_TO_QUEUE: string = `https://api.streamersonglist.com/v1/streamers/drearyworlds/queue/{songId}/request`;
 
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
     private configService: ConfigurationService
   ) { }
+
+  getSongList(): Observable<Array<SsSong>> {
+    const songList: Observable<Array<SsSong>> = this.http
+      .get<Array<SsSong>>(SsService.URL_GET_SONGLIST)
+      .pipe(
+        tap((_) => this.logVerbose('Fetched song list')),
+        catchError(this.handleError<Array<SsSong>>('getSongList'))
+      );
+    return songList;
+  }
 
   getQueue(): Observable<SongQueue> {
     const songQueue: Observable<SongQueue> = this.http
@@ -32,6 +44,35 @@ export class SsService {
         catchError(this.handleError<SongQueue>('getSongQueue'))
       );
     return songQueue;
+  }
+
+  addToQueue(id : number) : Observable<StatusResponse> {
+    this.logVerbose('addToQueue');
+
+    const url = SsService.URL_ADD_TO_QUEUE.replace(/{songId}/g, id.toString());
+
+    this.logVerbose(`id: ${id}`)
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.configService.streamerSonglistToken}`
+      }),
+    };
+
+    const statusResponse: Observable<StatusResponse> = this.http
+      .post<StatusResponse>(
+        url,
+        null,
+        httpOptions)
+      .pipe(
+        tap((_) => this.logVerbose(`Added entry (${id}) to queue`)),
+        catchError(this.handleError<StatusResponse>('addToQueue'))
+      );
+
+    this.logVerbose(`addToQueue response: ${statusResponse}`)
+
+    return statusResponse;
   }
 
   markAsPlayed(entry: SsQueueEntry) : Observable<StatusResponse> {

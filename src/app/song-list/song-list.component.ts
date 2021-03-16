@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Song } from '../../json-schema/song';
 import { SongService } from '../song.service';
+import { SsService } from '../ss.service';
 import { StatusResponse } from '../../json-schema/statusResponse';
 import { MessageService } from '../message.service';
+import { SsSong, SsQueueEntry } from '../../json-schema/ss-objects'
+import { SongList } from 'src/json-schema/song-list';
+
 
 @Component({
   selector: 'app-song-list',
@@ -16,7 +20,8 @@ export class SongListComponent implements OnInit {
 
   constructor(
     private songService: SongService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private ssService: SsService
   ) { }
 
   ngOnInit(): void {
@@ -93,6 +98,54 @@ export class SongListComponent implements OnInit {
   }
 
 
+  GetSsSongFromSong(song: Song): SsSong {
+    this.logVerbose(`GetQueueEntryFromSong`);
+    let songList: Array<SsSong> = new Array<SsSong>();
+
+    this.ssService.getSongList()
+      .subscribe((songList: Array<SsSong>) => {
+        songList = songList;
+      });
+
+    this.logVerbose(`got songlist`);
+    let returnSsSong: SsSong = songList[0]
+    
+    if (songList.entries.length > 0) {
+      songList.forEach((ssSong: SsSong) => {
+        this.logVerbose(`foreach loop: ${ssSong.title}`);
+        if (song.artist == ssSong.artist
+          && song.title == ssSong.title) {
+          returnSsSong = ssSong;
+        }
+      });
+
+      this.logVerbose(`Returning`);
+    } else {
+      this.logVerbose("Queue has no entries")
+    }
+
+    return returnSsSong;
+  }
+
+  GetSongFromssSong(ssSong: SsSong): Song {
+    let songs: Array<Song> = new Array<Song>();
+
+    this.songService.getList()
+      .subscribe((list: SongList) => {
+        songs = list.songs;
+      });
+
+    let returnSong: Song = songs[0];
+    songs.forEach((song: Song) => {
+      if (ssSong.artist == song.artist
+        && ssSong.title == song.title) {
+        returnSong = song;
+      }
+    });
+
+    return returnSong;
+  }
+
   getSongList(): void {
     this.songService
       .getList()
@@ -112,8 +165,20 @@ export class SongListComponent implements OnInit {
       });
   }
 
-  addToQueue(songToQueue: Song) {
-    this.logFailure("addToQueue not yet implemented")
+  addToQueue(song: Song) {
+    this.logVerbose('addToQueue');
+    let ssSong: SsSong = this.GetSsSongFromSong(song);
+
+    // this.logVerbose(`entry: ${ssSong.title}`);
+    // this.ssService
+    //   .addToQueue(ssSong)
+    //   .subscribe(
+    //     () => {
+    //       this.logSuccess('Entry added to queue');
+    //     }
+    //   );
+
+    this.logVerbose('addToQueue');
   }
 
   private logFailure(message: string) {
