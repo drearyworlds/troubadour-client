@@ -4,13 +4,14 @@
   "main": "electron/dist/main.js",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --base-href ./",
+    "build-electron": "npm run build && tsc --p electron",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron": "ng build --base-href ./ && tsc --p electron && electron .",
-    "make-win": "electron-packager . songlistclient --platform=win32 --arch=x64 --out=./dist"
+    "start": "ng serve",
+    "start-electron": "electron .",
+    "make-electron-win": "electron-packager . songlistclient --platform=win32 --arch=x64 --out=./dist"
   },
   "browser": {
     "fs": false,
