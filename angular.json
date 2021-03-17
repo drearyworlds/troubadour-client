@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "songlistclient": {
+    "troubadour-client": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/songlistclient",
+            "outputPath": "dist/troubadour-client",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -67,18 +67,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "songlistclient:build"
+            "browserTarget": "troubadour-client:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "songlistclient:build:production"
+              "browserTarget": "troubadour-client:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "songlistclient:build"
+            "browserTarget": "troubadour-client:build"
           }
         },
         "test": {
@@ -115,16 +115,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "songlistclient:serve"
+            "devServerTarget": "troubadour-client:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "songlistclient:serve:production"
+              "devServerTarget": "troubadour-client:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "songlistclient"
+  "defaultProject": "troubadour-client"
 }

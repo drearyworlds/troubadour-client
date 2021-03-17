@@ -18,7 +18,7 @@ function createWindow() {
 
     win.loadURL(
       url.format({
-        pathname: path.join(__dirname, `/../../dist/songlistclient/index.html`),
+        pathname: path.join(__dirname, `/../../dist/troubadour-client/index.html`),
         protocol: 'file:',
         slashes: true,
       })

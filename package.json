@@ -1,17 +1,19 @@
 {
-  "name": "songlistclient",
+  "name": "troubadour-client",
   "version": "0.0.1",
   "main": "electron/dist/main.js",
   "scripts": {
     "ng": "ng",
+    "clean": "rd /s /q .\\dist && rd /s /q .\\bin",
     "build": "ng build --base-href ./",
     "build-electron": "npm run build && tsc --p electron",
+    "rebuild": "npm run clean && npm run build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "start": "ng serve",
-    "start-electron": "electron .",
-    "make-electron-win": "electron-packager . songlistclient --platform=win32 --arch=x64 --out=./dist"
+    "start": "npm run build && ng serve",
+    "start-electron": "npm run build-electron && electron .",
+    "make-electron-win": "npm run build-electron && electron-packager . troubadour-client --platform=win32 --arch=x64 --out=./bin"
   },
   "browser": {
     "fs": false,
