@@ -37,7 +37,7 @@
     "directories": {
       "output": "bin"
     },
-    "asar": false
+    "asar": true
   },
   "browser": {
     "fs": false,
