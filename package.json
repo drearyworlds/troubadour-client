@@ -15,7 +15,8 @@
     "e2e": "ng e2e",
     "start": "npm run build && ng serve",
     "pack": "electron-builder --dir",
-    "dist": "npm run build-electron && electron-builder"
+    "dist": "npm run build-electron && electron-builder",
+    "publish": "electron-builder --win --x64 --publish always"
   },
   "build": {
     "appId": "com.electron.troubadour-client",
