@@ -1,6 +1,6 @@
 {
   "name": "troubadour-client",
-  "description": "Client for Troubadour Song List Application",
+  "description": "Troubadour Song List Client Application",
   "version": "0.0.1",
   "author": "drearyworlds",
   "main": "electron/dist/main.js",
@@ -19,6 +19,7 @@
   },
   "build": {
     "appId": "com.electron.troubadour-client",
+    "productName": "Troubadour Client",
     "files": [
       "!bin",
       "!node_modules",
@@ -35,9 +36,30 @@
       "!tslint.json"
     ],
     "directories": {
+      "buildResources": "res",
       "output": "bin"
     },
-    "asar": true
+    "asar": true,
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "drearyworlds",
+        "repo": "troubadour-client"
+      }
+    ],
+    "win": {
+      "publish": [
+        "github"
+      ],
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    }
   },
   "browser": {
     "fs": false,
