@@ -5,8 +5,7 @@ import { SsService } from '../ss.service';
 import { StatusResponse } from '../../json-schema/statusResponse';
 import { MessageService } from '../message.service';
 import { SsSong, SsQueueEntry } from '../../json-schema/ss-objects'
-import { SongList } from 'src/json-schema/song-list';
-
+import { SongList } from '../../json-schema/song-list';
 
 @Component({
   selector: 'app-song-list',

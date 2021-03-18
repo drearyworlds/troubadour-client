@@ -1,6 +1,8 @@
 {
   "name": "troubadour-client",
+  "description": "Client for Troubadour Song List Application",
   "version": "0.0.1",
+  "author": "drearyworlds",
   "main": "electron/dist/main.js",
   "scripts": {
     "ng": "ng",
@@ -12,8 +14,30 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "start": "npm run build && ng serve",
-    "start-electron": "npm run build-electron && electron .",
-    "make-electron-win": "npm run build-electron && electron-packager . troubadour-client --platform=win32 --arch=x64 --out=./bin"
+    "pack": "electron-builder --dir",
+    "dist": "npm run build-electron && electron-builder"
+  },
+  "build": {
+    "appId": "com.electron.troubadour-client",
+    "files": [
+      "!bin",
+      "!node_modules",
+      "!e2e",
+      "!src",
+      "!browserslistrc",
+      "!angular.json",
+      "!azure-pipelines.yml",
+      "!karma.conf.js",
+      "!README.md",
+      "!tsconfig.app.json",
+      "!tsconfig.json",
+      "!tsconfig.spec.json",
+      "!tslint.json"
+    ],
+    "directories": {
+      "output": "bin"
+    },
+    "asar": false
   },
   "browser": {
     "fs": false,
@@ -46,6 +70,7 @@
     "@types/jasmine": "~3.6.3",
     "codelyzer": "^6.0.1",
     "electron": "^12.0.1",
+    "electron-builder": "^22.10.5",
     "electron-packager": "^15.2.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~6.0.0",
