@@ -126,7 +126,7 @@ export class SongListComponent implements OnInit {
     return returnSsSong;
   }
 
-  GetSongFromssSong(ssSong: SsSong): Song {
+  GetSongFromSsSong(ssSong: SsSong): Song {
     let songs: Array<Song> = new Array<Song>();
 
     this.songService.getList()
@@ -143,6 +143,20 @@ export class SongListComponent implements OnInit {
     });
 
     return returnSong;
+  }
+
+  getNextValidSongId(): number {
+    let returnValue = 0
+
+    if (this.songs) {
+      for (let song of this.songs) {
+        if (song.id > returnValue) {
+          returnValue = song.id;
+        }
+      }
+    }
+
+    return returnValue;
   }
 
   getSongList(): void {

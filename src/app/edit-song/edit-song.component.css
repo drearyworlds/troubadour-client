@@ -1,15 +1,24 @@
 input.button {
-    float: right;
-    width: 10%;
-    height: 50px;
-}
+    float: left;
+    width: 100px;
+    height: 25px;  
+    display: block;
+  }
 
 div.field {
     padding: 20px 20px;
+    display: block;
 }
 
 input, textarea {
     font-family: 'Courier New', Courier, monospace;
     font-size: 12px;
-    width: 100%
+    width: 50%;
+    color: white;
+    background-color: black;
+    
+}
+
+:disabled {
+    background-color: #222;
 }

@@ -27,10 +27,17 @@ export class EditSongComponent implements OnInit {
     const songId = +(this.route.snapshot.paramMap.get('id') || 0)
 
     this.songService.getDataBySongId(songId)
-      .subscribe(song => {
-        this.logVerbose(`song: ${song}`)
-        this.song = JSON.parse(song);
-        this.logSuccess(`Retrieved song data for: ${this.song?.title}`)
+      .subscribe(songJsonString => {
+        if (songJsonString) {
+          this.song = JSON.parse(songJsonString);
+          this.logSuccess(`Retrieved song data for: ${this.song?.title}`)
+        }
+
+        if (!this.song) {
+          this.logInfo(`Did not find song. Adding new song.`)
+          this.song = new Song();
+          this.song.id = songId;
+        }
       });
   }
 
@@ -47,7 +54,7 @@ export class EditSongComponent implements OnInit {
   private logFailure(message: string) {
     this.messageService.logFailure(message, this.constructor.name);
   }
-  
+
   private logSuccess(message: string) {
     this.messageService.logSuccess(message, this.constructor.name);
   }

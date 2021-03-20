@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { SsQueueEntry } from '../../json-schema/ss-objects'
 import { MessageService } from '../message.service';
 import { SsService } from '../ss.service';
@@ -14,7 +15,8 @@ export class SsQueueComponent implements OnInit {
 
   constructor(
     private ssService: SsService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -66,8 +68,18 @@ export class SsQueueComponent implements OnInit {
       .subscribe(
         () => {
           this.logSuccess('Entry marked as played');
+          this.getSongQueue();
         }
       );
+
+
+    // this.router.navigate(['/', 'song-list'])
+    //   .then(nav => {
+    //     this.logSuccess(`Navigated: ${nav}`)
+    //   }, err => {
+    //     this.logFailure(`Failed to navigate: ${err}`)
+    //   });
+
   }
 
   removeFromQueue(entry: SsQueueEntry) {

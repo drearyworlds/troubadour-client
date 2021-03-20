@@ -1,11 +1,13 @@
 <h2>Edit Song</h2>
 
 <div *ngIf="song">
-    <input class="button" type="button" value="Save Changes" (click)="saveSongData()">
+    <div class="field">
+        <input class="button" type="button" value="Save Changes" (click)="saveSongData()">
+    </div>
 
     <div class="field">
         <label for="ID">ID: </label>
-        <input name="ID" [(ngModel)]="song.id" placeholder="(ID Not Found)">
+        <input name="ID" [(ngModel)]="song.id" disabled="true" placeholder="(ID Not Found)">
     </div>
 
     <div class="field">
@@ -40,12 +42,12 @@
 
     <div class="field">
         <label for="Pick">Pick: </label>
-        <input type="checkbox" name="Pick" [(ngModel)]="song.pick" placeholder="(Pick Not Found)"/>
+        <input type="checkbox" name="Pick" [(ngModel)]="song.pick" placeholder="(Pick Not Found)" />
     </div>
 
     <div class="field">
         <label for="Active">Active: </label>
-        <input type="checkbox" name="Active" [(ngModel)]="song.active" placeholder="(Active Not Found)"/>
+        <input type="checkbox" name="Active" [(ngModel)]="song.active" placeholder="(Active Not Found)" />
     </div>
 
     <div class="field">
@@ -59,13 +61,20 @@
     </div>
 
     <div class="field">
+        <label for="SuggestedBy">Suggested by: </label>
+        <input name="SuggestedBy" [(ngModel)]="song.suggestedBy" placeholder="(Suggested By Not Found)">
+    </div>
+
+    <div class="field">
         <label for="Lyrics">Lyrics: </label>
-        <textarea rows="100" cols="200" name="Lyrics" [(ngModel)]="song.lyrics" placeholder="(Lyrics Not Found)"></textarea>
+        <textarea rows="100" cols="200" name="Lyrics" [(ngModel)]="song.lyrics"
+            placeholder="(Lyrics Not Found)"></textarea>
     </div>
 
     <div class="field">
         <label for="Chords">Chords: </label>
-        <textarea rows="100" cols="200" name="Chords" [(ngModel)]="song.chords" placeholder="(Chords Not Found)"></textarea>
+        <textarea rows="100" cols="200" name="Chords" [(ngModel)]="song.chords"
+            placeholder="(Chords Not Found)"></textarea>
     </div>
 
     <div class="field">

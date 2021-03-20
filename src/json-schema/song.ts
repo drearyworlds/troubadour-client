@@ -1,9 +1,9 @@
 import { SsSong } from './ss-objects'
 
-export interface Song extends SsSong {
-    id: number;
-    tuning: string;
-    pick: boolean;
-    composer : string;
-    suggestedBy: string;
+export class Song extends SsSong {
+    id: number = 0;
+    tuning: string = "Standard";
+    pick: boolean = true;
+    composer : string = "";
+    suggestedBy: string = "drearyworlds";
 }
