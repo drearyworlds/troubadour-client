@@ -1,14 +1,19 @@
-export interface SsSong {
-    artist: string;
-    title: string;
-    album: string;
-    year: number;
-    capo: number;
-    active: boolean;
-    comment: string;
-    lyrics: string;
-    chords: string;
-    tab: string;
+export class SsSong {
+    id: number = 0;
+    artist: string = "";
+    title: string = "";
+    album: string = "";
+    year: number = 0;
+    capo: number = 0;
+    active: boolean = false;
+    comment: string = "";
+    lyrics: string = "";
+    chords: string = "";
+    tab: string = "";
+}
+
+export interface SsSongList {
+    items: SsSong[];
 }
 
 interface SsRequest {

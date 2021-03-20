@@ -4,7 +4,7 @@ import { SongService } from '../song.service';
 import { SsService } from '../ss.service';
 import { StatusResponse } from '../../json-schema/statusResponse';
 import { MessageService } from '../message.service';
-import { SsSong, SsQueueEntry } from '../../json-schema/ss-objects'
+import { SsSong, SsSongList } from '../../json-schema/ss-objects'
 import { SongList } from '../../json-schema/song-list';
 
 @Component({
@@ -14,6 +14,7 @@ import { SongList } from '../../json-schema/song-list';
 })
 export class SongListComponent implements OnInit {
   songs?: Song[];
+  ssSongs?: SsSong[];
   success?: boolean;
   fileName?: string;
 
@@ -25,6 +26,7 @@ export class SongListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getSongList();
+    this.getSsSongList();
   }
 
   getHeaderRowDivClass() {
@@ -98,29 +100,27 @@ export class SongListComponent implements OnInit {
 
 
   GetSsSongFromSong(song: Song): SsSong {
-    this.logVerbose(`GetQueueEntryFromSong`);
-    let songList: Array<SsSong> = new Array<SsSong>();
+    let returnSsSong: SsSong = new SsSong();
 
-    this.ssService.getSongList()
-      .subscribe((songList: Array<SsSong>) => {
-        songList = songList;
-      });
+    if (this.ssSongs) {
+      this.logVerbose(`GetSsSongFromSong`);
 
-    this.logVerbose(`got songlist`);
-    let returnSsSong: SsSong = songList[0]
-    
-    if (songList.entries.length > 0) {
-      songList.forEach((ssSong: SsSong) => {
-        this.logVerbose(`foreach loop: ${ssSong.title}`);
-        if (song.artist == ssSong.artist
-          && song.title == ssSong.title) {
-          returnSsSong = ssSong;
+      if (this.ssSongs.length > 0) {
+        for (let ssSong of this.ssSongs) {
+          if (song.artist == ssSong.artist
+            && song.title == ssSong.title) {
+            this.logVerbose(`Matched song: ${ssSong.title}`);
+            returnSsSong = ssSong;
+            break;
+          }
         }
-      });
 
-      this.logVerbose(`Returning`);
-    } else {
-      this.logVerbose("Queue has no entries")
+        if (returnSsSong.id == 0) {
+          this.logFailure(`Did not find matching song for: ${song.artist} - ${song.title}`)
+        }
+      } else {
+        this.logFailure("SS songlist has no entries")
+      }
     }
 
     return returnSsSong;
@@ -154,6 +154,15 @@ export class SongListComponent implements OnInit {
       });
   }
 
+  getSsSongList(): void {
+    this.ssService
+      .getSongList()
+      .subscribe((ssSongList) => {
+        this.ssSongs = ssSongList.items;
+        this.logSuccess('Fetched SS song list');
+      });
+  }
+
   setAsCurrent(songToSet: Song): void {
     this.logVerbose(`Setting song as current: ${songToSet.title}`);
     this.songService
@@ -168,14 +177,15 @@ export class SongListComponent implements OnInit {
     this.logVerbose('addToQueue');
     let ssSong: SsSong = this.GetSsSongFromSong(song);
 
-    // this.logVerbose(`entry: ${ssSong.title}`);
-    // this.ssService
-    //   .addToQueue(ssSong)
-    //   .subscribe(
-    //     () => {
-    //       this.logSuccess('Entry added to queue');
-    //     }
-    //   );
+    this.logVerbose(`ssSong: ${JSON.stringify(ssSong)}`)
+
+    this.ssService
+      .addToQueue(ssSong.id)
+      .subscribe(
+        () => {
+          this.logSuccess('Entry added to queue');
+        }
+      );
 
     this.logVerbose('addToQueue');
   }

@@ -6,6 +6,7 @@ import { MessageService } from './message.service';
 import { catchError, tap } from 'rxjs/operators';
 import { ConfigurationService } from './configuration.service';
 import { StatusResponse } from '../json-schema/statusResponse';
+import { SsSongList } from '../json-schema/ss-objects'
 
 interface SongQueue {
   list: SsQueueEntry[];
@@ -26,12 +27,21 @@ export class SsService {
     private configService: ConfigurationService
   ) { }
 
-  getSongList(): Observable<Array<SsSong>> {
-    const songList: Observable<Array<SsSong>> = this.http
-      .get<Array<SsSong>>(SsService.URL_GET_SONGLIST)
+  getSongList(): Observable<SsSongList> {
+    let options: { params?: HttpParams; } = {
+      params: new HttpParams()
+        .append('size', "0")
+        .append('current', "0")
+        .append('showInactive', "false")
+        .append('isNew', "false")
+        .append('order', "asc")
+    };
+
+    let songList: Observable<SsSongList> = this.http
+      .get<SsSongList>(SsService.URL_GET_SONGLIST, options)
       .pipe(
         tap((_) => this.logVerbose('Fetched song list')),
-        catchError(this.handleError<Array<SsSong>>('getSongList'))
+        catchError(this.handleError<SsSongList>('getSongList'))
       );
     return songList;
   }
@@ -46,12 +56,14 @@ export class SsService {
     return songQueue;
   }
 
-  addToQueue(id : number) : Observable<StatusResponse> {
-    this.logVerbose('addToQueue');
+  addToQueue(id: number): Observable<StatusResponse> {
+    let idString = id.toString();
+    this.logVerbose(`addToQueue: ${idString}`);
 
-    const url = SsService.URL_ADD_TO_QUEUE.replace(/{songId}/g, id.toString());
+    const url = SsService.URL_ADD_TO_QUEUE.replace(/{songId}/g, idString);
 
-    this.logVerbose(`id: ${id}`)
+    this.logVerbose(`url: ${url}`)
+    this.logVerbose(`token: ${this.configService.streamerSonglistToken}`)
 
     const httpOptions = {
       headers: new HttpHeaders({
@@ -75,7 +87,7 @@ export class SsService {
     return statusResponse;
   }
 
-  markAsPlayed(entry: SsQueueEntry) : Observable<StatusResponse> {
+  markAsPlayed(entry: SsQueueEntry): Observable<StatusResponse> {
     let id: any = entry.id;
     const url = SsService.URL_MARK_QUEUE_ENTRY_AS_PLAYED.replace(/{queueId}/g, id);
 
