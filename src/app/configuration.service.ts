@@ -6,7 +6,6 @@ import { Injectable } from '@angular/core';
 export class ConfigurationService {
     public serverHost?: string = "";
     public serverPort?: number = 0
-    public streamerSonglistToken?: string = "";
 
     constructor() {
     }
