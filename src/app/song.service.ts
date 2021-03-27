@@ -12,15 +12,15 @@ import { ConfigurationService } from './configuration.service';
   providedIn: 'root',
 })
 export class SongService {
-  private URL_SONG_LIST: string = `http://${this.config.serverHost}:${this.config.serverPort}/song/list`;
-  private URL_UPDATE_CURRENT_SONG: string = `http://${this.config.serverHost}:${this.config.serverPort}/song/current`;
-  private URL_SONG_DATA: string = `http://${this.config.serverHost}:${this.config.serverPort}/song/data`;
-  private URL_GET_SONG_LYRICS: string = `http://${this.config.serverHost}:${this.config.serverPort}/song/lyrics`;
+  private URL_SONG_LIST: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/song/list`;
+  private URL_UPDATE_CURRENT_SONG: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/song/current`;
+  private URL_SONG_DATA: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/song/data`;
+  private URL_GET_SONG_LYRICS: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/song/lyrics`;
 
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
-    private config: ConfigurationService
+    private configService: ConfigurationService
   ) { }
 
   getList(): Observable<SongList> {

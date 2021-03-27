@@ -53,7 +53,7 @@ export class SsQueueComponent implements OnInit {
 
   getSongQueue(): void {
     this.ssService
-      .getQueue()
+      .getSongQueue()
       .subscribe(
         (songQueue) => {
           this.entries = songQueue.list.sort(x => x.position)
@@ -79,17 +79,16 @@ export class SsQueueComponent implements OnInit {
     //   }, err => {
     //     this.logFailure(`Failed to navigate: ${err}`)
     //   });
-
   }
 
   removeFromQueue(entry: SsQueueEntry) {
-    // this.ssService
-    //   .removeFromQueue(entry)
-    //   .subscribe(
-    //     () => {
-    //       this.logSuccess('Entry removed from queue');
-    //     }
-    //   );
+    this.ssService
+      .removeFromQueue(entry)
+      .subscribe(
+        () => {
+          this.logSuccess('Entry removed from queue');
+        }
+      );
   }
 
   private logFailure(message: string) {

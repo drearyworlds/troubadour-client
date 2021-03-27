@@ -16,29 +16,22 @@ interface SongQueue {
   providedIn: 'root',
 })
 export class SsService {
-  private static URL_GET_QUEUE: string = `https://api.streamersonglist.com/v1/streamers/drearyworlds/queue`;
-  private static URL_GET_SONGLIST: string = `https://api.streamersonglist.com/v1/streamers/drearyworlds/songs`;
-  private static URL_MARK_QUEUE_ENTRY_AS_PLAYED: string = `https://api.streamersonglist.com/v1/streamers/drearyworlds/queue/{queueId}/played`
-  private static URL_ADD_TO_QUEUE: string = `https://api.streamersonglist.com/v1/streamers/drearyworlds/queue/{songId}/request`;
+
+  private URL_GET_SONGLIST: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/ss/list`
+  private URL_GET_QUEUE: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/ss/queue`
+  private URL_ADD_TO_QUEUE: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/ss/queue/add`
+  private URL_REMOVE_FROM_QUEUE: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/ss/queue/remove`
+  private URL_MARK_QUEUE_ENTRY_AS_PLAYED: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/ss/queue/mark`
 
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
-    private configService: ConfigurationService
+    private configService: ConfigurationService,
   ) { }
 
   getSongList(): Observable<SsSongList> {
-    let options: { params?: HttpParams; } = {
-      params: new HttpParams()
-        .append('size', "0")
-        .append('current', "0")
-        .append('showInactive', "false")
-        .append('isNew', "false")
-        .append('order', "asc")
-    };
-
     let songList: Observable<SsSongList> = this.http
-      .get<SsSongList>(SsService.URL_GET_SONGLIST, options)
+      .get<SsSongList>(this.URL_GET_SONGLIST)
       .pipe(
         tap((_) => this.logVerbose('Fetched song list')),
         catchError(this.handleError<SsSongList>('getSongList'))
@@ -46,9 +39,9 @@ export class SsService {
     return songList;
   }
 
-  getQueue(): Observable<SongQueue> {
+  getSongQueue(): Observable<SongQueue> {
     const songQueue: Observable<SongQueue> = this.http
-      .get<SongQueue>(SsService.URL_GET_QUEUE)
+      .get<SongQueue>(this.URL_GET_QUEUE)
       .pipe(
         tap((_) => this.logVerbose('Fetched song queue')),
         catchError(this.handleError<SongQueue>('getSongQueue'))
@@ -57,26 +50,17 @@ export class SsService {
   }
 
   addToQueue(id: number): Observable<StatusResponse> {
-    let idString = id.toString();
-    this.logVerbose(`addToQueue: ${idString}`);
+    this.logVerbose(`addToQueue: ${id}`);
 
-    const url = SsService.URL_ADD_TO_QUEUE.replace(/{songId}/g, idString);
-
+    let url = this.URL_ADD_TO_QUEUE;;
     this.logVerbose(`url: ${url}`)
-    this.logVerbose(`token: ${this.configService.streamerSonglistToken}`)
 
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.configService.streamerSonglistToken}`
-      }),
-    };
+    let body = { songId: id }
 
     const statusResponse: Observable<StatusResponse> = this.http
       .post<StatusResponse>(
         url,
-        null,
-        httpOptions)
+        body)
       .pipe(
         tap((_) => this.logVerbose(`Added entry (${id}) to queue`)),
         catchError(this.handleError<StatusResponse>('addToQueue'))
@@ -89,28 +73,52 @@ export class SsService {
 
   markAsPlayed(entry: SsQueueEntry): Observable<StatusResponse> {
     let id: any = entry.id;
-    const url = SsService.URL_MARK_QUEUE_ENTRY_AS_PLAYED.replace(/{queueId}/g, id);
-
     this.logVerbose(`id: ${id}`)
 
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.configService.streamerSonglistToken}`
-      }),
-    };
+    const url = this.URL_MARK_QUEUE_ENTRY_AS_PLAYED;
+    this.logVerbose(`url: ${url}`)
+
+    let body = { queueId: id }
 
     const statusResponse: Observable<StatusResponse> = this.http
       .post<StatusResponse>(
         url,
-        null,
-        httpOptions)
+        body)
       .pipe(
-        tap((_) => this.logVerbose(`Marked entry (${id}) as played`)),
+        tap((_) => {
+          this.logVerbose(`Marked entry (${id}) as played`)
+          this.getSongQueue()
+        }),
         catchError(this.handleError<StatusResponse>('markAsPlayed'))
       );
 
     this.logVerbose(`markAsPlayed response: ${statusResponse}`)
+
+    return statusResponse;
+  }
+
+  removeFromQueue(entry: SsQueueEntry): Observable<StatusResponse> {
+    let id: any = entry.id;
+    this.logVerbose(`id: ${id}`)
+
+    const url = this.URL_REMOVE_FROM_QUEUE;
+    this.logVerbose(`url: ${url}`)
+
+    let body = { queueId: id }
+
+    const statusResponse: Observable<StatusResponse> = this.http
+      .post<StatusResponse>(
+        url,
+        body)
+      .pipe(
+        tap((_) => {
+          this.logVerbose(`Removed entry (${id}) from queue`)
+          this.getSongQueue()
+        }),
+        catchError(this.handleError<StatusResponse>('removeFromQueue'))
+      );
+
+    this.logVerbose(`removeFromQueue response: ${statusResponse}`)
 
     return statusResponse;
   }

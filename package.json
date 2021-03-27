@@ -14,6 +14,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "start": "npm run build && ng serve",
+    "start-electron": "npm run build-electron && electron .",
     "pack": "electron-builder --dir",
     "dist": "npm run build-electron && electron-builder",
     "publish": "electron-builder --win --x64 --publish always"
