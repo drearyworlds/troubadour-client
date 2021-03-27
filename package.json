@@ -7,7 +7,7 @@
   "scripts": {
     "ng": "ng",
     "clean": "rd /s /q .\\dist && rd /s /q .\\bin",
-    "build": "ng build --base-href ./",
+    "build": "npm install && ng build --base-href ./",
     "build-electron": "npm run build && tsc --p electron",
     "rebuild": "npm run clean && npm run build",
     "test": "ng test",
@@ -69,7 +69,6 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^11.1.2",
     "@angular/cli": "^11.2.2",
     "@angular/common": "~11.1.2",
     "@angular/compiler": "~11.1.2",
