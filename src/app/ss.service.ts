@@ -34,7 +34,7 @@ export class SsService {
       .get<SsSongList>(this.URL_GET_SONGLIST)
       .pipe(
         tap((_) => this.logVerbose('Fetched song list')),
-        catchError(this.handleError<SsSongList>('getSongList'))
+        catchError(this.handleError<SsSongList>(`getSongList from ${this.URL_GET_SONGLIST}`))
       );
     return songList;
   }

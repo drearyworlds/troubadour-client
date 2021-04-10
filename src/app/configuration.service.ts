@@ -4,8 +4,9 @@ import { Injectable } from '@angular/core';
     providedIn: 'root',
 })
 export class ConfigurationService {
-    public serverHost?: string = "";
-    public serverPort?: number = 0
+    // Note: These values are not currently being read from the config.json
+    public serverHost?: string = "localhost";
+    public serverPort?: number = 3000
 
     constructor() {
     }
