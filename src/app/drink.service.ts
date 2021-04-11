@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Drink } from '../json-schema/drink';
 import { StatusResponse } from '../json-schema/statusResponse';
 import { Observable, of } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { MessageService } from './message.service';
 import { catchError, map, tap } from 'rxjs/operators';
 import { ConfigurationService } from './configuration.service';
@@ -16,15 +16,17 @@ interface DrinkList {
 })
 
 export class DrinkService {
-  private URL_DRINK_LIST: string = `http://${this.config.serverHost}:${this.config.serverPort}/drink/list`;
-  private URL_UPDATE_CURRENT_DRINK: string = `http://${this.config.serverHost}:${this.config.serverPort}/drink/current`;
+  private URL_DRINK_LIST: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/drink/list`;
+  private URL_UPDATE_CURRENT_DRINK: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/drink/current`;
+  private URL_DRINK_DATA: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/drink/data`;
+
   private drinkList?: Observable<DrinkList>;
   private updateStatusResponse?: Observable<StatusResponse>;
 
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
-    private config: ConfigurationService,
+    private configService: ConfigurationService,
   ) {}
 
   getList(): Observable<DrinkList> {
@@ -56,6 +58,45 @@ export class DrinkService {
       );
 
     return this.updateStatusResponse;
+  }
+
+  getDataByDrinkId(drinkId: number): Observable<string> {
+    let options: { params?: HttpParams; responseType: 'text' } = {
+      params: new HttpParams().append('id', drinkId.toString()),
+      responseType: 'text',
+    };
+
+    let drinkData: Observable<string> = this.http
+      .get(this.URL_DRINK_DATA, options)
+      .pipe(
+        tap((_) => this.logVerbose('Fetched drink data')),
+        catchError(this.handleError<string>('getData'))
+      );
+
+    return drinkData;
+  }
+
+  saveDrinkData(drinkToSave : Drink) {
+    const drinkToSaveString: string = JSON.stringify(drinkToSave);
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
+
+    const updateStatusResponse: Observable<StatusResponse> = this.http
+      .post<StatusResponse>(
+        this.URL_DRINK_DATA,
+        drinkToSaveString,
+        httpOptions
+      )
+      .pipe(
+        tap((_) => this.logVerbose('Saved current drink')),
+        catchError(this.handleError<StatusResponse>('saveDrinkData'))
+      );
+
+    return updateStatusResponse;
   }
 
   async importDrinkList(drinkListFile: File): Promise<Observable<StatusResponse>> {

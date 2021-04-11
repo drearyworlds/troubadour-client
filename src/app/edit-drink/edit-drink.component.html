@@ -1,1 +1,36 @@
-<p>edit-drink works!</p>
+<h2>Edit Drink</h2>
+
+<div *ngIf="drink">
+    <div class="field">
+        <input class="button" type="button" value="Save Changes" (click)="saveDrinkData()">
+    </div>
+
+    <div class="field">
+        <label for="ID">ID: </label>
+        <input name="ID" [(ngModel)]="drink.id" disabled="true" placeholder="(ID Not Found)">
+    </div>
+
+    <div class="field">
+        <label for="Name">Name: </label>
+        <input name="Name" [(ngModel)]="drink.name" placeholder="(Name Not Found)">
+    </div>
+
+    <div class="field">
+        <label for="Style">Style: </label>
+        <input name="Style" [(ngModel)]="drink.style" placeholder="(Style Not Found)">
+    </div>
+
+    <div class="field">
+        <label for="Brewery">Brewery: </label>
+        <input name="Brewery" [(ngModel)]="drink.brewery" placeholder="(Brewery Not Found)">
+    </div>
+
+    <div class="field">
+        <label for="City">City: </label>
+        <input name="City" [(ngModel)]="drink.city" placeholder="(City Not Found)">
+    </div>
+</div>
+
+<div *ngIf="!drink">
+    <h3>No drink found to edit</h3>
+</div>

@@ -1,5 +1,8 @@
 <h2>Drink List</h2>
 
+<input class="button" type="button" value="Add New Drink" routerLink="/edit-drink/{{getNextValidSongId() + 1}}">
+<br/>
+
 <div class="table">
   <div [ngClass]="getHeaderRowDivClass()">
     <div [ngClass]="getHeaderCellDivClass(true)">ID</div>

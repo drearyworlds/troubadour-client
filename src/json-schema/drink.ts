@@ -1,10 +1,10 @@
 enum DrinkTypeEnum { Beer, Wine, Liquor, Soft }
 
-export interface Drink {
-    id?: number;
-    type: DrinkTypeEnum
-    name: string;
-    style: string;
-    brewery: string;
-    city: number;
+export class Drink {
+    id: number = 0;
+    type: DrinkTypeEnum = DrinkTypeEnum.Beer;
+    name: string = "";
+    style: string = "";
+    brewery: string = "";
+    city: string = "";
 }

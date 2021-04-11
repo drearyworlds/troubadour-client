@@ -51,6 +51,20 @@ export class DrinkListComponent implements OnInit {
     }
   }
 
+  getNextValidSongId(): number {
+    let returnValue = 0
+
+    if (this.drinks) {
+      for (let drink of this.drinks) {
+        if (drink.id > returnValue) {
+          returnValue = drink.id;
+        }
+      }
+    }
+
+    return returnValue;
+  }
+
   getDrinkList(): void {
     this.drinkService
       .getList()
