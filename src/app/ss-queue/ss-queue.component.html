@@ -14,6 +14,7 @@
       <div [ngClass]="getCellDivClass(true, false)">{{ entry.song.title }}</div>
       <div [ngClass]="getCellDivClass(true, false)">{{ entry.requests[0].name }}</div>
       <div [ngClass]="getCellDivClass(true, false)">
+        <span class="action-button" routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}" (click)="setAsCurrent(entry)">Play</span> |
         <span class="action-button" (click)="markAsPlayed(entry)">Mark played</span> |
         <span class="action-button" (click)="removeFromQueue(entry)">Remove</span>
       </div>

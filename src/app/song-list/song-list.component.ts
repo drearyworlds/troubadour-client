@@ -99,7 +99,7 @@ export class SongListComponent implements OnInit {
   }
 
 
-  GetSsSongFromSong(song: Song): SsSong {
+  getSsSongFromSong(song: Song): SsSong {
     let returnSsSong: SsSong = new SsSong();
 
     if (this.ssSongs) {
@@ -109,40 +109,21 @@ export class SongListComponent implements OnInit {
         for (let ssSong of this.ssSongs) {
           if (song.artist == ssSong.artist
             && song.title == ssSong.title) {
-            this.logVerbose(`Matched song: ${ssSong.title}`);
+            this.logVerbose(`Matched ssSong: ${ssSong.title}`);
             returnSsSong = ssSong;
             break;
           }
         }
 
         if (returnSsSong.id == 0) {
-          this.logFailure(`Did not find matching song for: ${song.artist} - ${song.title}`)
+          this.logFailure(`Did not find matching ssSong for: ${song.artist} - ${song.title}`)
         }
       } else {
-        this.logFailure("SS songlist has no entries")
+        this.logFailure("ssSongs has no entries")
       }
     }
 
     return returnSsSong;
-  }
-
-  GetSongFromSsSong(ssSong: SsSong): Song {
-    let songs: Array<Song> = new Array<Song>();
-
-    this.songService.getList()
-      .subscribe((list: SongList) => {
-        songs = list.songs;
-      });
-
-    let returnSong: Song = songs[0];
-    songs.forEach((song: Song) => {
-      if (ssSong.artist == song.artist
-        && ssSong.title == song.title) {
-        returnSong = song;
-      }
-    });
-
-    return returnSong;
   }
 
   getNextValidSongId(): number {
@@ -189,7 +170,7 @@ export class SongListComponent implements OnInit {
 
   addToQueue(song: Song) {
     this.logVerbose('addToQueue');
-    let ssSong: SsSong = this.GetSsSongFromSong(song);
+    let ssSong: SsSong = this.getSsSongFromSong(song);
 
     this.logVerbose(`ssSong: ${JSON.stringify(ssSong)}`)
 

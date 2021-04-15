@@ -1,3 +1,5 @@
+import { Song } from "./song";
+
 export class SsSong {
     id: number = 0;
     artist: string = "";

@@ -7,16 +7,16 @@
   "scripts": {
     "ng": "ng",
     "clean": "rd /s /q .\\dist && rd /s /q .\\bin",
-    "build": "npm install && ng build --base-href ./",
-    "build-electron": "npm run build && tsc --p electron",
+    "build": "npm install && ng build --base-href ./ && tsc --p electron",
+    "build-cli": "npm install && ng build",
     "rebuild": "npm run clean && npm run build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "start": "npm run build && ng serve",
-    "start-electron": "npm run build-electron && electron .",
+    "start": "npm run build && electron .",
+    "start-cli": "npm run build && ng serve",
     "pack": "electron-builder --dir",
-    "dist": "npm run build-electron && electron-builder",
+    "dist": "npm run build && electron-builder",
     "publish": "electron-builder --win --x64 --publish always"
   },
   "build": {

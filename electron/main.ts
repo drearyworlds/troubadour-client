@@ -21,7 +21,8 @@ function createWindow() {
     frame: true,
     darkTheme: true,
     autoHideMenuBar: true,
-    fullscreen: true
+    fullscreen: false,
+    maximizable: true
   });
 
   console.log(`__dirname: ${__dirname}`)
@@ -36,6 +37,7 @@ function createWindow() {
 
 
   //win.webContents.openDevTools()
+  win.maximize();
 
   win.on('closed', () => {
     win = null
