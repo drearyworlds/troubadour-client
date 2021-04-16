@@ -29,31 +29,16 @@ export class SongListComponent implements OnInit {
     this.getSsSongList();
   }
 
-  getHeaderRowDivClass() {
-    return {
-      'rowHeader': true
-    }
-  }
-
   getRowDivClass(active: boolean) {
     return {
-      'rowActive': active,
-      'rowInactive': !active
+      'table-danger': !active
     }
+
   }
 
-  getHeaderCellDivClass(fixed: boolean) {
+  getCellDivClass(active: boolean) {
     return {
-      'cellHeader': true,
-      'cellFixedWidth': fixed
-    }
-  }
-
-  getCellDivClass(active: boolean, fixed: boolean) {
-    return {
-      'cellActive': active,
-      'cellInactive': !active,
-      'cellFixedWidth': fixed
+      'table-danger': !active
     }
   }
 

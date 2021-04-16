@@ -1,4 +1,8 @@
-input.button {
+.table-danger {
+  background-color:rgb(100, 22, 22);
+}
+
+/* input.button {
   float: left;
   width: 100px;
   height: 25px;
@@ -82,10 +86,11 @@ input.button {
 .cellFixedWidth {
   width: var(--fixed-column-width);
 }
-
+*/
 .action-button:hover {
   color: blue;
   background-color: antiquewhite;
+  cursor: pointer;
 }
 
 .table:after {

@@ -1,29 +1,31 @@
-<h2>Song List</h2>
+<div class="tabTitle">Song List</div>
 
-<input class="button" type="button" value="Add New Song" routerLink="/edit-song/{{getNextValidSongId() + 1}}">
-<br/>
+<input class="btn btn-primary" type="button" value="Add New Song" routerLink="/edit-song/{{getNextValidSongId() + 1}}">
 
-<div class="table">
-  <div [ngClass]="getHeaderRowDivClass()">
-    <div [ngClass]="getHeaderCellDivClass(true)">ID</div>
-    <div [ngClass]="getHeaderCellDivClass(false)">Artist</div>
-    <div [ngClass]="getHeaderCellDivClass(false)">Title</div>
-    <div [ngClass]="getHeaderCellDivClass(true)">Year</div>
-    <div [ngClass]="getHeaderCellDivClass(false)">Album</div>
-    <div [ngClass]="getHeaderCellDivClass(false)">Actions</div>
-  </div>
+<table class="table table-dark table-striped table-hover">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Artist</th>
+      <th scope="col">Title</th>
+      <th scope="col">Year</th>
+      <th scope="col">Album</th>
+      <th scope="col">Actions</th>
+    </tr>
+</thead>
   <ng-container *ngFor="let song of songs">
-    <div [ngClass]="getRowDivClass(song.active)">
-      <div [ngClass]="getCellDivClass(song.active, true)" routerLink="/lyrics/{{song.id}}">{{ song.id }}</div>
-      <div [ngClass]="getCellDivClass(song.active, false)" routerLink="/lyrics/{{song.id}}">{{ song.artist }}</div>
-      <div [ngClass]="getCellDivClass(song.active, false)" routerLink="/lyrics/{{song.id}}">{{ song.title }}</div>
-      <div [ngClass]="getCellDivClass(song.active, true)" routerLink="/lyrics/{{song.id}}">{{ song.year }}</div>
-      <div [ngClass]="getCellDivClass(song.active, false)" routerLink="/lyrics/{{song.id}}">{{ song.album }}</div>
-      <div [ngClass]="getCellDivClass(true, false)">
-        <span class="action-button" (click)="addToQueue(song)">Queue</span> |
-        <span class="action-button" routerLink="/lyrics/{{song.id}}" (click)="setAsCurrent(song)">Play</span> |
-        <span class="action-button" routerLink="/edit-song/{{song.id}}">Edit</span>
-      </div>
-    </div>
-  </ng-container>
-</div>
+    <tbody class="table table-striped table-dark">
+      <tr [ngClass]="getRowDivClass(song.active)">
+        <td [ngClass]="getCellDivClass(song.active)" routerLink="/lyrics/{{song.id}}">{{ song.id }}</td>
+        <td [ngClass]="getCellDivClass(song.active)" routerLink="/lyrics/{{song.id}}">{{ song.artist }}</td>
+        <td [ngClass]="getCellDivClass(song.active)" routerLink="/lyrics/{{song.id}}">{{ song.title }}</td>
+        <td [ngClass]="getCellDivClass(song.active)" routerLink="/lyrics/{{song.id}}">{{ song.year }}</td>
+        <td [ngClass]="getCellDivClass(song.active)" routerLink="/lyrics/{{song.id}}">{{ song.album }}</td>
+        <td [ngClass]="getCellDivClass(song.active)">
+          <span class="action-button" (click)="addToQueue(song)">Queue</span> |
+          <span class="action-button" routerLink="/lyrics/{{song.id}}" (click)="setAsCurrent(song)">Play</span> |
+          <span class="action-button" routerLink="/edit-song/{{song.id}}">Edit</span>
+        </td>
+      </tr>
+    </ng-container>
+</table>

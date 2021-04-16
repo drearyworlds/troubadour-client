@@ -1,23 +1,28 @@
-<h2>StreamerSongList Queue</h2>
-<div class="table">
-  <div [ngClass]="getHeaderRowDivClass()">
-    <div [ngClass]="getHeaderCellDivClass(true)">Position</div>
-    <div [ngClass]="getHeaderCellDivClass(false)">Artist</div>
-    <div [ngClass]="getHeaderCellDivClass(false)">Title</div>
-    <div [ngClass]="getHeaderCellDivClass(false)">Requested By</div>
-    <div [ngClass]="getHeaderCellDivClass(false)">Actions</div>
-  </div>
+<div class="tabTitle">Queue</div>
+
+<table class="table table-dark table-striped table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Position</th>
+      <th scope="col">Artist</th>
+      <th scope="col">Title</th>
+      <th scope="col">Requested By</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
   <ng-container *ngFor="let entry of entries">
-    <div [ngClass]="getRowDivClass(true)">
-      <div [ngClass]="getCellDivClass(true, true)" >{{ entry.position }}</div>
-      <div [ngClass]="getCellDivClass(true, false)">{{ entry.song.artist }}</div>
-      <div [ngClass]="getCellDivClass(true, false)">{{ entry.song.title }}</div>
-      <div [ngClass]="getCellDivClass(true, false)">{{ entry.requests[0].name }}</div>
-      <div [ngClass]="getCellDivClass(true, false)">
-        <span class="action-button" routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}" (click)="setAsCurrent(entry)">Play</span> |
-        <span class="action-button" (click)="markAsPlayed(entry)">Mark played</span> |
-        <span class="action-button" (click)="removeFromQueue(entry)">Remove</span>
-      </div>
-    </div>
+    <tbody class="table table-striped table-dark">
+      <tr>
+        <td routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}">{{ entry.position }}</td>
+        <td routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}">{{ entry.song.artist }}</td>
+        <td routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}">{{ entry.song.title }}</td>
+        <td routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}">{{ entry.requests[0].name }}</td>
+        <td>
+          <span class="action-button" routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}"
+            (click)="setAsCurrent(entry)">Play</span> |
+          <span class="action-button" (click)="markAsPlayed(entry)">Mark played</span> |
+          <span class="action-button" (click)="removeFromQueue(entry)">Remove</span>
+        </td>
+      </tr>
   </ng-container>
-</div>
+</table>
