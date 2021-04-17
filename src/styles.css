@@ -21,6 +21,11 @@ input.btn-primary {
   margin: 5px;
 }
 
+span.btn-primary {
+  display: inline;
+  margin: 5px;
+}
+
 h1 {
   color: rgb(0,127,212);
   font-family: Arial, Helvetica, sans-serif;

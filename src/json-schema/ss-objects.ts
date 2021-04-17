@@ -1,17 +1,30 @@
 import { Song } from "./song";
 
 export class SsSong {
+    constructor(song?: Song) {
+        if (song) {
+            this.active = song.active;
+            this.artist = song.artist;
+            this.comment = song.comment;
+            this.title = song.title;
+            this.tab = song.tab;
+            this.chords = song.chords;
+            this.lyrics = song.lyrics;
+        }
+    }
+
     id: number = 0;
     artist: string = "";
     title: string = "";
-    album: string = "";
-    year: number = 0;
-    capo: number = 0;
     active: boolean = false;
     comment: string = "";
     lyrics: string = "";
     chords: string = "";
     tab: string = "";
+    attributes: AttributeEntity[] = [];
+}
+
+class AttributeEntity {
 }
 
 export interface SsSongList {
@@ -24,7 +37,7 @@ interface SsRequest {
 }
 
 export interface SsQueueEntry {
-    id : number;
+    id: number;
     song: SsSong;
     position: number;
     requests: SsRequest[];

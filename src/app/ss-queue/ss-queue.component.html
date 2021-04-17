@@ -18,10 +18,10 @@
         <td routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}">{{ entry.song.title }}</td>
         <td routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}">{{ entry.requests[0].name }}</td>
         <td>
-          <span class="action-button" routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}"
-            (click)="setAsCurrent(entry)">Play</span> |
-          <span class="action-button" (click)="markAsPlayed(entry)">Mark played</span> |
-          <span class="action-button" (click)="removeFromQueue(entry)">Remove</span>
+          <span class="btn btn-primary" routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}"
+            (click)="setAsCurrent(entry)">Play</span>
+          <span class="btn btn-primary" (click)="markAsPlayed(entry)">Mark played</span>
+          <span class="btn btn-primary" (click)="removeFromQueue(entry)">Remove</span>
         </td>
       </tr>
   </ng-container>

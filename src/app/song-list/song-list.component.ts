@@ -92,20 +92,27 @@ export class SongListComponent implements OnInit {
 
       if (this.ssSongs.length > 0) {
         for (let ssSong of this.ssSongs) {
-          if (song.artist == ssSong.artist
-            && song.title == ssSong.title) {
-            this.logVerbose(`Matched ssSong: ${ssSong.title}`);
-            returnSsSong = ssSong;
-            break;
+          if (song.artist == ssSong.artist) {
+            if (song.title == ssSong.title) {
+              this.logVerbose(`Matched ssSong: ${ssSong.title}`);
+              returnSsSong = ssSong;
+              break;
+            } else {
+              this.logVerbose(`${ssSong.title} != ${song.title}`)
+            }
+          } else {
+            this.logVerbose(`${ssSong.artist} != ${song.artist}`)
           }
         }
 
         if (returnSsSong.id == 0) {
-          this.logFailure(`Did not find matching ssSong for: ${song.artist} - ${song.title}`)
+          this.logWarning(`Did not find matching ssSong for: ${song.artist} - ${song.title}`)
         }
       } else {
         this.logFailure("ssSongs has no entries")
       }
+    } else {
+      this.logVerbose("this.ssSongs is null")
     }
 
     return returnSsSong;
@@ -130,7 +137,7 @@ export class SongListComponent implements OnInit {
       .getList()
       .subscribe((songList) => {
         this.songs = songList.songs.sort(this.songComparator);
-        this.logSuccess('Fetched song list');
+        this.logVerbose('Fetched song list');
       });
   }
 
@@ -139,7 +146,7 @@ export class SongListComponent implements OnInit {
       .getSongList()
       .subscribe((ssSongList) => {
         this.ssSongs = ssSongList.items;
-        this.logSuccess('Fetched SS song list');
+        this.logVerbose('Fetched SS song list');
       });
   }
 
@@ -170,8 +177,56 @@ export class SongListComponent implements OnInit {
     this.logVerbose('addToQueue');
   }
 
+  promote(song: Song) {
+    song.active = true;
+    this.toggleSongActiveStatus(song)
+  }
+
+  demote(song: Song) {
+    song.active = false;
+    this.toggleSongActiveStatus(song)
+  }
+
+  toggleSongActiveStatus(song: Song) {
+    this.songService.saveSongData(song)
+      .subscribe((response: StatusResponse) => {
+        this.success = response.success
+        this.logSuccess(`Toggled current song active status to ${song.active}: ${song.title}`)
+        this.getSongList();
+      });
+
+    let ssSong: SsSong = this.getSsSongFromSong(song)
+
+    if (ssSong && ssSong.id != 0) {
+      this.logVerbose(`Updating existing song`)
+      ssSong.active = song.active;
+
+      this.ssService.updateSong(ssSong)
+        .subscribe((songResponse: SsSong) => {
+          this.success = (songResponse.id != 0)
+          this.logSuccess(`Toggled current song active status to ${songResponse.active} for ${songResponse.title}`)
+          this.getSsSongList();
+        });
+    } else {
+      this.logVerbose(`Adding song to SS`)
+      // Create ssSong from song
+      ssSong = new SsSong(song)
+
+      this.ssService.addSong(ssSong)
+        .subscribe((songResponse: SsSong) => {
+          this.success = (songResponse.id != 0)
+          this.logSuccess(`Toggled current song active status to ${songResponse.active} for ${songResponse.title}`)
+          this.getSsSongList();
+        });
+      }
+  }
+
   private logFailure(message: string) {
     this.messageService.logFailure(message, this.constructor.name);
+  }
+
+  private logWarning(message: string) {
+    this.messageService.logWarning(message, this.constructor.name);
   }
 
   private logSuccess(message: string) {

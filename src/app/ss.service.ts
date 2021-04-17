@@ -22,6 +22,8 @@ export class SsService {
   private URL_ADD_TO_QUEUE: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/ss/queue/add`
   private URL_REMOVE_FROM_QUEUE: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/ss/queue/remove`
   private URL_MARK_QUEUE_ENTRY_AS_PLAYED: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/ss/queue/mark`
+  private URL_UPDATE_SONG: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/ss/song`;
+  private URL_ADD_SONG: string = this.URL_UPDATE_SONG;
 
   constructor(
     private http: HttpClient,
@@ -39,6 +41,56 @@ export class SsService {
     return songList;
   }
 
+  updateSong(ssSong: SsSong): Observable<SsSong> {
+    this.logVerbose(`updateSong: ${ssSong.id}`);
+
+    let url = this.URL_UPDATE_SONG;;
+    this.logVerbose(`url: ${url}`)
+
+    const body = ssSong;
+
+    this.logVerbose(`body: ${JSON.stringify(body)}`)
+
+    const songResponse: Observable<SsSong> = this.http
+      .put<SsSong>(
+        url,
+        body)
+      .pipe(
+        tap((_) => {
+          this.logVerbose(`Updated song "${ssSong.title}"`)
+          this.logVerbose(`Update Song response: ${songResponse}`)
+        }),
+        catchError(this.handleError<SsSong>('updateSong'))
+      );
+
+    return songResponse;
+  }
+
+  addSong(ssSong: SsSong) {
+    this.logVerbose(`addSong: ${ssSong.id}`);
+
+    let url = this.URL_ADD_SONG;;
+    this.logVerbose(`url: ${url}`)
+
+    const body = ssSong;
+
+    this.logVerbose(`body: ${JSON.stringify(body)}`)
+
+    const songResponse: Observable<SsSong> = this.http
+      .post<SsSong>(
+        url,
+        body)
+      .pipe(
+        tap((_) => {
+          this.logVerbose(`Added song "${ssSong.title}"`)
+          this.logVerbose(`Add Song response: ${songResponse}`)
+        }),
+        catchError(this.handleError<SsSong>('addSong'))
+      );
+
+    return songResponse;
+  }
+
   getSongQueue(): Observable<SongQueue> {
     const songQueue: Observable<SongQueue> = this.http
       .get<SongQueue>(this.URL_GET_QUEUE)
@@ -52,7 +104,7 @@ export class SsService {
   addToQueue(id: number): Observable<StatusResponse> {
     this.logVerbose(`addToQueue: ${id}`);
 
-    let url = this.URL_ADD_TO_QUEUE;;
+    const url = this.URL_ADD_TO_QUEUE;;
     this.logVerbose(`url: ${url}`)
 
     let body = { songId: id }

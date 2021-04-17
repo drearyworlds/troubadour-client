@@ -93,6 +93,11 @@
   cursor: pointer;
 }
 
+span.btn-primary {
+  display: inline;
+  margin: 5px;
+}
+
 .table:after {
   visibility: hidden;
   display: block;

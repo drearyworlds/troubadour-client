@@ -22,8 +22,8 @@
         <td>{{ drink.brewery }}</td>
         <td>{{ drink.city }}</td>  
         <td>
-          <span class="action-button" (click)="setAsCurrent(drink)">Drink</span> |
-          <span class="action-button" routerLink="/edit-drink/{{drink.id}}">Edit</span>
+          <span class="btn btn-primary" (click)="setAsCurrent(drink)">Drink</span>
+          <span class="btn btn-primary" routerLink="/edit-drink/{{drink.id}}">Edit</span>
         </td>
       </tr>
   </ng-container>

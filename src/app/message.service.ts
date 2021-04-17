@@ -21,6 +21,18 @@ export class MessageService {
     console.error(formattedMessage);
   }
 
+  logWarning(message: string, fromClass : string) {
+    const formattedMessage = `[${fromClass}] ${message}`;
+    this.messages.push(`Warning: ${formattedMessage}`);
+
+    // Toast failure
+    this.toastService.info(message)
+
+    // Log failure to console
+    console.warn(formattedMessage);
+  }
+
+
   logSuccess(message: string, fromClass : string) {
     const formattedMessage = `[${fromClass}] ${message}`;
     this.messages.push(`Success: ${formattedMessage}`);

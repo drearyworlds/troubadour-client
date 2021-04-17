@@ -12,7 +12,7 @@
       <th scope="col">Album</th>
       <th scope="col">Actions</th>
     </tr>
-</thead>
+  </thead>
   <ng-container *ngFor="let song of songs">
     <tbody class="table table-striped table-dark">
       <tr [ngClass]="getRowDivClass(song.active)">
@@ -22,10 +22,16 @@
         <td [ngClass]="getCellDivClass(song.active)" routerLink="/lyrics/{{song.id}}">{{ song.year }}</td>
         <td [ngClass]="getCellDivClass(song.active)" routerLink="/lyrics/{{song.id}}">{{ song.album }}</td>
         <td [ngClass]="getCellDivClass(song.active)">
-          <span class="action-button" (click)="addToQueue(song)">Queue</span> |
-          <span class="action-button" routerLink="/lyrics/{{song.id}}" (click)="setAsCurrent(song)">Play</span> |
-          <span class="action-button" routerLink="/edit-song/{{song.id}}">Edit</span>
+          <span class="btn btn-primary" (click)="addToQueue(song)">Queue</span>
+          <span class="btn btn-primary" routerLink="/lyrics/{{song.id}}" (click)="setAsCurrent(song)">Play</span>
+          <span *ngIf="!song.active">
+            <span class="btn btn-primary" (click)="promote(song)">Promote</span>
+          </span>
+          <span *ngIf="song.active">
+            <span class="btn btn-primary" (click)="demote(song)">Demote</span>
+          </span>
+          <span class="btn btn-primary" routerLink="/edit-song/{{song.id}}">Edit</span>
         </td>
       </tr>
-    </ng-container>
+  </ng-container>
 </table>
