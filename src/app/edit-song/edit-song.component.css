@@ -1,3 +1,8 @@
+textarea {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px
+}
+
 /* input.button {
     float: left;
     width: 100px;

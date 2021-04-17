@@ -39,8 +39,9 @@ export class LyricsComponent implements OnInit {
 
       if (artist && title) {
         this.songService.getDataByArtistTitle(artist, title)
-          .subscribe(song => {
-            this.song = JSON.parse(song);
+          .subscribe(songString => {
+            this.song = JSON.parse(songString);
+            this.logVerbose(`Retreived lyrics for ${this.song?.artist} - ${this.song?.title}`)
             this.logVerbose(JSON.stringify(this.song))
           });
       } else {
