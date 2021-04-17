@@ -13,4 +13,18 @@
             column-gap: 0px;
 
     display: inline-block;
+    margin: 0px;
+    padding: 0px;
+    column-rule-style: solid;
+    column-width: 100%;
+
+    /* TODO: Figure out how to actually wrap */
+    flex-direction: column;
+    flex-wrap: wrap;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
  }
