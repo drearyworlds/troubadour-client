@@ -11,4 +11,6 @@
     -webkit-column-gap: 0px;
        -moz-column-gap: 0px;
             column-gap: 0px;
+
+    display: inline-block;
  }
