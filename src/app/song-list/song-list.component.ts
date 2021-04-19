@@ -4,8 +4,8 @@ import { SongService } from '../song.service';
 import { SsService } from '../ss.service';
 import { StatusResponse } from '../../json-schema/statusResponse';
 import { MessageService } from '../message.service';
-import { SsSong, SsSongList } from '../../json-schema/ss-objects'
-import { SongList } from '../../json-schema/song-list';
+import { SsSong } from '../../json-schema/ss-objects'
+import { songComparator } from '../comparators'
 
 @Component({
   selector: 'app-song-list',
@@ -41,48 +41,6 @@ export class SongListComponent implements OnInit {
       'table-danger': !active
     }
   }
-
-  songComparator(song1: Song, song2: Song) {
-    let song1SortArtist = song1.artist;
-    let song2SortArtist = song2.artist;
-    let song1SortTitle = song1.title;
-    let song2SortTitle = song2.title;
-
-    // Put active songs above inactive songs
-    if (song1.active != song2.active) {
-      return song1.active ? -1 : 1;
-    }
-
-    if (song1SortArtist.match("A ",)) {
-      song1SortArtist = song1SortArtist.substring(2)
-    } else if (song1SortArtist.match("An ",)) {
-      song1SortArtist = song1SortArtist.substring(3)
-    } else if (song1SortArtist.match("The ",)) {
-      song1SortArtist = song1SortArtist.substring(4)
-    }
-
-    if (song2SortArtist.match("A ",)) {
-      song2SortArtist = song2SortArtist.substring(2)
-    } else if (song2SortArtist.match("An ",)) {
-      song2SortArtist = song2SortArtist.substring(3)
-    } else if (song2SortArtist.match("The ",)) {
-      song2SortArtist = song2SortArtist.substring(4)
-    }
-
-    if (song1SortArtist == song2SortArtist) {
-      if (song1SortTitle == song2SortTitle) {
-        return 0;
-      }
-      if (song1SortTitle < song2SortTitle) {
-        return -1;
-      }
-    } else if (song1SortArtist < song2SortArtist) {
-      return -1;
-    }
-
-    return 1;
-  }
-
 
   getSsSongFromSong(song: Song): SsSong {
     let returnSsSong: SsSong = new SsSong();
@@ -136,7 +94,7 @@ export class SongListComponent implements OnInit {
     this.songService
       .getList()
       .subscribe((songList) => {
-        this.songs = songList.songs.sort(this.songComparator);
+        this.songs = songList.songs.sort(songComparator);
         this.logVerbose('Fetched song list');
       });
   }

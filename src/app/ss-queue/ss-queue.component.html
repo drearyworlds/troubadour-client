@@ -19,7 +19,7 @@
         <td routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}">{{ entry.requests[0].name }}</td>
         <td>
           <span class="btn btn-primary" routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}"
-            (click)="setAsCurrent(entry)">Play</span>
+            (click)="setAsCurrent(entry.song)">Play</span>
           <span class="btn btn-primary" (click)="markAsPlayed(entry)">Mark played</span>
           <span class="btn btn-primary" (click)="removeFromQueue(entry)">Remove</span>
         </td>
