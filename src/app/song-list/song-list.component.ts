@@ -3,7 +3,7 @@ import { Song } from '../../json-schema/song';
 import { SongService } from '../song.service';
 import { SsService } from '../ss.service';
 import { StatusResponse } from '../../json-schema/statusResponse';
-import { LogService } from '../log.service';
+import { LogService, LogLevel } from '../log.service';
 import { SsSong } from '../../json-schema/ss-objects'
 import { songComparator } from '../comparators'
 
@@ -23,7 +23,6 @@ export class SongListComponent implements OnInit {
     private logService: LogService,
     private ssService: SsService
   ) {
-    this.logService.className = this.constructor.name;
   }
 
   ngOnInit(): void {
@@ -48,31 +47,31 @@ export class SongListComponent implements OnInit {
     let returnSsSong: SsSong = new SsSong();
 
     if (this.ssSongs) {
-      this.logService.logVerbose(`GetSsSongFromSong`);
+      this.log(LogLevel.Verbose, `GetSsSongFromSong`);
 
       if (this.ssSongs.length > 0) {
         for (let ssSong of this.ssSongs) {
           if (song.artist == ssSong.artist) {
             if (song.title == ssSong.title) {
-              this.logService.logVerbose(`Matched ssSong: ${ssSong.title}`);
+              this.log(LogLevel.Verbose, `Matched ssSong: ${ssSong.title}`);
               returnSsSong = ssSong;
               break;
             } else {
-              this.logService.logVerbose(`${ssSong.title} != ${song.title}`)
+              this.log(LogLevel.Verbose, `${ssSong.title} != ${song.title}`)
             }
           } else {
-            this.logService.logVerbose(`${ssSong.artist} != ${song.artist}`)
+            this.log(LogLevel.Verbose, `${ssSong.artist} != ${song.artist}`)
           }
         }
 
         if (returnSsSong.id == 0) {
-          this.logService.logWarning(`Did not find matching ssSong for: ${song.artist} - ${song.title}`)
+          this.log(LogLevel.Warning, `Did not find matching ssSong for: ${song.artist} - ${song.title}`)
         }
       } else {
-        this.logService.logFailure("ssSongs has no entries")
+        this.log(LogLevel.Failure, "ssSongs has no entries")
       }
     } else {
-      this.logService.logVerbose("this.ssSongs is null")
+      this.log(LogLevel.Verbose, "this.ssSongs is null")
     }
 
     return returnSsSong;
@@ -97,7 +96,7 @@ export class SongListComponent implements OnInit {
       .getList()
       .subscribe((songList) => {
         this.songs = songList.songs.sort(songComparator);
-        this.logService.logVerbose('Fetched song list');
+        this.log(LogLevel.Verbose, 'Fetched song list');
       });
   }
 
@@ -106,35 +105,35 @@ export class SongListComponent implements OnInit {
       .getSongList()
       .subscribe((ssSongList) => {
         this.ssSongs = ssSongList.items;
-        this.logService.logVerbose('Fetched SS song list');
+        this.log(LogLevel.Verbose, 'Fetched SS song list');
       });
   }
 
   setAsCurrent(songToSet: Song): void {
-    this.logService.logVerbose(`Setting song as current: ${songToSet.title}`);
+    this.log(LogLevel.Verbose, `Setting song as current: ${songToSet.title}`);
     this.songService
       .setCurrentSong(songToSet)
       .subscribe((response: StatusResponse) => {
         this.success = response.success
-        this.logService.logSuccess(`Current song set to: ${songToSet.title}`)
+        this.log(LogLevel.Success, `Current song set to: ${songToSet.title}`)
       });
   }
 
   addToQueue(song: Song) {
-    this.logService.logVerbose('addToQueue');
+    this.log(LogLevel.Verbose, 'addToQueue');
     let ssSong: SsSong = this.getSsSongFromSong(song);
 
-    this.logService.logVerbose(`ssSong: ${JSON.stringify(ssSong)}`)
+    this.log(LogLevel.Verbose, `ssSong: ${JSON.stringify(ssSong)}`)
 
     this.ssService
       .addToQueue(ssSong.id)
       .subscribe(
         () => {
-          this.logService.logSuccess('Entry added to queue');
+          this.log(LogLevel.Success, 'Entry added to queue');
         }
       );
 
-    this.logService.logVerbose('addToQueue');
+    this.log(LogLevel.Verbose, 'addToQueue');
   }
 
   promote(song: Song) {
@@ -151,33 +150,37 @@ export class SongListComponent implements OnInit {
     this.songService.saveSongData(song)
       .subscribe((response: StatusResponse) => {
         this.success = response.success
-        this.logService.logSuccess(`Toggled current song active status to ${song.active}: ${song.title}`)
+        this.log(LogLevel.Success, `Toggled current song active status to ${song.active}: ${song.title}`)
         this.getSongList();
       });
 
     let ssSong: SsSong = this.getSsSongFromSong(song)
 
     if (ssSong && ssSong.id != 0) {
-      this.logService.logVerbose(`Updating existing song`)
+      this.log(LogLevel.Verbose, `Updating existing song`)
       ssSong.active = song.active;
 
       this.ssService.updateSong(ssSong)
         .subscribe((songResponse: SsSong) => {
           this.success = (songResponse.id != 0)
-          this.logService.logSuccess(`Toggled current song active status to ${songResponse.active} for ${songResponse.title}`)
+          this.log(LogLevel.Success, `Toggled current song active status to ${songResponse.active} for ${songResponse.title}`)
           this.getSsSongList();
         });
     } else {
-      this.logService.logVerbose(`Adding song to SS`)
+      this.log(LogLevel.Verbose, `Adding song to SS`)
       // Create ssSong from song
       ssSong = new SsSong(song)
 
       this.ssService.addSong(ssSong)
         .subscribe((songResponse: SsSong) => {
           this.success = (songResponse.id != 0)
-          this.logService.logSuccess(`Toggled current song active status to ${songResponse.active} for ${songResponse.title}`)
+          this.log(LogLevel.Success, `Toggled current song active status to ${songResponse.active} for ${songResponse.title}`)
           this.getSsSongList();
         });
       }
+  }
+
+  log(logLevel: LogLevel, message: string) {
+    this.logService.log(logLevel, message, this.constructor.name)
   }
 }

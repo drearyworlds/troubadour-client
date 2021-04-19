@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router'
 import { SongService } from '../song.service'
-import { LogService } from '../log.service'
+import { LogService, LogLevel } from '../log.service'
 import { Song } from '../../json-schema/song'
 
 @Component({
@@ -17,7 +17,6 @@ export class LyricsComponent implements OnInit {
     private songService: SongService,
     private logService: LogService
   ) {
-    this.logService.className = this.constructor.name;
   }
 
   ngOnInit(): void {
@@ -31,10 +30,10 @@ export class LyricsComponent implements OnInit {
       this.songService.getDataBySongId(songId)
         .subscribe(song => {
           this.song = JSON.parse(song);
-          this.logService.logVerbose(JSON.stringify(this.song))
+          this.log(LogLevel.Verbose, JSON.stringify(this.song))
         });
     } else {
-      this.logService.logFailure("No id passed in. Trying artist and title instead")
+      this.log(LogLevel.Failure, "No id passed in. Trying artist and title instead")
 
       const artist = this.route.snapshot.paramMap.get('artist')
       const title = this.route.snapshot.paramMap.get('title')
@@ -43,12 +42,16 @@ export class LyricsComponent implements OnInit {
         this.songService.getDataByArtistTitle(artist, title)
           .subscribe(songString => {
             this.song = JSON.parse(songString);
-            this.logService.logVerbose(`Retreived lyrics for ${this.song?.artist} - ${this.song?.title}`)
-            this.logService.logVerbose(JSON.stringify(this.song))
+            this.log(LogLevel.Verbose, `Retreived lyrics for ${this.song?.artist} - ${this.song?.title}`)
+            this.log(LogLevel.Verbose, JSON.stringify(this.song))
           });
       } else {
-        this.logService.logFailure("No artist and title passed in")
+        this.log(LogLevel.Failure, "No artist and title passed in")
       }
     }
+  }
+
+  log(logLevel: LogLevel, message: string) {
+    this.logService.log(logLevel, message, this.constructor.name)
   }
 }

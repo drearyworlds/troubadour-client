@@ -3,7 +3,7 @@ import { Drink } from '../json-schema/drink';
 import { StatusResponse } from '../json-schema/statusResponse';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { LogService } from './log.service';
+import { LogService, LogLevel } from './log.service'
 import { catchError, map, tap } from 'rxjs/operators';
 import { ConfigurationService } from './configuration.service';
 
@@ -28,12 +28,11 @@ export class DrinkService {
     private logService: LogService,
     private configService: ConfigurationService,
   ) {
-    this.logService.className = this.constructor.name;
   }
 
   getList(): Observable<DrinkList> {
     this.drinkList = this.http.get<DrinkList>(this.URL_DRINK_LIST).pipe(
-      tap((_) => this.logService.logVerbose('Fetched drink list')),
+      tap((_) => this.log(LogLevel.Verbose, 'Fetched drink list')),
       catchError(this.handleError<DrinkList>('getDrinkList'))
     );
     return this.drinkList;
@@ -55,7 +54,7 @@ export class DrinkService {
         httpOptions
       )
       .pipe(
-        tap((_) => this.logService.logVerbose('Fetched current drink')),
+        tap((_) => this.log(LogLevel.Verbose, 'Fetched current drink')),
         catchError(this.handleError<StatusResponse>('setCurrentDrink'))
       );
 
@@ -71,7 +70,7 @@ export class DrinkService {
     let drinkData: Observable<string> = this.http
       .get(this.URL_DRINK_DATA, options)
       .pipe(
-        tap((_) => this.logService.logVerbose('Fetched drink data')),
+        tap((_) => this.log(LogLevel.Verbose, 'Fetched drink data')),
         catchError(this.handleError<string>('getData'))
       );
 
@@ -94,7 +93,7 @@ export class DrinkService {
         httpOptions
       )
       .pipe(
-        tap((_) => this.logService.logVerbose('Saved current drink')),
+        tap((_) => this.log(LogLevel.Verbose, 'Saved current drink')),
         catchError(this.handleError<StatusResponse>('saveDrinkData'))
       );
 
@@ -102,8 +101,8 @@ export class DrinkService {
   }
 
   async importDrinkList(drinkListFile: File): Promise<Observable<StatusResponse>> {
-    this.logService.logVerbose("importDrinkList")
-    this.logService.logVerbose(`drinkListFile: ${drinkListFile}`)
+    this.log(LogLevel.Verbose, "importDrinkList")
+    this.log(LogLevel.Verbose, `drinkListFile: ${drinkListFile}`)
     let drinkList = await drinkListFile.text();
 
     const httpOptions = {
@@ -119,7 +118,7 @@ export class DrinkService {
         httpOptions
       )
       .pipe(
-        tap((_) => this.logService.logVerbose('Imported drink list')),
+        tap((_) => this.log(LogLevel.Verbose, 'Imported drink list')),
         catchError(this.handleError<StatusResponse>('importDrinkList'))
       );
 
@@ -135,10 +134,14 @@ export class DrinkService {
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       // Log the error
-      this.logService.logFailure(`${operation} failed: ${error.message}`);
+      this.log(LogLevel.Failure, `${operation} failed: ${error.message}`);
 
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
+  }
+
+  log(logLevel: LogLevel, message: string) {
+    this.logService.log(logLevel, message, this.constructor.name)
   }
 }

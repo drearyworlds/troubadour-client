@@ -4,7 +4,7 @@ import { Drink } from '../../json-schema/drink';
 import { StatusResponse } from '../../json-schema/statusResponse';
 import { SongService } from '../song.service';
 import { DrinkService } from '../drink.service';
-import { LogService } from '../log.service';
+import { LogService, LogLevel } from '../log.service';
 
 @Component({
   selector: 'app-import-export',
@@ -20,7 +20,6 @@ export class ImportExportComponent implements OnInit {
     private drinkService: DrinkService,
     private logService: LogService
   ) {
-    this.logService.className = this.constructor.name;
   }
 
   ngOnInit(): void {
@@ -33,7 +32,7 @@ export class ImportExportComponent implements OnInit {
       (await this.songService.importSongList(fileToImport))
         .subscribe((response: StatusResponse) => {
           this.success = response.success
-          this.logService.logSuccess("Song list imported")
+          this.log(LogLevel.Success, "Song list imported")
         });
     }
   }
@@ -63,7 +62,7 @@ export class ImportExportComponent implements OnInit {
       (await this.drinkService.importDrinkList(fileToImport))
         .subscribe((response: StatusResponse) => {
           this.success = response.success
-          this.logService.logSuccess("Drink list imported")
+          this.log(LogLevel.Success, "Drink list imported")
         });
     }
   }
@@ -84,5 +83,9 @@ export class ImportExportComponent implements OnInit {
           document.body.removeChild(element);
         }
       );
+  }
+
+  log(logLevel: LogLevel, message: string) {
+    this.logService.log(logLevel, message, this.constructor.name)
   }
 }

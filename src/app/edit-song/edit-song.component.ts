@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router'
 import { SongService } from '../song.service'
-import { LogService } from '../log.service'
+import { LogService, LogLevel } from '../log.service'
 import { Song } from '../../json-schema/song'
 import { StatusResponse } from '../../json-schema/statusResponse'
 
@@ -18,7 +18,6 @@ export class EditSongComponent implements OnInit {
     private songService: SongService,
     private logService: LogService
   ) {
-    this.logService.className = this.constructor.name;
   }
 
   ngOnInit(): void {
@@ -32,11 +31,11 @@ export class EditSongComponent implements OnInit {
       .subscribe(songJsonString => {
         if (songJsonString) {
           this.song = JSON.parse(songJsonString);
-          this.logService.logSuccess(`Retrieved song data for: ${this.song?.title}`)
+          this.log(LogLevel.Success, `Retrieved song data for: ${this.song?.title}`)
         }
 
         if (!this.song) {
-          this.logService.logInfo(`Did not find song. Adding new song.`)
+          this.log(LogLevel.Info, `Did not find song. Adding new song.`)
           this.song = new Song();
           this.song.id = songId;
         }
@@ -47,9 +46,13 @@ export class EditSongComponent implements OnInit {
     if (this.song) {
       this.songService.saveSongData(this.song)
         .subscribe((response: StatusResponse) => {
-          this.logService.logSuccess(`Saved song data for: ${this.song?.title}`)
-          this.logService.logVerbose(`response: ${JSON.stringify(response)}`)
+          this.log(LogLevel.Success, `Saved song data for: ${this.song?.title}`)
+          this.log(LogLevel.Verbose, `response: ${JSON.stringify(response)}`)
         });
     }
+  }
+
+  log(logLevel: LogLevel, message: string) {
+    this.logService.log(logLevel, message, this.constructor.name)
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Drink } from '../../json-schema/drink'
 import { DrinkService } from '../drink.service';
 import { StatusResponse } from '../../json-schema/statusResponse'
-import { LogService } from '../log.service';
+import { LogService, LogLevel } from '../log.service';
 
 @Component({
   selector: 'app-drink-list',
@@ -19,7 +19,6 @@ export class DrinkListComponent implements OnInit {
   constructor(
     private drinkService: DrinkService,
     private logService: LogService) {
-      this.logService.className = this.constructor.name;
   }
 
   ngOnInit(): void {
@@ -71,17 +70,21 @@ export class DrinkListComponent implements OnInit {
       .getList()
       .subscribe((drinkList) => {
         this.drinks = drinkList.drinks;
-        this.logService.logSuccess('Fetched drink list');
+        this.log(LogLevel.Success, 'Fetched drink list');
       });
   }
 
   setAsCurrent(drinkToSet: Drink): void {
-    this.logService.logVerbose(`Setting drink as current: ${drinkToSet.name}`);
+    this.log(LogLevel.Verbose, `Setting drink as current: ${drinkToSet.name}`);
     this.drinkService
       .setCurrentDrink(drinkToSet)
       .subscribe((response: StatusResponse) => {
         this.success = response.success
-        this.logService.logSuccess(`Current song set to: ${drinkToSet.name}`)
+        this.log(LogLevel.Success, `Current song set to: ${drinkToSet.name}`)
       });
+  }
+
+  log(logLevel: LogLevel, message: string) {
+    this.logService.log(logLevel, message, this.constructor.name)
   }
 }

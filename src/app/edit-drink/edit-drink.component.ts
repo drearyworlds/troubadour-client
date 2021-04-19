@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router'
 import { DrinkService } from '../drink.service'
-import { LogService } from '../log.service'
+import { LogService, LogLevel } from '../log.service'
 import { Drink } from '../../json-schema/drink'
 import { StatusResponse } from '../../json-schema/statusResponse'
 
@@ -18,7 +18,6 @@ export class EditDrinkComponent implements OnInit {
     private drinkService: DrinkService,
     private logService: LogService
   ) {
-    this.logService.className = this.constructor.name;
   }
 
   ngOnInit(): void {
@@ -32,11 +31,11 @@ export class EditDrinkComponent implements OnInit {
       .subscribe(drinkJsonString => {
         if (drinkJsonString) {
           this.drink = JSON.parse(drinkJsonString);
-          this.logService.logSuccess(`Retrieved drink data for: ${this.drink?.name}`)
+          this.log(LogLevel.Success, `Retrieved drink data for: ${this.drink?.name}`)
         }
 
         if (!this.drink) {
-          this.logService.logInfo(`Did not find drink. Adding new drink.`)
+          this.log(LogLevel.Info, `Did not find drink. Adding new drink.`)
           this.drink = new Drink();
           this.drink.id = drinkId;
         }
@@ -47,9 +46,13 @@ export class EditDrinkComponent implements OnInit {
     if (this.drink) {
       this.drinkService.saveDrinkData(this.drink)
         .subscribe((response: StatusResponse) => {
-          this.logService.logSuccess(`Saved drink data for: ${this.drink?.name}`)
-          this.logService.logVerbose(`response: ${JSON.stringify(response)}`)
+          this.log(LogLevel.Success, `Saved drink data for: ${this.drink?.name}`)
+          this.log(LogLevel.Verbose, `response: ${JSON.stringify(response)}`)
         });
     }
+  }
+
+  log(logLevel: LogLevel, message: string) {
+    this.logService.log(logLevel, message, this.constructor.name)
   }
 }

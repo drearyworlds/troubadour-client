@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LogService } from '../log.service'
+import { LogService, LogLevel } from '../log.service'
 
 @Component({
   selector: 'app-messages',
@@ -9,13 +9,8 @@ import { LogService } from '../log.service'
 export class MessagesComponent implements OnInit {
 
   constructor(public logService: LogService) {
-    this.logService.className = "Messages"
   }
 
   ngOnInit(): void {
-  }
-
-  logServiceMessages() : any[] {
-    return LogService.messages;
   }
 }

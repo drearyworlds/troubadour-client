@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { SsQueueEntry, SsSong } from '../../json-schema/ss-objects'
 import { Song } from '../../json-schema/song'
 import { StatusResponse } from '../../json-schema/statusResponse'
-import { LogService } from '../log.service';
+import { LogService, LogLevel } from '../log.service';
 import { SsService } from '../ss.service';
 import { SongService } from '../song.service'
 import { songComparator } from '../comparators'
@@ -23,7 +23,6 @@ export class SsQueueComponent implements OnInit {
     private songService: SongService,
     private logService: LogService,
   ) {
-    this.logService.className = this.constructor.name;
   }
 
   ngOnInit(): void {
@@ -65,7 +64,7 @@ export class SsQueueComponent implements OnInit {
       .subscribe(
         (songQueue) => {
           this.entries = songQueue.list.sort(x => x.position)
-          this.logService.logSuccess('Fetched song queue');
+          this.log(LogLevel.Success, 'Fetched song queue');
         }
       );
   }
@@ -75,7 +74,7 @@ export class SsQueueComponent implements OnInit {
       .getList()
       .subscribe((songList) => {
         this.songs = songList.songs.sort(songComparator);
-        this.logService.logSuccess('Fetched song list');
+        this.log(LogLevel.Success, 'Fetched song list');
       });
   }
 
@@ -83,23 +82,23 @@ export class SsQueueComponent implements OnInit {
     let returnSong: Song = new Song();
 
     if (this.songs) {
-      this.logService.logVerbose(`getSongFromSsSong`);
+      this.log(LogLevel.Verbose, `getSongFromSsSong`);
 
       if (this.songs.length > 0) {
         for (let song of this.songs) {
           if (ssSong.artist == song.artist
             && ssSong.title == song.title) {
-            this.logService.logVerbose(`Matched song: ${song.title}`);
+            this.log(LogLevel.Verbose, `Matched song: ${song.title}`);
             returnSong = song;
             break;
           }
         }
 
         if (returnSong.id == 0) {
-          this.logService.logFailure(`Did not find matching song for: ${ssSong.artist} - ${ssSong.title}`)
+          this.log(LogLevel.Failure, `Did not find matching song for: ${ssSong.artist} - ${ssSong.title}`)
         }
       } else {
-        this.logService.logFailure("songs has no entries")
+        this.log(LogLevel.Failure, "songs has no entries")
       }
     }
 
@@ -108,12 +107,12 @@ export class SsQueueComponent implements OnInit {
 
   setAsCurrent(ssSong: SsSong): void {
     let song = this.getSongFromSsSong(ssSong);
-    this.logService.logVerbose(`Setting song as current: ${song.title}`);
+    this.log(LogLevel.Verbose, `Setting song as current: ${song.title}`);
     this.songService
       .setCurrentSong(song)
       .subscribe((response: StatusResponse) => {
         this.success = response.success
-        this.logService.logSuccess(`Current song set to: ${song.title}`)
+        this.log(LogLevel.Success, `Current song set to: ${song.title}`)
       });
   }
 
@@ -123,7 +122,7 @@ export class SsQueueComponent implements OnInit {
       .markAsPlayed(entry)
       .subscribe(
         () => {
-          this.logService.logSuccess('Entry marked as played');
+          this.log(LogLevel.Success, 'Entry marked as played');
           this.getSongQueue();
         }
       );
@@ -134,9 +133,13 @@ export class SsQueueComponent implements OnInit {
       .removeFromQueue(entry)
       .subscribe(
         () => {
-          this.logService.logSuccess('Entry removed from queue');
+          this.log(LogLevel.Success, 'Entry removed from queue');
           this.getSongQueue();
         }
       );
+  }
+
+  log(logLevel: LogLevel, message: string) {
+    this.logService.log(logLevel, message, this.constructor.name)
   }
 }
