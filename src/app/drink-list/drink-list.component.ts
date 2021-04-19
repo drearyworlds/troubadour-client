@@ -19,6 +19,7 @@ export class DrinkListComponent implements OnInit {
   constructor(
     private drinkService: DrinkService,
     private logService: LogService) {
+      this.logService.className = this.constructor.name;
   }
 
   ngOnInit(): void {
@@ -70,33 +71,17 @@ export class DrinkListComponent implements OnInit {
       .getList()
       .subscribe((drinkList) => {
         this.drinks = drinkList.drinks;
-        this.logSuccess('Fetched drink list');
+        this.logService.logSuccess('Fetched drink list');
       });
   }
 
   setAsCurrent(drinkToSet: Drink): void {
-    this.logVerbose(`Setting drink as current: ${drinkToSet.name}`);
+    this.logService.logVerbose(`Setting drink as current: ${drinkToSet.name}`);
     this.drinkService
       .setCurrentDrink(drinkToSet)
       .subscribe((response: StatusResponse) => {
         this.success = response.success
-        this.logSuccess(`Current song set to: ${drinkToSet.name}`)
+        this.logService.logSuccess(`Current song set to: ${drinkToSet.name}`)
       });
-  }
-
-  private logFailure(message: string) {
-    this.logService.logFailure(message, this.constructor.name);
-  }
-
-  private logSuccess(message: string) {
-    this.logService.logSuccess(message, this.constructor.name);
-  }
-
-  private logInfo(message: string) {
-    this.logService.logInfo(message, this.constructor.name);
-  }
-
-  private logVerbose(message: string) {
-    this.logService.logVerbose(message, this.constructor.name);
   }
 }

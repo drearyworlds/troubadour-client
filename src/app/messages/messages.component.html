@@ -1,5 +1,5 @@
 <h2>Message Log</h2>
 
-<div class="messages-list" *ngIf="logServiceMessage.length">
-    <div *ngFor='let message of logServiceMessage'> {{message}} </div>
+<div class="messages-list" *ngIf="logServiceMessages().length">
+    <div *ngFor='let message of logServiceMessages()'> {{message}} </div>
 </div>

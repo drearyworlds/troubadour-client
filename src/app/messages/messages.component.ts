@@ -15,7 +15,7 @@ export class MessagesComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  logServiceMessage() : Array<string> {
+  logServiceMessages() : any[] {
     return LogService.messages;
   }
 }

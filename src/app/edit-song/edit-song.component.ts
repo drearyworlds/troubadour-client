@@ -17,7 +17,9 @@ export class EditSongComponent implements OnInit {
     private route: ActivatedRoute,
     private songService: SongService,
     private logService: LogService
-  ) { }
+  ) {
+    this.logService.className = this.constructor.name;
+  }
 
   ngOnInit(): void {
     this.getSongDataForEdit()
@@ -30,11 +32,11 @@ export class EditSongComponent implements OnInit {
       .subscribe(songJsonString => {
         if (songJsonString) {
           this.song = JSON.parse(songJsonString);
-          this.logSuccess(`Retrieved song data for: ${this.song?.title}`)
+          this.logService.logSuccess(`Retrieved song data for: ${this.song?.title}`)
         }
 
         if (!this.song) {
-          this.logInfo(`Did not find song. Adding new song.`)
+          this.logService.logInfo(`Did not find song. Adding new song.`)
           this.song = new Song();
           this.song.id = songId;
         }
@@ -45,25 +47,9 @@ export class EditSongComponent implements OnInit {
     if (this.song) {
       this.songService.saveSongData(this.song)
         .subscribe((response: StatusResponse) => {
-          this.logSuccess(`Saved song data for: ${this.song?.title}`)
-          this.logVerbose(`response: ${JSON.stringify(response)}`)
+          this.logService.logSuccess(`Saved song data for: ${this.song?.title}`)
+          this.logService.logVerbose(`response: ${JSON.stringify(response)}`)
         });
     }
-  }
-
-  private logFailure(message: string) {
-    this.logService.logFailure(message, this.constructor.name);
-  }
-
-  private logSuccess(message: string) {
-    this.logService.logSuccess(message, this.constructor.name);
-  }
-
-  private logInfo(message: string) {
-    this.logService.logInfo(message, this.constructor.name);
-  }
-
-  private logVerbose(message: string) {
-    this.logService.logVerbose(message, this.constructor.name);
   }
 }

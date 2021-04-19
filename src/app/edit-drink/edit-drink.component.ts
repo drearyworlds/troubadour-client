@@ -17,7 +17,9 @@ export class EditDrinkComponent implements OnInit {
     private route: ActivatedRoute,
     private drinkService: DrinkService,
     private logService: LogService
-  ) { }
+  ) {
+    this.logService.className = this.constructor.name;
+  }
 
   ngOnInit(): void {
     this.getDrinkDataForEdit()
@@ -30,11 +32,11 @@ export class EditDrinkComponent implements OnInit {
       .subscribe(drinkJsonString => {
         if (drinkJsonString) {
           this.drink = JSON.parse(drinkJsonString);
-          this.logSuccess(`Retrieved drink data for: ${this.drink?.name}`)
+          this.logService.logSuccess(`Retrieved drink data for: ${this.drink?.name}`)
         }
 
         if (!this.drink) {
-          this.logInfo(`Did not find drink. Adding new drink.`)
+          this.logService.logInfo(`Did not find drink. Adding new drink.`)
           this.drink = new Drink();
           this.drink.id = drinkId;
         }
@@ -45,25 +47,9 @@ export class EditDrinkComponent implements OnInit {
     if (this.drink) {
       this.drinkService.saveDrinkData(this.drink)
         .subscribe((response: StatusResponse) => {
-          this.logSuccess(`Saved drink data for: ${this.drink?.name}`)
-          this.logVerbose(`response: ${JSON.stringify(response)}`)
+          this.logService.logSuccess(`Saved drink data for: ${this.drink?.name}`)
+          this.logService.logVerbose(`response: ${JSON.stringify(response)}`)
         });
     }
-  }
-
-  private logFailure(message: string) {
-    this.logService.logFailure(message, this.constructor.name);
-  }
-
-  private logSuccess(message: string) {
-    this.logService.logSuccess(message, this.constructor.name);
-  }
-
-  private logInfo(message: string) {
-    this.logService.logInfo(message, this.constructor.name);
-  }
-
-  private logVerbose(message: string) {
-    this.logService.logVerbose(message, this.constructor.name);
   }
 }

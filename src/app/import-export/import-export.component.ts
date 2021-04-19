@@ -19,7 +19,9 @@ export class ImportExportComponent implements OnInit {
     private songService: SongService,
     private drinkService: DrinkService,
     private logService: LogService
-  ) { }
+  ) {
+    this.logService.className = this.constructor.name;
+  }
 
   ngOnInit(): void {
   }
@@ -31,7 +33,7 @@ export class ImportExportComponent implements OnInit {
       (await this.songService.importSongList(fileToImport))
         .subscribe((response: StatusResponse) => {
           this.success = response.success
-          this.logSuccess("Song list imported")
+          this.logService.logSuccess("Song list imported")
         });
     }
   }
@@ -61,7 +63,7 @@ export class ImportExportComponent implements OnInit {
       (await this.drinkService.importDrinkList(fileToImport))
         .subscribe((response: StatusResponse) => {
           this.success = response.success
-          this.logSuccess("Drink list imported")
+          this.logService.logSuccess("Drink list imported")
         });
     }
   }
@@ -82,21 +84,5 @@ export class ImportExportComponent implements OnInit {
           document.body.removeChild(element);
         }
       );
-  }
-
-  private logFailure(message: string) {
-    this.logService.logFailure(message, this.constructor.name);
-  }
-
-  private logSuccess(message: string) {
-    this.logService.logSuccess(message, this.constructor.name);
-  }
-
-  private logInfo(message: string) {
-    this.logService.logInfo(message, this.constructor.name);
-  }
-
-  private logVerbose(message: string) {
-    this.logService.logVerbose(message, this.constructor.name);
   }
 }
