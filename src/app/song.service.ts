@@ -4,7 +4,7 @@ import { SongList } from '../json-schema/song-list'
 import { StatusResponse } from '../json-schema/statusResponse';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { MessageService } from './message.service';
+import { LogService } from './log.service';
 import { catchError, tap } from 'rxjs/operators';
 import { ConfigurationService } from './configuration.service';
 
@@ -19,15 +19,17 @@ export class SongService {
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService,
+    private logService: LogService,
     private configService: ConfigurationService
-  ) { }
+  ) {
+    this.logService.className = this.constructor.name;
+  }
 
   getList(): Observable<SongList> {
     const songList: Observable<SongList> = this.http
       .get<SongList>(this.URL_SONG_LIST)
       .pipe(
-        tap((_) => this.logVerbose('Fetched song list')),
+        tap((_) => this.logService.logVerbose('Fetched song list')),
         catchError(this.handleError<SongList>('getSongList'))
       );
     return songList;
@@ -42,7 +44,7 @@ export class SongService {
     let songData: Observable<string> = this.http
       .get(this.URL_SONG_DATA, options)
       .pipe(
-        tap((_) => this.logVerbose('Fetched song data')),
+        tap((_) => this.logService.logVerbose('Fetched song data')),
         catchError(this.handleError<string>('getData'))
       );
 
@@ -58,7 +60,7 @@ export class SongService {
     let songData: Observable<string> = this.http
       .get(this.URL_SONG_DATA, options)
       .pipe(
-        tap((_) => this.logVerbose('Fetched data')),
+        tap((_) => this.logService.logVerbose('Fetched data')),
         catchError(this.handleError<string>('getData'))
       );
 
@@ -74,7 +76,7 @@ export class SongService {
     let lyrics: Observable<string> = this.http
       .get(this.URL_GET_SONG_LYRICS, options)
       .pipe(
-        tap((_) => this.logVerbose('Fetched lyrics')),
+        tap((_) => this.logService.logVerbose('Fetched lyrics')),
         catchError(this.handleError<string>('getLyrics'))
       );
 
@@ -97,7 +99,7 @@ export class SongService {
         httpOptions
       )
       .pipe(
-        tap((_) => this.logVerbose('Saved current song')),
+        tap((_) => this.logService.logVerbose('Saved current song')),
         catchError(this.handleError<StatusResponse>('saveSongData'))
       );
 
@@ -120,7 +122,7 @@ export class SongService {
         httpOptions
       )
       .pipe(
-        tap((_) => this.logVerbose(`Set current song to ${currentSong.title}`)),
+        tap((_) => this.logService.logVerbose(`Set current song to ${currentSong.title}`)),
         catchError(this.handleError<StatusResponse>('setCurrentSong'))
       );
 
@@ -128,8 +130,8 @@ export class SongService {
   }
 
   async importSongList(songListFile: File): Promise<Observable<StatusResponse>> {
-    this.logVerbose("importSongList")
-    this.logVerbose(`songListFile: ${songListFile}`)
+    this.logService.logVerbose("importSongList")
+    this.logService.logVerbose(`songListFile: ${songListFile}`)
     let songList = await songListFile.text();
 
     const httpOptions = {
@@ -145,7 +147,7 @@ export class SongService {
         httpOptions
       )
       .pipe(
-        tap((_) => this.logVerbose('Imported song list')),
+        tap((_) => this.logService.logVerbose('Imported song list')),
         catchError(this.handleError<StatusResponse>('importSongList'))
       );
 
@@ -161,26 +163,10 @@ export class SongService {
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       // Log failure
-      this.logFailure(`${operation} failed: ${error.message}`);
+      this.logService.logFailure(`${operation} failed: ${error.message}`);
 
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
-  }
-
-  private logFailure(message: string) {
-    this.messageService.logFailure(message, this.constructor.name);
-  }
-
-  private logSuccess(message: string) {
-    this.messageService.logSuccess(message, this.constructor.name);
-  }
-
-  private logInfo(message: string) {
-    this.messageService.logInfo(message, this.constructor.name);
-  }
-
-  private logVerbose(message: string) {
-    this.messageService.logVerbose(message, this.constructor.name);
   }
 }

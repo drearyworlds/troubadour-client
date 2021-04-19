@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Drink } from '../../json-schema/drink'
 import { DrinkService } from '../drink.service';
 import { StatusResponse } from '../../json-schema/statusResponse'
-import { MessageService } from '../message.service';
+import { LogService } from '../log.service';
 
 @Component({
   selector: 'app-drink-list',
@@ -18,7 +18,7 @@ export class DrinkListComponent implements OnInit {
 
   constructor(
     private drinkService: DrinkService,
-    private messageService: MessageService) {
+    private logService: LogService) {
   }
 
   ngOnInit(): void {
@@ -85,18 +85,18 @@ export class DrinkListComponent implements OnInit {
   }
 
   private logFailure(message: string) {
-    this.messageService.logFailure(message, this.constructor.name);
+    this.logService.logFailure(message, this.constructor.name);
   }
 
   private logSuccess(message: string) {
-    this.messageService.logSuccess(message, this.constructor.name);
+    this.logService.logSuccess(message, this.constructor.name);
   }
 
   private logInfo(message: string) {
-    this.messageService.logInfo(message, this.constructor.name);
+    this.logService.logInfo(message, this.constructor.name);
   }
 
   private logVerbose(message: string) {
-    this.messageService.logVerbose(message, this.constructor.name);
+    this.logService.logVerbose(message, this.constructor.name);
   }
 }

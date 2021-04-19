@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router'
 import { SongService } from '../song.service'
-import { MessageService } from '../message.service'
+import { LogService } from '../log.service'
 import { Song } from '../../json-schema/song'
 import { StatusResponse } from '../../json-schema/statusResponse'
 
@@ -16,7 +16,7 @@ export class EditSongComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private songService: SongService,
-    private messageService: MessageService
+    private logService: LogService
   ) { }
 
   ngOnInit(): void {
@@ -52,18 +52,18 @@ export class EditSongComponent implements OnInit {
   }
 
   private logFailure(message: string) {
-    this.messageService.logFailure(message, this.constructor.name);
+    this.logService.logFailure(message, this.constructor.name);
   }
 
   private logSuccess(message: string) {
-    this.messageService.logSuccess(message, this.constructor.name);
+    this.logService.logSuccess(message, this.constructor.name);
   }
 
   private logInfo(message: string) {
-    this.messageService.logInfo(message, this.constructor.name);
+    this.logService.logInfo(message, this.constructor.name);
   }
 
   private logVerbose(message: string) {
-    this.messageService.logVerbose(message, this.constructor.name);
+    this.logService.logVerbose(message, this.constructor.name);
   }
 }

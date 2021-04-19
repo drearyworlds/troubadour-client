@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { SsQueueEntry, SsSong } from '../../json-schema/ss-objects'
 import { Song } from '../../json-schema/song'
 import { StatusResponse } from '../../json-schema/statusResponse'
-import { MessageService } from '../message.service';
+import { LogService } from '../log.service';
 import { SsService } from '../ss.service';
 import { SongService } from '../song.service'
 import { songComparator } from '../comparators'
@@ -21,8 +21,10 @@ export class SsQueueComponent implements OnInit {
   constructor(
     private ssService: SsService,
     private songService: SongService,
-    private messageService: MessageService,
-  ) { }
+    private logService: LogService,
+  ) {
+    this.logService.className = this.constructor.name;
+  }
 
   ngOnInit(): void {
     this.getSongQueue();
@@ -63,7 +65,7 @@ export class SsQueueComponent implements OnInit {
       .subscribe(
         (songQueue) => {
           this.entries = songQueue.list.sort(x => x.position)
-          this.logSuccess('Fetched song queue');
+          this.logService.logSuccess('Fetched song queue');
         }
       );
   }
@@ -73,7 +75,7 @@ export class SsQueueComponent implements OnInit {
       .getList()
       .subscribe((songList) => {
         this.songs = songList.songs.sort(songComparator);
-        this.logSuccess('Fetched song list');
+        this.logService.logSuccess('Fetched song list');
       });
   }
 
@@ -81,23 +83,23 @@ export class SsQueueComponent implements OnInit {
     let returnSong: Song = new Song();
 
     if (this.songs) {
-      this.logVerbose(`getSongFromSsSong`);
+      this.logService.logVerbose(`getSongFromSsSong`);
 
       if (this.songs.length > 0) {
         for (let song of this.songs) {
           if (ssSong.artist == song.artist
             && ssSong.title == song.title) {
-            this.logVerbose(`Matched song: ${song.title}`);
+            this.logService.logVerbose(`Matched song: ${song.title}`);
             returnSong = song;
             break;
           }
         }
 
         if (returnSong.id == 0) {
-          this.logFailure(`Did not find matching song for: ${ssSong.artist} - ${ssSong.title}`)
+          this.logService.logFailure(`Did not find matching song for: ${ssSong.artist} - ${ssSong.title}`)
         }
       } else {
-        this.logFailure("songs has no entries")
+        this.logService.logFailure("songs has no entries")
       }
     }
 
@@ -106,12 +108,12 @@ export class SsQueueComponent implements OnInit {
 
   setAsCurrent(ssSong: SsSong): void {
     let song = this.getSongFromSsSong(ssSong);
-    this.logVerbose(`Setting song as current: ${song.title}`);
+    this.logService.logVerbose(`Setting song as current: ${song.title}`);
     this.songService
       .setCurrentSong(song)
       .subscribe((response: StatusResponse) => {
         this.success = response.success
-        this.logSuccess(`Current song set to: ${song.title}`)
+        this.logService.logSuccess(`Current song set to: ${song.title}`)
       });
   }
 
@@ -121,7 +123,7 @@ export class SsQueueComponent implements OnInit {
       .markAsPlayed(entry)
       .subscribe(
         () => {
-          this.logSuccess('Entry marked as played');
+          this.logService.logSuccess('Entry marked as played');
           this.getSongQueue();
         }
       );
@@ -132,25 +134,9 @@ export class SsQueueComponent implements OnInit {
       .removeFromQueue(entry)
       .subscribe(
         () => {
-          this.logSuccess('Entry removed from queue');
+          this.logService.logSuccess('Entry removed from queue');
           this.getSongQueue();
         }
       );
-  }
-
-  private logFailure(message: string) {
-    this.messageService.logFailure(message, this.constructor.name);
-  }
-
-  private logSuccess(message: string) {
-    this.messageService.logSuccess(message, this.constructor.name);
-  }
-
-  private logInfo(message: string) {
-    this.messageService.logInfo(message, this.constructor.name);
-  }
-
-  private logVerbose(message: string) {
-    this.messageService.logVerbose(message, this.constructor.name);
   }
 }

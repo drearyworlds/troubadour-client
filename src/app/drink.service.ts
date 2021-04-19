@@ -3,7 +3,7 @@ import { Drink } from '../json-schema/drink';
 import { StatusResponse } from '../json-schema/statusResponse';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { MessageService } from './message.service';
+import { LogService } from './log.service';
 import { catchError, map, tap } from 'rxjs/operators';
 import { ConfigurationService } from './configuration.service';
 
@@ -25,7 +25,7 @@ export class DrinkService {
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService,
+    private logService: LogService,
     private configService: ConfigurationService,
   ) {}
 
@@ -141,18 +141,18 @@ export class DrinkService {
   }
 
   private logFailure(message: string) {
-    this.messageService.logFailure(message, this.constructor.name);
+    this.logService.logFailure(message, this.constructor.name);
   }
   
   private logSuccess(message: string) {
-    this.messageService.logSuccess(message, this.constructor.name);
+    this.logService.logSuccess(message, this.constructor.name);
   }
 
   private logInfo(message: string) {
-    this.messageService.logInfo(message, this.constructor.name);
+    this.logService.logInfo(message, this.constructor.name);
   }
 
   private logVerbose(message: string) {
-    this.messageService.logVerbose(message, this.constructor.name);
+    this.logService.logVerbose(message, this.constructor.name);
   }
 }
