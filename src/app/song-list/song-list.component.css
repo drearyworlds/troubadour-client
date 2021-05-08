@@ -9,10 +9,6 @@
   display: block;
 }
 
-.table {
-  width: 100%;
-}
-
 .rowHeader,
 .rowActive {
   clear: both;
@@ -86,7 +82,15 @@
 .cellFixedWidth {
   width: var(--fixed-column-width);
 }
+
 */
+td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 0;
+}
+
 .action-button:hover {
   color: blue;
   background-color: antiquewhite;

@@ -24,11 +24,9 @@ function load(http: HttpClient, config: ConfigurationService): (() => Promise<bo
     return new Promise<boolean>((resolve: (a: boolean) => void): void => {
       http.get('./config.json')
         .pipe(
-          map((x: ConfigurationService) => {
+          map((x: any) => {
             console.log("Found the config.json")
-            config.serverHost = x.serverHost;
-            config.serverPort = x.serverPort;
-
+            config.setValuesFrom(x)
             resolve(true);
           }),
           catchError((x: { status: number }, caught: Observable<void>): ObservableInput<{}> => {

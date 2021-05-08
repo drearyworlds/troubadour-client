@@ -16,9 +16,9 @@ interface DrinkList {
 })
 
 export class DrinkService {
-  private URL_DRINK_LIST: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/drink/list`;
-  private URL_UPDATE_CURRENT_DRINK: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/drink/current`;
-  private URL_DRINK_DATA: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/drink/data`;
+  private URL_DRINK_LIST: string = `http://${this.configService.getServerHost()}:${this.configService.getServerPort()}/drink/list`;
+  private URL_UPDATE_CURRENT_DRINK: string = `http://${this.configService.getServerHost()}:${this.configService.getServerPort()}/drink/current`;
+  private URL_DRINK_DATA: string = `http://${this.configService.getServerHost()}:${this.configService.getServerPort()}/drink/data`;
 
   private drinkList?: Observable<DrinkList>;
   private updateStatusResponse?: Observable<StatusResponse>;

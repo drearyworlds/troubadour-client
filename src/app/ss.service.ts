@@ -17,12 +17,12 @@ interface SongQueue {
 })
 export class SsService {
 
-  private URL_GET_SONGLIST: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/ss/list`
-  private URL_GET_QUEUE: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/ss/queue`
-  private URL_ADD_TO_QUEUE: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/ss/queue/add`
-  private URL_REMOVE_FROM_QUEUE: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/ss/queue/remove`
-  private URL_MARK_QUEUE_ENTRY_AS_PLAYED: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/ss/queue/mark`
-  private URL_UPDATE_SONG: string = `http://${this.configService.serverHost}:${this.configService.serverPort}/ss/song`;
+  private URL_GET_SONGLIST: string = `http://${this.configService.getServerHost()}:${this.configService.getServerPort()}/ss/list`
+  private URL_GET_QUEUE: string = `http://${this.configService.getServerHost()}:${this.configService.getServerPort()}/ss/queue`
+  private URL_ADD_TO_QUEUE: string = `http://${this.configService.getServerHost()}:${this.configService.getServerPort()}/ss/queue/add`
+  private URL_REMOVE_FROM_QUEUE: string = `http://${this.configService.getServerHost()}:${this.configService.getServerPort()}/ss/queue/remove`
+  private URL_MARK_QUEUE_ENTRY_AS_PLAYED: string = `http://${this.configService.getServerHost()}:${this.configService.getServerPort()}/ss/queue/mark`
+  private URL_UPDATE_SONG: string = `http://${this.configService.getServerHost()}:${this.configService.getServerPort()}/ss/song`;
   private URL_ADD_SONG: string = this.URL_UPDATE_SONG;
 
   constructor(
@@ -33,24 +33,28 @@ export class SsService {
   }
 
   getSongList(): Observable<SsSongList> {
+    const methodName = this.getSongList.name;
+
     let songList: Observable<SsSongList> = this.http
       .get<SsSongList>(this.URL_GET_SONGLIST)
       .pipe(
-        tap((_) => this.log(LogLevel.Verbose, 'Fetched song list')),
+        tap((_) => this.log(LogLevel.Verbose, 'Fetched song list', methodName)),
         catchError(this.handleError<SsSongList>(`getSongList from ${this.URL_GET_SONGLIST}`))
       );
     return songList;
   }
 
   updateSong(ssSong: SsSong): Observable<SsSong> {
-    this.log(LogLevel.Verbose, `updateSong: ${ssSong.id}`);
+    const methodName = this.updateSong.name;
+
+    this.log(LogLevel.Verbose, `id: ${ssSong.id}`, methodName);
 
     let url = this.URL_UPDATE_SONG;;
-    this.log(LogLevel.Verbose, `url: ${url}`)
+    this.log(LogLevel.Verbose, `url: ${url}`, methodName);
 
     const body = ssSong;
 
-    this.log(LogLevel.Verbose, `body: ${JSON.stringify(body)}`)
+    this.log(LogLevel.Verbose, `body: ${JSON.stringify(body)}`, methodName);
 
     const songResponse: Observable<SsSong> = this.http
       .put<SsSong>(
@@ -58,8 +62,8 @@ export class SsService {
         body)
       .pipe(
         tap((_) => {
-          this.log(LogLevel.Verbose, `Updated song "${ssSong.title}"`)
-          this.log(LogLevel.Verbose, `Update Song response: ${songResponse}`)
+          this.log(LogLevel.Verbose, `Updated song "${ssSong.title}"`, methodName);
+          this.log(LogLevel.Verbose, `Update Song response: ${songResponse}`, methodName);
         }),
         catchError(this.handleError<SsSong>('updateSong'))
       );
@@ -68,14 +72,16 @@ export class SsService {
   }
 
   addSong(ssSong: SsSong) {
-    this.log(LogLevel.Verbose, `addSong: ${ssSong.id}`);
+    const methodName = this.addSong.name;
+
+    this.log(LogLevel.Verbose, `id: ${ssSong.id}`, methodName);
 
     let url = this.URL_ADD_SONG;;
-    this.log(LogLevel.Verbose, `url: ${url}`)
+    this.log(LogLevel.Verbose, `url: ${url}`, methodName);
 
     const body = ssSong;
 
-    this.log(LogLevel.Verbose, `body: ${JSON.stringify(body)}`)
+    this.log(LogLevel.Verbose, `body: ${JSON.stringify(body)}`, methodName);
 
     const songResponse: Observable<SsSong> = this.http
       .post<SsSong>(
@@ -83,8 +89,8 @@ export class SsService {
         body)
       .pipe(
         tap((_) => {
-          this.log(LogLevel.Verbose, `Added song "${ssSong.title}"`)
-          this.log(LogLevel.Verbose, `Add Song response: ${songResponse}`)
+          this.log(LogLevel.Verbose, `Added song "${ssSong.title}"`, methodName);
+          this.log(LogLevel.Verbose, `Add Song response: ${songResponse}`, methodName);
         }),
         catchError(this.handleError<SsSong>('addSong'))
       );
@@ -93,20 +99,24 @@ export class SsService {
   }
 
   getSongQueue(): Observable<SongQueue> {
+    const methodName = this.getSongQueue.name;
+
     const songQueue: Observable<SongQueue> = this.http
       .get<SongQueue>(this.URL_GET_QUEUE)
       .pipe(
-        tap((_) => this.log(LogLevel.Verbose, 'Fetched song queue')),
+        tap((_) => this.log(LogLevel.Verbose, 'Fetched song queue', methodName)),
         catchError(this.handleError<SongQueue>('getSongQueue'))
       );
     return songQueue;
   }
 
   addToQueue(id: number): Observable<StatusResponse> {
-    this.log(LogLevel.Verbose, `addToQueue: ${id}`);
+    const methodName = this.addToQueue.name;
+
+    this.log(LogLevel.Verbose, `id: ${id}`, methodName);
 
     const url = this.URL_ADD_TO_QUEUE;;
-    this.log(LogLevel.Verbose, `url: ${url}`)
+    this.log(LogLevel.Verbose, `url: ${url}`, methodName);
 
     let body = { songId: id }
 
@@ -115,21 +125,23 @@ export class SsService {
         url,
         body)
       .pipe(
-        tap((_) => this.log(LogLevel.Verbose, `Added entry (${id}) to queue`)),
+        tap((_) => this.log(LogLevel.Verbose, `Added entry (${id}) to queue`, methodName)),
         catchError(this.handleError<StatusResponse>('addToQueue'))
       );
 
-    this.log(LogLevel.Verbose, `addToQueue response: ${statusResponse}`)
+    this.log(LogLevel.Verbose, `addToQueue response: ${statusResponse}`, methodName);
 
     return statusResponse;
   }
 
   markAsPlayed(entry: SsQueueEntry): Observable<StatusResponse> {
+    const methodName = this.markAsPlayed.name;
+
     let id: any = entry.id;
-    this.log(LogLevel.Verbose, `id: ${id}`)
+    this.log(LogLevel.Verbose, `id: ${id}`, methodName);
 
     const url = this.URL_MARK_QUEUE_ENTRY_AS_PLAYED;
-    this.log(LogLevel.Verbose, `url: ${url}`)
+    this.log(LogLevel.Verbose, `url: ${url}`, methodName);
 
     let body = { queueId: id }
 
@@ -139,23 +151,25 @@ export class SsService {
         body)
       .pipe(
         tap((_) => {
-          this.log(LogLevel.Verbose, `Marked entry (${id}) as played`)
+          this.log(LogLevel.Verbose, `Marked entry (${id}) as played`, methodName);
           this.getSongQueue()
         }),
         catchError(this.handleError<StatusResponse>('markAsPlayed'))
       );
 
-    this.log(LogLevel.Verbose, `markAsPlayed response: ${statusResponse}`)
+    this.log(LogLevel.Verbose, `markAsPlayed response: ${statusResponse}`, methodName);
 
     return statusResponse;
   }
 
   removeFromQueue(entry: SsQueueEntry): Observable<StatusResponse> {
+    const methodName = this.removeFromQueue.name;
+
     let id: any = entry.id;
-    this.log(LogLevel.Verbose, `id: ${id}`)
+    this.log(LogLevel.Verbose, `id: ${id}`, methodName);
 
     const url = this.URL_REMOVE_FROM_QUEUE;
-    this.log(LogLevel.Verbose, `url: ${url}`)
+    this.log(LogLevel.Verbose, `url: ${url}`, methodName);
 
     let body = { queueId: id }
 
@@ -165,13 +179,13 @@ export class SsService {
         body)
       .pipe(
         tap((_) => {
-          this.log(LogLevel.Verbose, `Removed entry (${id}) from queue`)
+          this.log(LogLevel.Verbose, `Removed entry (${id}) from queue`, methodName);
           this.getSongQueue()
         }),
         catchError(this.handleError<StatusResponse>('removeFromQueue'))
       );
 
-    this.log(LogLevel.Verbose, `removeFromQueue response: ${statusResponse}`)
+    this.log(LogLevel.Verbose, `removeFromQueue response: ${statusResponse}`, methodName);
 
     return statusResponse;
   }
@@ -183,16 +197,18 @@ export class SsService {
    * @param result - optional value to return as the observable result
    */
   private handleError<T>(operation = 'operation', result?: T) {
+    const methodName = this.handleError.name;
+
     return (error: any): Observable<T> => {
       // Log the error
-      this.log(LogLevel.Failure, `${operation} failed: ${error.message}`);
+      this.log(LogLevel.Failure, `${operation} failed: ${error.message}`, methodName);
 
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
   }
 
-  log(logLevel: LogLevel, message: string) {
-    this.logService.log(logLevel, message, this.constructor.name)
+  log(logLevel: LogLevel, message: string, methodName: string) {
+    this.logService.log(logLevel, message, this.constructor.name, methodName);
   }
 }

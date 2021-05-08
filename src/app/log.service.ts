@@ -14,9 +14,8 @@ export class LogService {
   constructor(private toastService: ToastService) {
   }
 
-  log(level: LogLevel, message: string, className: string) {
+  log(level: LogLevel, message: string, className: string, methodName?: string) {
     let logMessage = message;
-    let toastMessage: string = `[${className}] ${message}`;
 
     switch (level) {
       case LogLevel.Verbose:
@@ -24,11 +23,11 @@ export class LogService {
         break;
       case LogLevel.Info:
         logMessage = `Info: ${logMessage}`
-        this.toastService.info(toastMessage)
+        this.toastService.info(logMessage)
         break;
       case LogLevel.Success:
         logMessage = `Success: ${logMessage}`
-        this.toastService.success(toastMessage)
+        this.toastService.success(logMessage)
         break;
       case LogLevel.Warning:
         logMessage = `Warning: ${logMessage}`
@@ -36,11 +35,13 @@ export class LogService {
       case LogLevel.Failure:
         logMessage = `${message}`
         logMessage = `Failure: ${logMessage}`
-        this.toastService.failure(toastMessage)
+        this.toastService.failure(logMessage)
         break;
     }
 
-    this.messages.push(`[${className}] ${logMessage}`);
+    logMessage = `[${className}] [${methodName}] ${logMessage}`;
+    
+    this.messages.push(logMessage);
   }
 
   clear() {
