@@ -33,7 +33,7 @@ export class SongListComponent implements OnInit {
     this.getSsSongList();
   }
 
-  isEditMode() : boolean{
+  isEditMode(): boolean {
     return this.configurationService.isEditMode();
   }
 
@@ -54,10 +54,10 @@ export class SongListComponent implements OnInit {
     }
   }
 
-  getSsSongFromSong(song: Song): SsSong | null {
+  getSsSongFromSong(song: Song): SsSong {
     const methodName = this.getSsSongFromSong.name;
 
-    let returnSsSong: SsSong | null = new SsSong();
+    let returnSsSong: SsSong = new SsSong();
 
     if (this.ssSongs) {
       this.log(LogLevel.Verbose, `this.ssSongs is valid`, methodName);;
@@ -70,10 +70,10 @@ export class SongListComponent implements OnInit {
               returnSsSong = ssSong;
               break;
             } else {
-              this.log(LogLevel.Verbose, `${ssSong.title} != ${song.title}`, methodName);
+              //this.log(LogLevel.Verbose, `${ssSong.title} != ${song.title}`, methodName);
             }
           } else {
-            this.log(LogLevel.Verbose, `${ssSong.artist} != ${song.artist}`, methodName);
+            //this.log(LogLevel.Verbose, `${ssSong.artist} != ${song.artist}`, methodName);
           }
         }
 
@@ -85,7 +85,6 @@ export class SongListComponent implements OnInit {
       }
     } else {
       this.log(LogLevel.Failure, "this.ssSongs is null", methodName);
-      returnSsSong = null
     }
 
     return returnSsSong;
@@ -105,6 +104,35 @@ export class SongListComponent implements OnInit {
     }
 
     return returnValue;
+  }
+
+  syncSongsWithSsSongs(): void {
+    const methodName = this.syncSongsWithSsSongs.name;
+
+    this.log(LogLevel.Verbose, 'Looking for missing active songs to add', methodName);
+
+    if (this.songs) {
+      this.log(LogLevel.Verbose, 'songs is valid. iterating...', methodName);
+
+      for (let song of this.songs) {
+        // Only add missing active songs
+        if (song.active) {
+          // See if it exists in this.ssSongs already
+          let ssSong: SsSong = this.getSsSongFromSong(song);
+
+          if (ssSong.id == 0) {
+            this.log(LogLevel.Warning, `Did not find song: ${song.artist} - ${song.title} - Adding`, methodName);
+            this.addSsSong(new SsSong(song));
+          }
+        } else {
+          this.log(LogLevel.Verbose, `${song.artist} - ${song.title} is inactive. Skipping...`, methodName);
+        }
+      }
+
+      this.log(LogLevel.Success, "Synchronized songs", methodName);
+    } else {
+      this.log(LogLevel.Failure, "Failed to synchronize songs", methodName);
+    }
   }
 
   getSongList(): void {
@@ -174,57 +202,58 @@ export class SongListComponent implements OnInit {
     const methodName = this.promote.name;
 
     song.active = true;
-    this.toggleSongActiveStatus(song)
+    this.setSongActiveStatus(song)
   }
 
   demote(song: Song) {
     const methodName = this.demote.name;
 
     song.active = false;
-    this.toggleSongActiveStatus(song)
+    this.setSongActiveStatus(song)
   }
 
-  toggleSongActiveStatus(song: Song) {
-    const methodName = this.toggleSongActiveStatus.name;
+  setSongActiveStatus(song: Song) {
+    const methodName = this.setSongActiveStatus.name;
 
     this.songService.saveSongData(song)
       .subscribe((response: StatusResponse) => {
         this.success = response.success
-        this.log(LogLevel.Success, `Toggled current song active status to ${song.active}: ${song.title}`, methodName);
+        this.log(LogLevel.Success, `Set current song active status to ${song.active}: ${song.title}`, methodName);
         this.getSongList();
       });
 
-    let ssSong: SsSong | null = this.getSsSongFromSong(song)
+    let ssSong: SsSong = this.getSsSongFromSong(song)
 
-    if (ssSong) {
-      if (ssSong.id != 0) {
-        this.log(LogLevel.Verbose, `Updating existing song`, methodName);
-        ssSong.active = song.active;
+    if (ssSong.id != 0) {
+      this.log(LogLevel.Verbose, `Updating existing song`, methodName);
+      ssSong.active = song.active;
 
-        this.ssService.updateSong(ssSong)
-          .subscribe((songResponse: SsSong) => {
-            this.success = (songResponse.id != 0)
-            this.log(LogLevel.Success, `Toggled current ssSong active status to ${songResponse.active} for ${songResponse.title}`, methodName);
-            this.getSsSongList();
-          });
-      } else {
-        this.log(LogLevel.Verbose, `SsSong not found. Adding to SS`, methodName);
-        // Create ssSong from song
-        ssSong = new SsSong(song)
-
-        this.ssService.addSong(ssSong)
-          .subscribe((songResponse: SsSong) => {
-            this.success = (songResponse.id != 0)
-            this.log(LogLevel.Success, `Added ssSong ${songResponse.active} for ${songResponse.title}`, methodName);
-            this.getSsSongList();
-          });
-      }
+      this.ssService.updateSong(ssSong)
+        .subscribe((songResponse: SsSong) => {
+          this.success = (songResponse.id != 0)
+          this.log(LogLevel.Success, `Toggled current ssSong active status to ${songResponse.active} for ${songResponse.title}`, methodName);
+          this.getSsSongList();
+        });
     } else {
-      this.log(LogLevel.Failure, "Failed to promote song", methodName)
+      this.log(LogLevel.Verbose, `SsSong not found. Adding to SS`, methodName);
+      // Create ssSong from song and add it
+      ssSong = new SsSong(song)
+      this.addSsSong(ssSong);
     }
   }
 
   log(logLevel: LogLevel, message: string, methodName: string) {
     this.logService.log(logLevel, message, this.constructor.name, methodName)
+  }
+
+  addSsSong(ssSong: SsSong): void {
+    const methodName = this.addSsSong.name;
+
+    this.ssService.addSong(ssSong)
+      .subscribe((songResponse: SsSong) => {
+        this.success = (songResponse.id != 0)
+        this.log(LogLevel.Success, `Added ssSong (active=${songResponse.active}) for ${songResponse.title}`, methodName);
+        this.getSsSongList();
+      });
   }
 }
