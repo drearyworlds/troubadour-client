@@ -1,6 +1,6 @@
 <div class="tabTitle">Song List</div>
 
-<input class="btn btn-primary" type="button" value="Add New Song" routerLink="/edit-song/{{getNextValidSongId() + 1}}">
+<input *ngIf="isEditMode()" class="btn btn-primary" type="button" value="Add New Song" routerLink="/edit-song/{{getNextValidSongId() + 1}}">
 
 <table class="table table-dark table-striped table-hover">
   <thead>
@@ -36,4 +36,4 @@
   </ng-container>
 </table>
 
-<input class="btn btn-primary" type="button" value="Re-sync with StreamerSonglist" (click)="syncSongsWithSsSongs()">
+<input *ngIf="isEditMode()" class="btn btn-primary" type="button" value="Re-sync with StreamerSonglist" (click)="syncSongsWithSsSongs()">

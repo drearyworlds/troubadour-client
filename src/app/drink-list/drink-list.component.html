@@ -1,6 +1,6 @@
 <div class="tabTitle">Drink List</div>
 
-<input class="btn btn-primary" type="button" value="Add New Drink" routerLink="/edit-drink/{{getNextValidSongId() + 1}}">
+<input *ngIf="isEditMode()" class="btn btn-primary" type="button" value="Add New Drink" routerLink="/edit-drink/{{getNextValidSongId() + 1}}">
 
 <table class="table table-dark table-striped table-hover">
   <thead>
@@ -23,7 +23,7 @@
         <td>{{ drink.city }}</td>  
         <td>
           <span class="btn btn-primary" (click)="setAsCurrent(drink)">Drink</span>
-          <span class="btn btn-primary" routerLink="/edit-drink/{{drink.id}}">Edit</span>
+          <span *ngIf="isEditMode()" class="btn btn-primary" routerLink="/edit-drink/{{drink.id}}">Edit</span>
         </td>
       </tr>
   </ng-container>

@@ -7,7 +7,6 @@ export class ConfigurationService {
     // Note: These values are not currently being read from the config.json
     public serverHost: string = "localhost";
     public serverPort: number = 3000;
-    public editMode: boolean = false;
 
     constructor() {
     }
@@ -15,7 +14,6 @@ export class ConfigurationService {
     public setValuesFrom(copy: ConfigurationService) {
         this.serverHost = copy.getServerHost();
         this.serverPort = copy.getServerPort();
-        this.editMode = copy.isEditMode()
     }
 
     public getServerHost(): string {
@@ -24,9 +22,5 @@ export class ConfigurationService {
 
     public getServerPort(): number {
         return this.serverPort;
-    }
-
-    public isEditMode(): boolean {
-        return this.editMode;
     }
 }

@@ -5,4 +5,10 @@
     <a *ngIf="isEditMode()" routerLink="/import-export">Import/Export</a>
     <a *ngIf="isEditMode()" routerLink="/messages">Message Log</a>
 </nav>
+
+<div class="form-check form-switch">
+    <input id="editModeToggle" class="form-switch" type="checkbox" [checked]="isEditMode()" (change)="setEditMode(!isEditMode())">
+    <label for="editModeToggle" class="form-check-label">Toggle Edit Mode</label>
+</div>
+
 <router-outlet></router-outlet>

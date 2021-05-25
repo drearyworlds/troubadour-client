@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ConfigurationService } from './configuration.service';
+import { LocalStorageService } from './local-storage.service';
 
 @Component({
   selector: 'app-root',
@@ -7,13 +7,14 @@ import { ConfigurationService } from './configuration.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title: string = 'Current Song';
-  
-  constructor(private configurationService : ConfigurationService) {
-
+  constructor(private localStorageService: LocalStorageService) {
   }
 
   isEditMode(): boolean {
-    return this.configurationService.isEditMode();
+    return this.localStorageService.isEditMode();
+  }
+
+  setEditMode(value: boolean): void {
+    this.localStorageService.setEditMode(value);
   }
 }

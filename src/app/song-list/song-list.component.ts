@@ -6,7 +6,7 @@ import { StatusResponse } from '../../json-schema/statusResponse';
 import { LogService, LogLevel } from '../log.service';
 import { SsSong } from '../../json-schema/ss-objects'
 import { songComparator } from '../comparators'
-import { ConfigurationService } from 'app/configuration.service';
+import { LocalStorageService } from 'app/local-storage.service';
 
 @Component({
   selector: 'app-song-list',
@@ -23,7 +23,7 @@ export class SongListComponent implements OnInit {
     private songService: SongService,
     private logService: LogService,
     private ssService: SsService,
-    private configurationService: ConfigurationService
+    private localStorageService: LocalStorageService
   ) {
   }
 
@@ -34,7 +34,7 @@ export class SongListComponent implements OnInit {
   }
 
   isEditMode(): boolean {
-    return this.configurationService.isEditMode();
+    return this.localStorageService.isEditMode();
   }
 
   getRowDivClass(active: boolean) {

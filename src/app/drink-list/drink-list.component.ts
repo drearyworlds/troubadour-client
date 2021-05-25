@@ -3,6 +3,7 @@ import { Drink } from '../../json-schema/drink'
 import { DrinkService } from '../drink.service';
 import { StatusResponse } from '../../json-schema/statusResponse'
 import { LogService, LogLevel } from '../log.service';
+import { LocalStorageService } from '../local-storage.service'
 
 @Component({
   selector: 'app-drink-list',
@@ -18,11 +19,16 @@ export class DrinkListComponent implements OnInit {
 
   constructor(
     private drinkService: DrinkService,
-    private logService: LogService) {
+    private logService: LogService,
+    private localStorageService: LocalStorageService) {
   }
 
   ngOnInit(): void {
     this.getDrinkList();
+  }
+
+  isEditMode(): boolean {
+    return this.localStorageService.isEditMode();
   }
 
   getHeaderRowDivClass() {
