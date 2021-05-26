@@ -46,14 +46,6 @@ export class SongListComponent implements OnInit {
 
   }
 
-  getCellDivClass(active: boolean) {
-    const methodName = this.getCellDivClass.name;
-
-    return {
-      'table-danger': !active
-    }
-  }
-
   getSsSongFromSong(song: Song): SsSong {
     const methodName = this.getSsSongFromSong.name;
 
