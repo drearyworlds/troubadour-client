@@ -1,0 +1,26 @@
+td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 0;
+}
+
+.action-button:hover {
+  color: blue;
+  background-color: antiquewhite;
+  cursor: pointer;
+}
+
+span.btn-primary {
+  display: inline;
+  margin: 5px;
+}
+
+.table:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
