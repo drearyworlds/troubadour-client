@@ -1,0 +1,10 @@
+.action-button:hover {
+  color: blue;
+  background-color: antiquewhite;
+  cursor: pointer;
+}
+
+span.btn-primary {
+  display: inline;
+  margin: 5px;
+}

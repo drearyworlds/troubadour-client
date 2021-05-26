@@ -3,27 +3,13 @@ textarea {
     font-size: 12px
 }
 
-/* input.button {
-    float: left;
-    width: 100px;
-    height: 25px;  
-    display: block;
-  }
-
-div.field {
-    padding: 20px 20px;
-    display: block;
+.action-button:hover {
+  color: blue;
+  background-color: antiquewhite;
+  cursor: pointer;
 }
 
-input, textarea {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 12px;
-    width: 50%;
-    color: white;
-    background-color: black;
-    
+span.btn-primary {
+  display: inline;
+  margin: 5px;
 }
-
-:disabled {
-    background-color: #222;
-} */
