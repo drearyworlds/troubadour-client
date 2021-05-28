@@ -1,8 +1,18 @@
 <div>
-  <span class="button">Queue song</span> | <span class="button">Set song as current</span>
+  <div>
+    <div class="songMetadata">
+      <span> [Tuning: <strong>{{ song?.tuning }}</strong>] </span>
+      <span> [Capo: <strong>{{ song?.capo }}</strong>] </span>
+      <span> [Pick: <strong>{{ song?.pick }}</strong>] </span>
+    </div>
 
-  <div class="lyricsContainer">
-    Tuning: {{ song?.tuning }} / Capo: {{ song?.capo }} / Pick: {{ song?.pick }}
-    <pre>{{ song?.lyrics }}</pre>
+    <div class="songButtons">
+      <span class="btn btn-primary" routerLink="/edit-song/{{song?.id}}">Queue</span>
+      <span class="btn btn-primary" routerLink="/edit-song/{{song?.id}}">Play</span>
+      <span class="btn btn-primary" routerLink="/edit-song/{{song?.id}}">Mark Played</span>
+      <span *ngIf="isEditMode()" class="btn btn-primary" routerLink="/edit-song/{{song?.id}}">Edit</span>
+    </div>
   </div>
+
+  <div class="lyrics lyricsColumns">{{ song?.lyrics }}</div>
 </div>

@@ -1,17 +1,40 @@
-* {
+.songMetadata {
+    float: left;
+}
+
+.songButtons {
+    float: right;
+}
+
+/* 4 columns for anything wider than 2256px */
+.lyrics {
+    display: inline-block;
+    width: 100%;
     font-family: 'Courier New', Courier, monospace;
     font-size: 12px;
     overflow: visible;
+    white-space: pre-wrap;    
+    color: rgb(144, 200, 219);
+    column-gap: 7px; 
+    column-count: 4;
 }
 
-.lyricsContainer {
-    -webkit-column-count: 2;
-       -moz-column-count: 2;
-            column-count: 2;
- 
-    -webkit-column-gap: 0px;
-       -moz-column-gap: 0px;
-            column-gap: 0px;   
- }
+/* 3 columns for any width between 1024px and 1280px */
+ @media (max-width: 2256px) {
+ .lyricsColumns {
+   column-count: 3;
+  }
+  }
 
+/* 2 columns for any width between 640px and 1024px */
+@media (max-width: 1024px) {
+  .lyricsColumns {
+    column-count: 2;
+  }
+}
 
+@media (max-width: 640px) {
+.lyricsColumns {
+  column-count: 1;
+  }
+}

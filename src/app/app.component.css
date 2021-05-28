@@ -9,35 +9,48 @@ nav {
   font-family: Arial, sans-serif;
   color: #039be5;
   background-color: #eee;
-  margin-bottom: 12px;
   border: none;
-  padding: 10px 0px;
-  border-radius: 20px;
+  border-radius: 16px;
+  display: inline-block;
+  width: 100%;
+  height: 48px;
 }
 
-a {
+.navButton {
   text-decoration: none;
   font-family: Arial, sans-serif;
   color: #333;
   background-color: #eee;
-  margin-bottom: 12px;
   border: none;
-  padding: 5px 10px;
-  border-radius: 20px;
+  height: 32px;
+  padding: 4px 5px 6px 5px;
+  margin: 8px 5px 0px 5px;
+  border-radius: 16px;
+  vertical-align: middle;
+  text-align: middle;
+  display: inline-block;
 }
 
-nav a:visited,
-a:link {
+nav .navButton:visited,
+.navButton:link {
   color: rgb(30,30,30);
   border-color: rgb(230,230,230);
 }
 
-nav a:hover {
+nav .navButton:hover {
   color:#eee;
   background-color:  #039be5;
   cursor: pointer;
 }
 
-nav a.active {
+nav .navButton.active {
   color: #039be5;
+}
+
+.navButtonLeft {
+  float: left;
+}
+
+.navButtonRight {
+  float: right;
 }

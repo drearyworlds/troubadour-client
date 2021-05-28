@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router'
 import { SongService } from '../song.service'
 import { LogService, LogLevel } from '../log.service'
 import { Song } from '../../json-schema/song'
+import { LocalStorageService } from 'app/local-storage.service';
 
 @Component({
   selector: 'app-lyrics',
@@ -15,12 +16,17 @@ export class LyricsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private songService: SongService,
-    private logService: LogService
+    private logService: LogService,
+    private localStorageService: LocalStorageService
   ) {
   }
 
   ngOnInit(): void {
     this.getSongData()
+  }
+
+  isEditMode(): boolean {
+    return this.localStorageService.isEditMode();
   }
 
   getSongData(): void {

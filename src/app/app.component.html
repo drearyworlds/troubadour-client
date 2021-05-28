@@ -1,14 +1,15 @@
 <nav>
-    <a routerLink="/ss-queue">Song Queue</a>
-    <a routerLink="/song-list">Song List</a>
-    <a routerLink="/drink-list">Drink List</a>
-    <a *ngIf="isEditMode()" routerLink="/import-export">Import/Export</a>
-    <a *ngIf="isEditMode()" routerLink="/messages">Message Log</a>
+    <a class="navButton navButtonLeft" routerLink="/ss-queue">Song Queue</a>
+    <a class="navButton navButtonLeft" routerLink="/song-list">Song List</a>
+    <a class="navButton navButtonLeft" routerLink="/drink-list">Drink List</a>
+    <a class="navButton navButtonLeft" *ngIf="isEditMode()" routerLink="/import-export">Import/Export</a>
+    <a class="navButton navButtonLeft" *ngIf="isEditMode()" routerLink="/messages">Message Log</a>
+    <div class="form-check navButton navButtonRight">
+        <input id="editModeToggle" class="form-switch" type="checkbox" [checked]="isEditMode()" (change)="setEditMode(!isEditMode())">
+        <label for="editModeToggle" class="form-check-label">Toggle Edit Mode</label>
+    </div>
 </nav>
 
-<div class="form-check form-switch">
-    <input id="editModeToggle" class="form-switch" type="checkbox" [checked]="isEditMode()" (change)="setEditMode(!isEditMode())">
-    <label for="editModeToggle" class="form-check-label">Toggle Edit Mode</label>
-</div>
+
 
 <router-outlet></router-outlet>
