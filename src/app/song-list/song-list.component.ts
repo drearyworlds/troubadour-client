@@ -7,6 +7,7 @@ import { LogService, LogLevel } from '../log.service';
 import { SsSong } from '../../json-schema/ss-objects'
 import { songComparator } from '../comparators'
 import { LocalStorageService } from 'app/local-storage.service';
+import { UtilitiesService } from 'app/utilities.service';
 
 @Component({
   selector: 'app-song-list',
@@ -14,8 +15,8 @@ import { LocalStorageService } from 'app/local-storage.service';
   styleUrls: ['./song-list.component.css'],
 })
 export class SongListComponent implements OnInit {
-  songs?: Song[];
-  ssSongs?: SsSong[];
+  songs: Song[] = [];
+  ssSongs: SsSong[] = [];
   success?: boolean;
   fileName?: string;
 
@@ -23,7 +24,8 @@ export class SongListComponent implements OnInit {
     private songService: SongService,
     private logService: LogService,
     private ssService: SsService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private utilitiesService: UtilitiesService
   ) {
   }
 
@@ -35,51 +37,6 @@ export class SongListComponent implements OnInit {
 
   isEditMode(): boolean {
     return this.localStorageService.isEditMode();
-  }
-
-  getRowDivClass(active: boolean) {
-    const methodName = this.getRowDivClass.name;
-
-    return {
-      'table-danger': !active
-    }
-
-  }
-
-  getSsSongFromSong(song: Song): SsSong {
-    const methodName = this.getSsSongFromSong.name;
-
-    let returnSsSong: SsSong = new SsSong();
-
-    if (this.ssSongs) {
-      this.log(LogLevel.Verbose, `this.ssSongs is valid`, methodName);;
-
-      if (this.ssSongs.length > 0) {
-        for (let ssSong of this.ssSongs) {
-          if (song.artist == ssSong.artist) {
-            if (song.title == ssSong.title) {
-              this.log(LogLevel.Verbose, `Matched ssSong: ${ssSong.title}`, methodName);;
-              returnSsSong = ssSong;
-              break;
-            } else {
-              //this.log(LogLevel.Verbose, `${ssSong.title} != ${song.title}`, methodName);
-            }
-          } else {
-            //this.log(LogLevel.Verbose, `${ssSong.artist} != ${song.artist}`, methodName);
-          }
-        }
-
-        if (returnSsSong.id == 0) {
-          this.log(LogLevel.Warning, `Did not find matching ssSong for: ${song.artist} - ${song.title}`, methodName);
-        }
-      } else {
-        this.log(LogLevel.Failure, "ssSongs has no entries", methodName);
-      }
-    } else {
-      this.log(LogLevel.Failure, "this.ssSongs is null", methodName);
-    }
-
-    return returnSsSong;
   }
 
   getNextValidSongId(): number {
@@ -110,7 +67,7 @@ export class SongListComponent implements OnInit {
         // Only add missing active songs
         if (song.active) {
           // See if it exists in this.ssSongs already
-          let ssSong: SsSong = this.getSsSongFromSong(song);
+          let ssSong: SsSong = this.utilitiesService.getSsSongFromSong(this.ssSongs, song);
 
           if (ssSong.id == 0) {
             this.log(LogLevel.Warning, `Did not find song: ${song.artist} - ${song.title} - Adding`, methodName);
@@ -173,7 +130,7 @@ export class SongListComponent implements OnInit {
     const methodName = this.addToQueue.name;
 
     this.log(LogLevel.Verbose, `id: ${song.id}`, methodName);
-    let ssSong: SsSong | null = this.getSsSongFromSong(song);
+    let ssSong: SsSong | null = this.utilitiesService.getSsSongFromSong(this.ssSongs, song);
 
     this.log(LogLevel.Verbose, `ssSong: ${JSON.stringify(ssSong)}`, methodName);
 
@@ -214,7 +171,7 @@ export class SongListComponent implements OnInit {
         this.getSongList();
       });
 
-    let ssSong: SsSong = this.getSsSongFromSong(song)
+    let ssSong: SsSong = this.utilitiesService.getSsSongFromSong(this.ssSongs, song);
 
     if (ssSong.id != 0) {
       this.log(LogLevel.Verbose, `Updating existing song`, methodName);
@@ -234,10 +191,6 @@ export class SongListComponent implements OnInit {
     }
   }
 
-  log(logLevel: LogLevel, message: string, methodName: string) {
-    this.logService.log(logLevel, message, this.constructor.name, methodName)
-  }
-
   addSsSong(ssSong: SsSong): void {
     const methodName = this.addSsSong.name;
 
@@ -247,5 +200,9 @@ export class SongListComponent implements OnInit {
         this.log(LogLevel.Success, `Added ssSong (active=${songResponse.active}) for ${songResponse.title}`, methodName);
         this.getSsSongList();
       });
+  }
+
+  log(logLevel: LogLevel, message: string, methodName: string) {
+    this.logService.log(logLevel, message, this.constructor.name, methodName)
   }
 }
