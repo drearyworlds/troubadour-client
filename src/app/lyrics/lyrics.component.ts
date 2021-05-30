@@ -4,6 +4,7 @@ import { SongService } from '../song.service'
 import { LogService, LogLevel } from '../log.service'
 import { Song } from '../../json-schema/song'
 import { LocalStorageService } from 'app/local-storage.service';
+import { SongListComponent } from '../song-list/song-list.component'
 
 @Component({
   selector: 'app-lyrics',
@@ -11,13 +12,14 @@ import { LocalStorageService } from 'app/local-storage.service';
   styleUrls: ['./lyrics.component.css']
 })
 export class LyricsComponent implements OnInit {
-  public song?: Song;
+  public song: Song = new Song();
 
   constructor(
     private route: ActivatedRoute,
     private songService: SongService,
     private logService: LogService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private songListComponent: SongListComponent
   ) {
   }
 
@@ -55,6 +57,14 @@ export class LyricsComponent implements OnInit {
         this.log(LogLevel.Failure, "No artist and title passed in")
       }
     }
+  }
+
+  addToQueue() {
+    this.songListComponent.addToQueue(this.song);
+  }
+
+  setAsCurrent() {
+    this.songListComponent.setAsCurrent(this.song);
   }
 
   log(logLevel: LogLevel, message: string) {
