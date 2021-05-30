@@ -7,8 +7,8 @@
     </div>
 
     <div class="songButtons">
-      <span class="btn btn-primary" routerLink="addToQueue()">Queue</span>
-      <span class="btn btn-primary" (click)="setAsCurrent()">Play</span>
+      <!-- <span class="btn btn-primary" routerLink="addToQueue()">Queue</span>
+      <span class="btn btn-primary" (click)="setAsCurrent()">Play</span> -->
       <span *ngIf="isEditMode()" class="btn btn-primary" routerLink="/edit-song/{{song?.id}}">Edit</span>
     </div>
   </div>

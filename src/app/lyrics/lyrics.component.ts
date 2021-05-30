@@ -18,8 +18,7 @@ export class LyricsComponent implements OnInit {
     private route: ActivatedRoute,
     private songService: SongService,
     private logService: LogService,
-    private localStorageService: LocalStorageService,
-    private songListComponent: SongListComponent
+    private localStorageService: LocalStorageService
   ) {
   }
 
@@ -59,13 +58,13 @@ export class LyricsComponent implements OnInit {
     }
   }
 
-  addToQueue() {
-    this.songListComponent.addToQueue(this.song);
-  }
+  // addToQueue() {
+  //   this.songListComponent.addToQueue(this.song);
+  // }
 
-  setAsCurrent() {
-    this.songListComponent.setAsCurrent(this.song);
-  }
+  // setAsCurrent() {
+  //   this.songListComponent.setAsCurrent(this.song);
+  // }
 
   log(logLevel: LogLevel, message: string) {
     this.logService.log(logLevel, message, this.constructor.name)
