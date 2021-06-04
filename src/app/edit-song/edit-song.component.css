@@ -1,7 +1,27 @@
-textarea {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 12px
+input.field {
+  background: #222222;
+  color: #9999ff;
 }
+
+input.readonly {
+  background: #333333;
+  color: #aaaaff;
+}
+
+input {
+  margin: 5px;
+}
+
+textarea.lyricsChordsTab {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    padding: 10px;
+    outline: 0;
+    border: 3px solid #333333;
+    background: #222222;
+    color: #9999ff;
+    line-height: 20px;
+  }
 
 .action-button:hover {
   color: blue;

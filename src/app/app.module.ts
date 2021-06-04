@@ -12,7 +12,7 @@ import { APP_INITIALIZER } from '@angular/core';
 import { ConfigurationService } from './configuration.service';
 import { of, Observable, ObservableInput } from '../../node_modules/rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { SsQueueComponent } from './ss-queue/ss-queue.component';
+import { SongQueueComponent } from './song-queue/song-queue.component';
 import { EditSongComponent } from './edit-song/edit-song.component';
 import { ImportExportComponent } from './import-export/import-export.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -50,7 +50,7 @@ function load(http: HttpClient, config: ConfigurationService): (() => Promise<bo
     DrinkListComponent,
     MessagesComponent,
     LyricsComponent,
-    SsQueueComponent,
+    SongQueueComponent,
     EditSongComponent,
     ImportExportComponent,
     EditDrinkComponent

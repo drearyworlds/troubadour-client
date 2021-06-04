@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SsQueueComponent } from './ss-queue.component';
+import { SongQueueComponent } from './song-queue.component';
 
-describe('SsQueueComponent', () => {
-  let component: SsQueueComponent;
-  let fixture: ComponentFixture<SsQueueComponent>;
+describe('SongQueueComponent', () => {
+  let component: SongQueueComponent;
+  let fixture: ComponentFixture<SongQueueComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SsQueueComponent ]
+      declarations: [ SongQueueComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SsQueueComponent);
+    fixture = TestBed.createComponent(SongQueueComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

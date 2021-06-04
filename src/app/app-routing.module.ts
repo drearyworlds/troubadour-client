@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SsQueueComponent } from './ss-queue/ss-queue.component';
+import { SongQueueComponent } from './song-queue/song-queue.component';
 import { SongListComponent } from './song-list/song-list.component';
 import { DrinkListComponent } from './drink-list/drink-list.component';
 import { LyricsComponent } from './lyrics/lyrics.component';
@@ -10,7 +10,7 @@ import { ImportExportComponent } from './import-export/import-export.component';
 import { MessagesComponent } from './messages/messages.component';
 
 const routes: Routes = [
-  { path: 'ss-queue', component: SsQueueComponent },
+  { path: 'ss-queue', component: SongQueueComponent },
   { path: 'song-list', component: SongListComponent },
   { path: 'drink-list', component: DrinkListComponent },
   { path: 'lyrics/:id', component: LyricsComponent },

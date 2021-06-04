@@ -21,13 +21,13 @@ export class EditSongComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getSongDataForEdit()
+    this.getSongForEdit()
   }
 
-  getSongDataForEdit(): void {
+  getSongForEdit(): void {
     const songId = +(this.route.snapshot.paramMap.get('id') || 0)
 
-    this.songService.getDataBySongId(songId)
+    this.songService.getSongById(songId)
       .subscribe(songJsonString => {
         if (songJsonString) {
           this.song = JSON.parse(songJsonString);
@@ -42,9 +42,9 @@ export class EditSongComponent implements OnInit {
       });
   }
 
-  saveSongData() {
+  saveSong() {
     if (this.song) {
-      this.songService.saveSongData(this.song)
+      this.songService.saveSong(this.song)
         .subscribe((response: StatusResponse) => {
           this.log(LogLevel.Success, `Saved song data for: ${this.song?.title}`)
           this.log(LogLevel.Verbose, `response: ${JSON.stringify(response)}`)
