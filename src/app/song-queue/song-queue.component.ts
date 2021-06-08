@@ -24,34 +24,11 @@ export class SongQueueComponent implements OnInit {
 
   ngOnInit(): void {
     this.getSongQueue();
-    //this.getSongList()
   }
 
   getHeaderRowDivClass() {
     return {
       'rowHeader': true
-    }
-  }
-
-  getRowDivClass(active: boolean) {
-    return {
-      'rowActive': active,
-      'rowInactive': !active
-    }
-  }
-
-  getHeaderCellDivClass(fixed: boolean) {
-    return {
-      'cellHeader': true,
-      'cellFixedWidth': fixed
-    }
-  }
-
-  getCellDivClass(active: boolean, fixed: boolean) {
-    return {
-      'cellActive': active,
-      'cellInactive': !active,
-      'cellFixedWidth': fixed
     }
   }
 
@@ -62,14 +39,11 @@ export class SongQueueComponent implements OnInit {
       .getSongQueue()
       .subscribe(
         (songQueue) => {
-          
           this.entries = songQueue.list.sort(x => x.position)
           this.log(LogLevel.Success, 'Fetched song queue', methodName);
           this.log(LogLevel.Verbose, `songQueue: ${JSON.stringify(songQueue)}`, methodName);
           this.log(LogLevel.Verbose, `entries: ${JSON.stringify(this.entries)}`, methodName);
-          this.log(LogLevel.Verbose, `entries.length: ${this.entries.length}`, methodName);
-          
-          
+          this.log(LogLevel.Verbose, `entries.length: ${this.entries.length}`, methodName); 
         }
       );
   }

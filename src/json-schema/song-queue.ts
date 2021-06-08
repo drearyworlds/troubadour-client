@@ -9,7 +9,7 @@ export interface QueueEntry {
     id: number;
     song: Song;
     position: number;
-    requests: SongRequest[];
+    requests: SongRequest;
 }
 
 export interface SongQueue {

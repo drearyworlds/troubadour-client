@@ -41,12 +41,13 @@ export class SongService {
   getSongById(songId: number): Observable<string> {
     const methodName = this.getSongById.name;
     this.log(LogLevel.Verbose, `Fetching song for ID: ${songId}`, methodName);
+
     let options: { params?: HttpParams; responseType: 'text' } = {
       params: new HttpParams().append('id', songId.toString()),
       responseType: 'text',
     };
 
-    let songData: Observable<string> = this.http
+    const songData: Observable<string> = this.http
       .get(this.URL_SONG, options)
       .pipe(
         tap((_) => this.log(LogLevel.Verbose, `Fetched song`, methodName)),

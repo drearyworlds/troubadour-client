@@ -29,6 +29,8 @@ export class EditSongComponent implements OnInit {
 
     this.songService.getSongById(songId)
       .subscribe(songJsonString => {
+        this.log(LogLevel.Verbose, `songJsonString: ${songJsonString}`)
+
         if (songJsonString) {
           this.song = JSON.parse(songJsonString);
           this.log(LogLevel.Success, `Retrieved song data for: ${this.song?.title}`)

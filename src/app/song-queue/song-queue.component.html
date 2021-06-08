@@ -13,21 +13,13 @@
   <ng-container *ngFor="let entry of entries">
     <tbody class="table table-striped table-dark">
       <tr>
-        <td>{{ entry.position }}</td>
-        <td>{{ entry.song.artist }}</td>
-        <td>{{ entry.song.title }}</td>
-        <td>{{ entry.requests[0].name }}</td>
-
-        <!-- <td routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}">{{ entry.position }}</td>
-        <td routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}">{{ entry.song.artist }}</td>
-        <td routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}">{{ entry.song.title }}</td>
-        <td routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}">{{ entry.requests[0].name }}</td> -->
-
+        <td routerLink="/lyrics/{{entry.song.id}}">{{ entry.position }}</td>
+        <td routerLink="/lyrics/{{entry.song.id}}">{{ entry.song.artist }}</td>
+        <td routerLink="/lyrics/{{entry.song.id}}">{{ entry.song.title }}</td>
+        <td routerLink="/lyrics/{{entry.song.id}}">{{ entry.requests.name }}</td>
         <td>
-          <span class="btn btn-primary" (click)="setAsCurrent(entry.song)">Play</span>
-          <!-- <span class="btn btn-primary" routerLink="/lyrics/{{getSongFromSsSong(entry.song).id}}"
-            (click)="setAsCurrent(entry.song)">Play</span> -->
-
+          <span class="btn btn-primary" routerLink="/lyrics/{{entry.song.id}}"
+            (click)="setAsCurrent(entry.song)">Play</span>
           <span class="btn btn-primary" (click)="markAsPlayed(entry)">Mark played</span>
           <span class="btn btn-primary" (click)="removeFromQueue(entry)">Remove</span>
         </td>
