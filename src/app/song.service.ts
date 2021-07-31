@@ -19,6 +19,7 @@ export class SongService {
   private URL_ADD_TO_QUEUE: string = `${this.URL_SONG}/queue/add`
   private URL_REMOVE_FROM_QUEUE: string = `${this.URL_SONG}/queue/remove`
   private URL_MARK_QUEUE_ENTRY_AS_PLAYED: string = `${this.URL_SONG}/queue/mark`
+  private URL_MARK_NON_QUEUE_SONG_AS_PLAYED: string = `${this.URL_SONG}/mark`
 
   constructor(
     private http: HttpClient,
@@ -191,6 +192,35 @@ export class SongService {
       );
 
     this.log(LogLevel.Verbose, `markAsPlayed response: ${statusResponse}`, methodName);
+
+    return statusResponse;
+  }
+
+  markNonQueueSongAsPlayed(songId : number) : Observable<StatusResponse> {
+    const methodName = this.markNonQueueSongAsPlayed.name;
+
+    this.log(LogLevel.Verbose, `songId: ${songId}`, methodName);
+
+    const url = this.URL_MARK_NON_QUEUE_SONG_AS_PLAYED;
+    this.log(LogLevel.Verbose, `url: ${url}`, methodName);
+
+    let body = { songId: songId }
+
+    this.log(LogLevel.Warning, "body: " + JSON.stringify(body), methodName);
+
+    const statusResponse: Observable<StatusResponse> = this.http
+      .post<StatusResponse>(
+        url,
+        body)
+      .pipe(
+        tap((_) => {
+          this.log(LogLevel.Verbose, `Marked non-queue song (${songId}) as played`, methodName);
+          this.getSongQueue()
+        }),
+        catchError(this.handleError<StatusResponse>('markNonQueueSongAsPlayed'))
+      );
+
+    this.log(LogLevel.Verbose, `markNonQueueSongAsPlayed response: ${statusResponse}`, methodName);
 
     return statusResponse;
   }

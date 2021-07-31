@@ -7,11 +7,14 @@
     </div>
 
     <div class="songButtons">
-      <!-- <span class="btn btn-primary" routerLink="addToQueue()">Queue</span>
-      <span class="btn btn-primary" (click)="setAsCurrent()">Play</span> -->
+      <span class="btn btn-primary" (click)="addToQueue()">Queue</span>
+      <span class="btn btn-primary" (click)="setAsCurrent()">Set as Current</span>
+      <span class="btn btn-primary" (click)="markAsPlayed()">Mark as Played</span>
       <span *ngIf="isEditMode()" class="btn btn-primary" routerLink="/edit-song/{{song?.id}}">Edit</span>
     </div>
   </div>
 
   <div class="lyrics lyricsColumns">{{ song?.lyrics }}</div>
+
+  <div class="tab tabColumns">{{ song?.tab }}</div>
 </div>

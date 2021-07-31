@@ -45,13 +45,22 @@ export class LyricsComponent implements OnInit {
     }
   }
 
-  // addToQueue() {
-  //   this.songListComponent.addToQueue(this.song);
-  // }
+  addToQueue() {
+    const methodName = this.addToQueue.name;
+    this.songService.addToQueue(this.song)
+  }
 
-  // setAsCurrent() {
-  //   this.songListComponent.setAsCurrent(this.song);
-  // }
+  setAsCurrent() {
+    const methodName = this.setAsCurrent.name;
+    this.logService.log(LogLevel.Verbose, "Setting as current", this.constructor.name, methodName)
+    this.songService.setCurrentSong(this.song)
+  }
+
+  markAsPlayed() {
+    const methodName = this.markAsPlayed.name;
+    this.logService.log(LogLevel.Verbose, "Marking as played", this.constructor.name, methodName)
+    this.songService.markNonQueueSongAsPlayed(this.song.id)
+  }
 
   log(logLevel: LogLevel, message: string, methodName: string) {
     this.logService.log(logLevel, message, this.constructor.name)

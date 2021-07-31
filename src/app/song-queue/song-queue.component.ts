@@ -71,7 +71,6 @@ export class SongQueueComponent implements OnInit {
       });
   }
 
-
   markAsPlayed(entry: QueueEntry) {
     const methodName = this.markAsPlayed.name;
     this.songService
