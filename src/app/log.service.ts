@@ -33,10 +33,14 @@ export class LogService {
         logMessage = `Warning: ${logMessage}`
         break;
       case LogLevel.Failure:
-        logMessage = `${message}`
         logMessage = `Failure: ${logMessage}`
         this.toastService.failure(logMessage)
         break;
+    }
+
+    // Constrain log messages to 64 characters
+    if (logMessage.length > 64) {
+      logMessage = `${logMessage.substring(0,128)}[...]`;
     }
 
     logMessage = `[${className}] [${methodName}] ${logMessage}`;

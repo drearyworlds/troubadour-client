@@ -4,7 +4,7 @@ import { Song } from '../../json-schema/song'
 import { StatusResponse } from '../../json-schema/statusResponse'
 import { LogService, LogLevel } from '../log.service';
 import { SongService } from '../song.service'
-import { songComparator } from '../comparators'
+import { songDefaultComparator } from '../comparators'
 
 @Component({
   selector: 'app-ss-queue',
@@ -54,7 +54,7 @@ export class SongQueueComponent implements OnInit {
     this.songService
       .getList()
       .subscribe((songList) => {
-        this.songs = songList.sort(songComparator);
+        this.songs = songList.sort(songDefaultComparator);
         this.log(LogLevel.Success, 'Fetched song list', methodName);
       });
   }

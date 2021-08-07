@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router'
 import { SongService } from '../song.service'
 import { LogService, LogLevel } from '../log.service'
 import { Song } from '../../json-schema/song'
+import { StatusResponse } from '../../json-schema/statusResponse';
 import { LocalStorageService } from 'app/local-storage.service';
 
 @Component({
@@ -36,33 +37,48 @@ export class LyricsComponent implements OnInit {
     if (songId) {
       this.songService.getSongById(songId)
         .subscribe(song => {
+          const methodName = this.getSongForPlay.name;
           this.log(LogLevel.Verbose, `song: ${song}`, methodName);
           this.song = JSON.parse(song);
-          this.log(LogLevel.Verbose, JSON.stringify(this.song), methodName)
         });
     } else {
       this.log(LogLevel.Failure, "No id passed in", methodName)
     }
   }
 
-  addToQueue() {
+  addToQueue(): void {
     const methodName = this.addToQueue.name;
-    this.songService.addToQueue(this.song)
+
+    this.log(LogLevel.Verbose, `Adding song to queue: ${this.song.title}`, methodName);;
+    this.songService
+      .addToQueue(this.song)
+      .subscribe((response: StatusResponse) => {
+        this.log(LogLevel.Success, `Song added to queue: ${this.song.title}`, methodName);
+      });
   }
 
-  setAsCurrent() {
+  setAsCurrent(): void {
     const methodName = this.setAsCurrent.name;
-    this.logService.log(LogLevel.Verbose, "Setting as current", this.constructor.name, methodName)
-    this.songService.setCurrentSong(this.song)
+
+    this.log(LogLevel.Verbose, `Setting song as current: ${this.song.title}`, methodName);;
+    this.songService
+      .setCurrentSong(this.song)
+      .subscribe((response: StatusResponse) => {
+        this.log(LogLevel.Success, `Current song set to: ${this.song.title}`, methodName);
+      });
   }
 
-  markAsPlayed() {
+  markAsPlayed(): void {
     const methodName = this.markAsPlayed.name;
-    this.logService.log(LogLevel.Verbose, "Marking as played", this.constructor.name, methodName)
-    this.songService.markNonQueueSongAsPlayed(this.song.id)
+    this.logService.log(LogLevel.Verbose, "Marking non-queue song as played", this.constructor.name, methodName)
+    this.songService
+      .markNonQueueSongAsPlayed(this.song.ssId)
+      .subscribe((response: StatusResponse) => {
+        this.log(LogLevel.Success, `Marked non-queue song as played: ${this.song.title}`, methodName);
+      });
   }
 
-  log(logLevel: LogLevel, message: string, methodName: string) {
+  log(logLevel: LogLevel, message: string, methodName: string): void {
     this.logService.log(logLevel, message, this.constructor.name)
   }
 }

@@ -22,4 +22,10 @@ export class Song {
     // Status
     active: boolean = false;
     suggestedBy: string = "drearyworlds";
+    isNew: boolean = false;
+
+    // History
+    dateAdded: Date = new Date();
+    lastPlayed: Date = new Date();
+    playCount: Date = new Date();
 }

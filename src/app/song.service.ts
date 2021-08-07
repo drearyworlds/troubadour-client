@@ -21,6 +21,12 @@ export class SongService {
   private URL_MARK_QUEUE_ENTRY_AS_PLAYED: string = `${this.URL_SONG}/queue/mark`
   private URL_MARK_NON_QUEUE_SONG_AS_PLAYED: string = `${this.URL_SONG}/mark`
 
+  private HTTP_OPTIONS_POST = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+    }),
+  };
+
   constructor(
     private http: HttpClient,
     private logService: LogService,
@@ -60,69 +66,58 @@ export class SongService {
 
   saveSong(songToSave: Song) {
     const methodName = this.saveSong.name;
-    const songToSaveString: string = JSON.stringify(songToSave);
 
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    };
+    const body = songToSave;
 
-    const updateStatusResponse: Observable<StatusResponse> = this.http
+    this.log(LogLevel.Verbose, "body: " + JSON.stringify(songToSave), methodName);
+
+    const statusResponse: Observable<StatusResponse> = this.http
       .post<StatusResponse>(
         this.URL_SONG,
-        songToSaveString,
-        httpOptions
+        body,
+        this.HTTP_OPTIONS_POST
       )
       .pipe(
         tap((_) => this.log(LogLevel.Verbose, 'Saved current song', methodName)),
         catchError(this.handleError<StatusResponse>('saveSong'))
       );
 
-    return updateStatusResponse;
+    return statusResponse;
   }
 
   setCurrentSong(currentSong: Song): Observable<StatusResponse> {
     const methodName = this.setCurrentSong.name;
-    const currentSongString: string = JSON.stringify(currentSong);
+    const body = currentSong;
 
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    };
+    this.log(LogLevel.Warning, "body: " + JSON.stringify(body), methodName);
 
-    const updateStatusResponse: Observable<StatusResponse> = this.http
+    const statusResponse: Observable<StatusResponse> = this.http
       .post<StatusResponse>(
         this.URL_UPDATE_CURRENT_SONG,
-        currentSongString,
-        httpOptions
+        body,
+        this.HTTP_OPTIONS_POST
       )
       .pipe(
         tap((_) => this.log(LogLevel.Verbose, `Set current song to ${currentSong.title}`, methodName)),
         catchError(this.handleError<StatusResponse>('setCurrentSong'))
       );
 
-    return updateStatusResponse;
+    return statusResponse;
   }
 
   async importSongList(songListFile: File): Promise<Observable<StatusResponse>> {
     const methodName = this.importSongList.name;
     this.log(LogLevel.Verbose, "importSongList", methodName)
     this.log(LogLevel.Verbose, `songListFile: ${songListFile}`, methodName)
-    let songList = await songListFile.text();
+    let body = await songListFile.text();
 
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    };
+    this.log(LogLevel.Warning, "body: " + JSON.stringify(body), methodName);
 
     const updateStatusResponse: Observable<StatusResponse> = this.http
       .post<StatusResponse>(
         this.URL_SONG_LIST,
-        songList,
-        httpOptions
+        body,
+        this.HTTP_OPTIONS_POST
       )
       .pipe(
         tap((_) => this.log(LogLevel.Verbose, 'Imported song list', methodName)),
@@ -149,15 +144,16 @@ export class SongService {
 
     this.log(LogLevel.Verbose, `id: ${song.id}`, methodName);
 
-    const url = this.URL_ADD_TO_QUEUE;;
-    this.log(LogLevel.Verbose, `url: ${url}`, methodName);
-
     let body = { songId: song.id }
+
+    this.log(LogLevel.Warning, "body: " + JSON.stringify(body), methodName);
 
     const statusResponse: Observable<StatusResponse> = this.http
       .post<StatusResponse>(
-        url,
-        body)
+        this.URL_ADD_TO_QUEUE,
+        body,
+        this.HTTP_OPTIONS_POST
+      )
       .pipe(
         tap((_) => this.log(LogLevel.Verbose, `Added entry (${song.id}) to queue`, methodName)),
         catchError(this.handleError<StatusResponse>('addToQueue'))
@@ -174,15 +170,16 @@ export class SongService {
     let id: any = entry.id;
     this.log(LogLevel.Verbose, `id: ${id}`, methodName);
 
-    const url = this.URL_MARK_QUEUE_ENTRY_AS_PLAYED;
-    this.log(LogLevel.Verbose, `url: ${url}`, methodName);
-
     let body = { queueId: id }
+
+    this.log(LogLevel.Warning, "body: " + JSON.stringify(body), methodName);
 
     const statusResponse: Observable<StatusResponse> = this.http
       .post<StatusResponse>(
-        url,
-        body)
+        this.URL_MARK_QUEUE_ENTRY_AS_PLAYED,
+        body,
+        this.HTTP_OPTIONS_POST
+      )
       .pipe(
         tap((_) => {
           this.log(LogLevel.Verbose, `Marked entry (${id}) as played`, methodName);
@@ -196,13 +193,10 @@ export class SongService {
     return statusResponse;
   }
 
-  markNonQueueSongAsPlayed(songId : number) : Observable<StatusResponse> {
+  markNonQueueSongAsPlayed(songId: number): Observable<StatusResponse> {
     const methodName = this.markNonQueueSongAsPlayed.name;
 
     this.log(LogLevel.Verbose, `songId: ${songId}`, methodName);
-
-    const url = this.URL_MARK_NON_QUEUE_SONG_AS_PLAYED;
-    this.log(LogLevel.Verbose, `url: ${url}`, methodName);
 
     let body = { songId: songId }
 
@@ -210,17 +204,16 @@ export class SongService {
 
     const statusResponse: Observable<StatusResponse> = this.http
       .post<StatusResponse>(
-        url,
-        body)
+        this.URL_MARK_NON_QUEUE_SONG_AS_PLAYED,
+        body,
+        this.HTTP_OPTIONS_POST
+      )
       .pipe(
         tap((_) => {
           this.log(LogLevel.Verbose, `Marked non-queue song (${songId}) as played`, methodName);
-          this.getSongQueue()
         }),
         catchError(this.handleError<StatusResponse>('markNonQueueSongAsPlayed'))
       );
-
-    this.log(LogLevel.Verbose, `markNonQueueSongAsPlayed response: ${statusResponse}`, methodName);
 
     return statusResponse;
   }
@@ -231,15 +224,16 @@ export class SongService {
     let id: any = entry.id;
     this.log(LogLevel.Verbose, `id: ${id}`, methodName);
 
-    const url = this.URL_REMOVE_FROM_QUEUE;
-    this.log(LogLevel.Verbose, `url: ${url}`, methodName);
-
     let body = { queueId: id }
+
+    this.log(LogLevel.Verbose, "body: " + JSON.stringify(body), methodName);
 
     const statusResponse: Observable<StatusResponse> = this.http
       .post<StatusResponse>(
-        url,
-        body)
+        this.URL_REMOVE_FROM_QUEUE,
+        body,
+        this.HTTP_OPTIONS_POST
+      )
       .pipe(
         tap((_) => {
           this.log(LogLevel.Verbose, `Removed entry (${id}) from queue`, methodName);

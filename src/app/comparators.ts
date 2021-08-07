@@ -1,6 +1,6 @@
 import { Song } from '../json-schema/song'
 
-export function songComparator(song1: Song, song2: Song) {
+export function songDefaultComparator(song1: Song, song2: Song) {
     if (song1 && song2) {
         // Put active songs above inactive songs
         if (song1.active != song2.active) {
