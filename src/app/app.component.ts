@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { LocalStorageService } from './local-storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,8 @@ import { LocalStorageService } from './local-storage.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(private localStorageService: LocalStorageService) {
+  constructor(
+    private localStorageService: LocalStorageService) {
   }
 
   isEditMode(): boolean {

@@ -114,10 +114,13 @@ export class SongListComponent implements OnInit {
 
   isNew(song: Song): boolean {
     const methodName = this.isNew.name;
+    if (song.isNew) {
+      return song.isNew;
+    }
+
     var fourWeeksInMs = 24192e5;
     var dateFourWeeksAgo = new Date(Date.now() - fourWeeksInMs);
-    var songDate = song.dateAdded;
-    song.isNew = new Date(songDate) >= dateFourWeeksAgo;
+    song.isNew = new Date(song.dateAdded) >= dateFourWeeksAgo;
     this.log(LogLevel.Verbose, `song ${song.title} isNew: ${song.isNew}`, methodName)
     return (song.isNew);
   }

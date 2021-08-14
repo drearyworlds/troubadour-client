@@ -7,7 +7,7 @@ import { SongService } from '../song.service'
 import { songDefaultComparator } from '../comparators'
 
 @Component({
-  selector: 'app-ss-queue',
+  selector: 'app-song-queue',
   templateUrl: './song-queue.component.html',
   styleUrls: ['./song-queue.component.css'],
 })

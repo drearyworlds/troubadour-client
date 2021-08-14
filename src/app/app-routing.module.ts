@@ -10,7 +10,7 @@ import { ImportExportComponent } from './import-export/import-export.component';
 import { MessagesComponent } from './messages/messages.component';
 
 const routes: Routes = [
-  { path: 'ss-queue', component: SongQueueComponent },
+  { path: 'song-queue', component: SongQueueComponent },
   { path: 'song-list', component: SongListComponent },
   { path: 'drink-list', component: DrinkListComponent },
   { path: 'lyrics/:id', component: LyricsComponent },

@@ -5,6 +5,11 @@ import { LogService, LogLevel } from '../log.service'
 import { Song } from '../../json-schema/song'
 import { StatusResponse } from '../../json-schema/statusResponse';
 import { LocalStorageService } from 'app/local-storage.service';
+import { Router } from '@angular/router';
+
+enum Views {
+  Lyrics, Chords, Tablature
+}
 
 @Component({
   selector: 'app-lyrics',
@@ -12,13 +17,17 @@ import { LocalStorageService } from 'app/local-storage.service';
   styleUrls: ['./lyrics.component.css']
 })
 export class LyricsComponent implements OnInit {
+  eViews = Views;
+
   public song: Song = new Song();
+  private view: Views = Views.Lyrics;
 
   constructor(
     private route: ActivatedRoute,
     private songService: SongService,
     private logService: LogService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private router : Router
   ) {
   }
 
@@ -28,6 +37,26 @@ export class LyricsComponent implements OnInit {
 
   isEditMode(): boolean {
     return this.localStorageService.isEditMode();
+  }
+
+  getView(): Views {
+    return this.view;
+  }
+
+  setView(view: Views): void {
+    this.view = view;
+  }
+
+  getContentForView(): string {
+    if (this.view == Views.Lyrics) {
+      return this.song?.lyrics;
+    } else if (this.view == Views.Chords) {
+      return this.song?.chords;
+    } else if (this.view == Views.Tablature) {
+      return this.song?.tab;
+    }
+
+    return this.song?.lyrics;
   }
 
   getSongForPlay(): void {
@@ -55,6 +84,8 @@ export class LyricsComponent implements OnInit {
       .subscribe((response: StatusResponse) => {
         this.log(LogLevel.Success, `Song added to queue: ${this.song.title}`, methodName);
       });
+
+      this.router.navigate(["/song-queue"]);
   }
 
   setAsCurrent(): void {
@@ -76,6 +107,8 @@ export class LyricsComponent implements OnInit {
       .subscribe((response: StatusResponse) => {
         this.log(LogLevel.Success, `Marked non-queue song as played: ${this.song.title}`, methodName);
       });
+      
+      this.router.navigate(["/song-list"]);
   }
 
   log(logLevel: LogLevel, message: string, methodName: string): void {

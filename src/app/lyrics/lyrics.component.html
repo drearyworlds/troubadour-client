@@ -4,6 +4,10 @@
       <span> [Tuning: <strong>{{ song?.tuning }}</strong>] </span>
       <span> [Capo: <strong>{{ song?.capo }}</strong>] </span>
       <span> [Pick: <strong>{{ song?.pick }}</strong>] </span>
+
+      <span (click)="setView(eViews.Lyrics)">Lyrics</span>
+      <span (click)="setView(eViews.Chords)">Chords </span>
+      <span (click)="setView(eViews.Tablature)">Tab</span>
     </div>
 
     <div class="songButtons">
@@ -14,7 +18,5 @@
     </div>
   </div>
 
-  <div class="lyrics lyricsColumns">{{ song?.lyrics }}</div>
-
-  <div class="tab tabColumns">{{ song?.tab }}</div>
+  <div class="lyrics lyricsColumns">{{ getContentForView() }}</div>
 </div>
