@@ -58,15 +58,16 @@ export class SongQueueComponent implements OnInit {
       });
   }
 
-  setAsCurrent(song: Song): void {
+  setAsCurrent(queueEntry: QueueEntry): void {
     const methodName = this.setAsCurrent.name;
-
-    this.log(LogLevel.Verbose, `Setting song as current: ${song.title}`, methodName);
+    const song = queueEntry.song;
+    song.requestedBy = queueEntry.requests.name;
+    this.log(LogLevel.Verbose, `Setting song as current: ${queueEntry.song.title}`, methodName);
     this.songService
       .setCurrentSong(song)
       .subscribe((response: StatusResponse) => {
         this.success = response.success
-        this.log(LogLevel.Success, `Current song set to: ${song.title}`, methodName)
+        this.log(LogLevel.Success, `Current song set to: ${queueEntry.song.title}`, methodName)
       });
   }
 

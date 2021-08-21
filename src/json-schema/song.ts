@@ -21,8 +21,9 @@ export class Song {
 
     // Status
     active: boolean = false;
-    suggestedBy: string = "drearyworlds";
     isNew: boolean = false;
+    suggestedBy: string = "drearyworlds";
+    requestedBy: string = "drearyworlds";
 
     // History
     dateAdded: Date = new Date();
