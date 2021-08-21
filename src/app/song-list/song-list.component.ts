@@ -3,18 +3,21 @@ import { Song } from '../../json-schema/song';
 import { SongService } from '../song.service';
 import { StatusResponse } from '../../json-schema/statusResponse';
 import { LogService, LogLevel } from '../log.service';
-import { songDefaultComparator } from '../comparators'
 import { LocalStorageService } from 'app/local-storage.service';
 
 enum SortBy {
-  DEFAULT = 0,
-  LAST_PLAYED = 1,
-  PLAY_COUNT = 2
+  ARTIST = "artist",
+  ALBUM = "album",
+  YEAR = "year",
+  TITLE = "title",
+  DATE_ADDED = "dateAdded",
+  DATE_PLAYED = "datePlayed",
+  PLAY_COUNT = "playCount",
 };
 
 enum SortDirection {
-  ASC = 0,
-  DESC = 1
+  ASC = "ASC",
+  DESC = "DESC"
 };
 
 @Component({
@@ -29,7 +32,7 @@ export class SongListComponent implements OnInit {
   eSortDirection = SortDirection;
 
   songs: Song[] = [];
-  sortedBy: SortBy = SortBy.DEFAULT;
+  sortedBy: SortBy = SortBy.ARTIST;
   sortedDirection: SortDirection = SortDirection.ASC;
 
   constructor(
@@ -64,12 +67,15 @@ export class SongListComponent implements OnInit {
     return returnValue;
   }
 
-  sortByDefault() {
-    const methodName = this.sortByDefault.name;
-    this.log(LogLevel.Info, `sorting by default`, methodName)
-    this.songs.sort(songDefaultComparator)
-    this.sortedBy = SortBy.DEFAULT;
-    this.sortedDirection = SortDirection.DESC;
+  sortByArtistYearAlbumTitle() {
+    const methodName = this.sortByArtistYearAlbumTitle.name;
+    this.log(LogLevel.Info, `sorting by artist/year/album/title`, methodName)
+
+    this.sortedDirection = SortDirection.ASC;
+    this.sortBy(SortBy.TITLE)
+    this.sortBy(SortBy.ALBUM)
+    this.sortBy(SortBy.YEAR)
+    this.sortBy(SortBy.ARTIST)
   }
 
   sortBy(sortBy: SortBy) {
@@ -78,38 +84,63 @@ export class SongListComponent implements OnInit {
     // If we are already sorted by this column, just change sort direction
     if (sortBy == this.sortedBy) {
       this.sortedDirection = (this.sortedDirection == SortDirection.ASC) ? SortDirection.DESC : SortDirection.ASC;
-      this.log(LogLevel.Info, `aleady sorted by ${this.sortedBy}, changing direction to: ${this.sortedDirection}`, methodName)
-    } else {
-      this.sortedBy = sortBy
-      this.sortedDirection = SortDirection.DESC;
-      this.log(LogLevel.Info, `sorting by ${this.sortedBy}, direction: ${this.sortedDirection}`, methodName)
+      this.log(LogLevel.Info, `already sorted by ${this.sortedBy}, changing direction to: ${this.sortedDirection}`, methodName)
     }
 
-    if (this.sortedBy == SortBy.LAST_PLAYED) {
-      if (this.sortedDirection == SortDirection.ASC) {
-        this.songs.sort((s1, s2,) => {
-          return (s1.active != s2.active) ? (s1.active ? -1 : 1) :
-            (this.formatDate(s1.lastPlayed) <= this.formatDate(s2.lastPlayed)) ? -1 : 1;
-        });
-      } else {
-        this.songs.sort((s1, s2,) => {
-          return (s1.active != s2.active) ? (s1.active ? -1 : 1) :
-            (this.formatDate(s1.lastPlayed) >= this.formatDate(s2.lastPlayed)) ? -1 : 1;
-        });
+    this.sortedBy = sortBy
+    this.log(LogLevel.Info, `sorting by ${this.sortedBy}, direction: ${this.sortedDirection}`, methodName)
+
+    this.sort();
+  }
+
+  private getSortValueString(sortField: string, sortValue: string) {
+    const THE_PREFIX = "The ";
+
+    try {
+      if (sortField == undefined) {
+        console.log(`sortField was undefined`)
       }
-    } else if (this.sortedBy == SortBy.PLAY_COUNT) {
-      if (this.sortedDirection == SortDirection.ASC) {
-        this.songs.sort((s1, s2,) => {
-          return (s1.active != s2.active) ? (s1.active ? -1 : 1) :
-            (s1.playCount <= s2.playCount) ? -1 : 1;
-        });
-      } else {
-        this.songs.sort((s1, s2,) => {
-          return (s1.active != s2.active) ? (s1.active ? -1 : 1) :
-            (s1.playCount >= s2.playCount) ? -1 : 1;
-        });
+      if (sortValue == undefined) {
+        console.log(`sortValue was undefined`)
       }
+
+      if (sortField.startsWith("date")) {
+        //console.log(`sortField "${sortField}" starts with "date"`)
+        sortValue = this.formatDate(new Date(sortValue));
+      }
+
+      if (sortField == "active") {
+        //console.log(`sortField "${sortField}" is "active"`)
+        sortValue = (sortValue ? "0" : "1");
+      }
+
+      if ((sortField == "artist" || sortField == "title") && sortValue.startsWith(THE_PREFIX)) {
+        //console.log(`sortValue "${sortValue}" starts with "${THE_PREFIX}"`)
+        sortValue = sortValue.substr(THE_PREFIX.length);
+      }
+    } catch (ex) {
+      console.log(`exception: ${ex} with value ${sortValue}`);
+      console.log(`sortField: ${sortField}`);
+      console.log(`sortValue: ${sortValue}`);
     }
+
+    return sortValue;
+  }
+
+  private sort() {
+    let sortField = this.sortedBy as keyof Song
+
+    console.log(`Sorting by ${sortField}`)
+
+    this.songs.sort((s1, s2,) => {
+      let s1ValueToSort = this.getSortValueString(sortField, s1[sortField] as string);
+      let s2ValueToSort = this.getSortValueString(sortField, s2[sortField] as string);
+
+      return (s1.active != s2.active) ? (s1.active ? -1 : 1) :
+        (this.sortedDirection == SortDirection.ASC) ?
+          (s1ValueToSort <= s2ValueToSort ? -1 : 1)
+          : (s1ValueToSort >= s2ValueToSort ? -1 : 1)
+    });
   }
 
   isNew(song: Song): boolean {
@@ -133,7 +164,8 @@ export class SongListComponent implements OnInit {
         return `${numberToPad}`;
       }
     }
-    dateToFormat = new Date(dateToFormat)
+
+    dateToFormat = new Date(dateToFormat);
     return `${dateToFormat.getFullYear()}.${pad(dateToFormat.getMonth() + 1)}.${pad(dateToFormat.getDate())}`;
   }
 
@@ -145,7 +177,7 @@ export class SongListComponent implements OnInit {
       .getList()
       .subscribe((songList) => {
         this.songs = songList;
-        this.sortByDefault();
+        this.sortByArtistYearAlbumTitle();
         this.log(LogLevel.Verbose, 'Fetched song list', methodName);
       });
   }

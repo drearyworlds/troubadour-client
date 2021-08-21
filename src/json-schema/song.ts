@@ -1,6 +1,6 @@
 export class Song {
     // Internal IDs
-    id: number = 0;
+    public id: number = 0;
     ssId: number = 0;
 
     // About the song
@@ -26,6 +26,6 @@ export class Song {
 
     // History
     dateAdded: Date = new Date();
-    lastPlayed: Date = new Date();
+    datePlayed: Date = new Date();
     playCount: Date = new Date();
 }

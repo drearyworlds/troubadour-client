@@ -8,24 +8,26 @@
     <tr>
       <!-- Play Mode -->
       <ng-container *ngIf="!isEditMode()">
-        <th width="20%" (click)="sortByDefault()">Artist</th>
-        <th width="32%">Title</th>
-        <th width="10%" (click)="sortBy(eSortBy.LAST_PLAYED)">Played</th>
-        <th width="5%" (click)="sortBy(eSortBy.PLAY_COUNT)">Count</th>
-        <th width="33%">Actions</th>
+        <th width="20%" (click)="sortByArtistYearAlbumTitle()">Artist</th>
+        <th width="32%" (click)="sortBy(eSortBy.TITLE)">Title</th>
+        <th width="8%" (click)="sortBy(eSortBy.DATE_ADDED)">Added</th>
+        <th width="8%" (click)="sortBy(eSortBy.DATE_PLAYED)">Played</th>
+        <th width="4%" (click)="sortBy(eSortBy.PLAY_COUNT)">Count</th>
+        <th width="28%">Actions</th>
       </ng-container>
 
       <!-- Edit Mode -->
       <ng-container *ngIf="isEditMode()">
         <th width="5%">ID</th>
         <th width="7%">SS ID</th>
-        <th width="14%">Artist</th>
-        <th width="15%">Title</th>
-        <th width="5%">Year</th>
-        <th width="8%">Album</th>
-        <th width="13%" (click)="sortBy(eSortBy.LAST_PLAYED)">Played</th>
+        <th width="14%" (click)="sortByArtistYearAlbumTitle()">Artist</th>
+        <th width="15%" (click)="sortBy(eSortBy.TITLE)">Title</th>
+        <th width="5%" (click)="sortBy(eSortBy.YEAR)">Year</th>
+        <th width="8%" (click)="sortBy(eSortBy.ALBUM)">Album</th>
+        <th width="8%" (click)="sortBy(eSortBy.DATE_ADDED)">Added</th>
+        <th width="8%" (click)="sortBy(eSortBy.DATE_PLAYED)">Played</th>
         <th width="5%" (click)="sortBy(eSortBy.PLAY_COUNT)">Count</th>
-        <th width="28%">Actions</th>
+        <th width="33%">Actions</th>
       </ng-container>
     </tr>
   </thead>
@@ -52,7 +54,10 @@
           *ngIf="isEditMode()" routerLink="/lyrics/{{song.id}}">{{ song.album }}</td>
 
         <td [class.bg-danger]="!song.active" [class.bg-warning]="isNew(song)"
-          routerLink="/lyrics/{{song.id}}">{{ formatDate(song.lastPlayed) }}</td>
+          routerLink="/lyrics/{{song.id}}">{{ formatDate(song.dateAdded) }}</td>
+
+        <td [class.bg-danger]="!song.active" [class.bg-warning]="isNew(song)"
+          routerLink="/lyrics/{{song.id}}">{{ formatDate(song.datePlayed) }}</td>
 
         <td [class.bg-danger]="!song.active" [class.bg-warning]="isNew(song)"
           routerLink="/lyrics/{{song.id}}">{{ song.playCount }}</td>

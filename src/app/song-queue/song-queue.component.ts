@@ -4,7 +4,6 @@ import { Song } from '../../json-schema/song'
 import { StatusResponse } from '../../json-schema/statusResponse'
 import { LogService, LogLevel } from '../log.service';
 import { SongService } from '../song.service'
-import { songDefaultComparator } from '../comparators'
 
 @Component({
   selector: 'app-song-queue',
@@ -43,7 +42,7 @@ export class SongQueueComponent implements OnInit {
           this.log(LogLevel.Success, 'Fetched song queue', methodName);
           this.log(LogLevel.Verbose, `songQueue: ${JSON.stringify(songQueue)}`, methodName);
           this.log(LogLevel.Verbose, `entries: ${JSON.stringify(this.entries)}`, methodName);
-          this.log(LogLevel.Verbose, `entries.length: ${this.entries.length}`, methodName); 
+          this.log(LogLevel.Verbose, `entries.length: ${this.entries.length}`, methodName);
         }
       );
   }
@@ -54,7 +53,7 @@ export class SongQueueComponent implements OnInit {
     this.songService
       .getList()
       .subscribe((songList) => {
-        this.songs = songList.sort(songDefaultComparator);
+        this.songs = songList;
         this.log(LogLevel.Success, 'Fetched song list', methodName);
       });
   }
