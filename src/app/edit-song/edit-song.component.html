@@ -61,11 +61,6 @@
         <input class="field" name="Composer" [(ngModel)]="song.composer" placeholder="(Composer Not Found)">
     </div>
 
-    <!-- <div class="field">
-        <label for="Comment">Comment: </label>
-        <input class="field" name="Comment" [(ngModel)]="song.comment" placeholder="(Comment Not Found)">
-    </div> -->
-
     <div class="field">
         <label for="SuggestedBy">Suggested by: </label>
         <input class="field" name="SuggestedBy" [(ngModel)]="song.suggestedBy" placeholder="(Suggested By Not Found)">
@@ -75,7 +70,7 @@
         <div>
             <label for="Lyrics">Lyrics: </label>
         </div>
-        <textarea class="lyricsChordsTab" rows="50" cols="66" name="Lyrics" [(ngModel)]="song.lyrics"
+        <textarea class="lyricsChordsTab" rows="32" cols="65" name="Lyrics" [(ngModel)]="song.lyrics"
             placeholder="(Lyrics Not Found)"></textarea>
     </div>
 
@@ -83,15 +78,15 @@
         <div>
             <label for="Chords">Chords: </label>
         </div>
-        <textarea class="lyricsChordsTab" rows="50" cols="66" name="Chords" [(ngModel)]="song.chords"
+        <textarea class="lyricsChordsTab" rows="32" cols="65" name="Chords" [(ngModel)]="song.chords"
             placeholder="(Chords Not Found)"></textarea>
     </div>
 
     <div class="field">
-        <div>
+        <div> 
             <label for="Tab">Tab: </label>
         </div>
-        <textarea class="lyricsChordsTab" rows="50" cols="66" name="Tab" [(ngModel)]="song.tab"
+        <textarea class="lyricsChordsTab" rows="32" cols="65" name="Tab" [(ngModel)]="song.tab"
             placeholder="(Tab Not Found)"></textarea>
     </div>
 </div>

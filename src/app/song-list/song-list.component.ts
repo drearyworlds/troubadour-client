@@ -69,13 +69,20 @@ export class SongListComponent implements OnInit {
 
   sortByArtistYearAlbumTitle() {
     const methodName = this.sortByArtistYearAlbumTitle.name;
-    this.log(LogLevel.Info, `sorting by artist/year/album/title`, methodName)
+    this.log(LogLevel.Verbose, `sorting by artist/year/album/title`, methodName)
 
     this.sortedDirection = SortDirection.ASC;
-    this.sortBy(SortBy.TITLE)
-    this.sortBy(SortBy.ALBUM)
-    this.sortBy(SortBy.YEAR)
-    this.sortBy(SortBy.ARTIST)
+    this.sortByAll(new Array(SortBy.TITLE, SortBy.ALBUM, SortBy.YEAR, SortBy.ARTIST));
+  }
+
+  sortByAll(sortBy: Array<SortBy>) {
+    const methodName = this.sortByAll.name;
+
+    for (let i = 0; i < sortBy.length; i++) {
+      this.sortBy(sortBy[i])
+    }
+
+    this.log(LogLevel.Info, `Sorted by ${sortBy}, direction: ${this.sortedDirection}`, methodName)
   }
 
   sortBy(sortBy: SortBy) {
@@ -88,7 +95,7 @@ export class SongListComponent implements OnInit {
     }
 
     this.sortedBy = sortBy
-    this.log(LogLevel.Info, `sorting by ${this.sortedBy}, direction: ${this.sortedDirection}`, methodName)
+    this.log(LogLevel.Verbose, `sorting by ${this.sortedBy}, direction: ${this.sortedDirection}`, methodName)
 
     this.sort();
   }
@@ -158,7 +165,7 @@ export class SongListComponent implements OnInit {
 
   formatDate(dateToFormat: Date): string {
     function pad(numberToPad: number) {
-      if (numberToPad < 9) {
+      if (numberToPad < 10) {
         return "0" + numberToPad;
       } else {
         return `${numberToPad}`;

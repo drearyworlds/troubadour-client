@@ -1,5 +1,12 @@
 @import '~bootstrap/dist/css/bootstrap.css';
 
+/* Application-wide variables */
+
+:root {
+  --default-font-size: 12px;
+  --lyrics-column-count: 1;
+}
+
 /* Application-wide Styles */
 
 body {

@@ -64,9 +64,9 @@
 
         <td [class.bg-danger]="!song.active" [class.bg-warning]="isNew(song)">
 
-          <span class="btn btn-primary" (click)="addSongToQueue(song)">Q</span>
+          <span class="btn btn-primary" (click)="addSongToQueue(song)">Que</span>
 
-          <span class="btn btn-primary" routerLink="/lyrics/{{song.id}}" (click)="setSongAsCurrent(song)">P</span>
+          <span class="btn btn-primary" routerLink="/lyrics/{{song.id}}" (click)="setSongAsCurrent(song)">Pro</span>
 
           <span *ngIf="!song.active && isEditMode()">
             <span class="btn btn-primary" (click)="promoteSong(song)">Pro</span>
@@ -76,7 +76,7 @@
             <span class="btn btn-primary" (click)="demoteSong(song)">Dem</span>
           </span>
 
-          <span *ngIf="isEditMode()" class="btn btn-primary" routerLink="/edit-song/{{song.id}}">E</span>
+          <span *ngIf="isEditMode()" class="btn btn-primary" routerLink="/edit-song/{{song.id}}">Edit</span>
         </td>
       </tr>
   </ng-container>

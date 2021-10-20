@@ -4,6 +4,12 @@
     <a class="navButton navButtonLeft" routerLink="/drink-list">Drink List</a>
     <a class="navButton navButtonLeft" *ngIf="isEditMode()" routerLink="/import-export">Import/Export</a>
     <a class="navButton navButtonLeft" *ngIf="isEditMode()" routerLink="/messages">Message Log</a>
+    <a class="navButton navButtonLeft" *ngIf="isEditMode()" (click)="decreaseFontSize()">Font -</a>
+    <a class="navButton navButtonLeft" *ngIf="isEditMode()" (click)="increaseFontSize()">Font +</a>
+    <a class="navButton navButtonLeft" *ngIf="isEditMode()" (click)="decreaseColumnCount()">Cols -</a>
+    <a class="navButton navButtonLeft" *ngIf="isEditMode()" (click)="increaseColumnCount()">Cols +</a>
+
+
     <div class="form-check navButton navButtonRight">
         <input id="editModeToggle" class="form-switch" type="checkbox" [checked]="isEditMode()" (change)="setEditMode(!isEditMode())">
         <label for="editModeToggle" class="form-check-label">Toggle Edit Mode</label>
