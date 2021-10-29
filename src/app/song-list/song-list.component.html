@@ -64,16 +64,16 @@
 
         <td [class.bg-danger]="!song.active" [class.bg-warning]="isNew(song)">
 
-          <span class="btn btn-primary" (click)="addSongToQueue(song)">Que</span>
+          <span class="btn btn-primary" (click)="addSongToQueue(song)">Queue</span>
 
-          <span class="btn btn-primary" routerLink="/lyrics/{{song.id}}" (click)="setSongAsCurrent(song)">Pro</span>
+          <span class="btn btn-primary" routerLink="/lyrics/{{song.id}}" (click)="setSongAsCurrent(song)">Play</span>
 
           <span *ngIf="!song.active && isEditMode()">
-            <span class="btn btn-primary" (click)="promoteSong(song)">Pro</span>
+            <span class="btn btn-primary" (click)="promoteSong(song)">Promote</span>
           </span>
 
           <span *ngIf="song.active && isEditMode()">
-            <span class="btn btn-primary" (click)="demoteSong(song)">Dem</span>
+            <span class="btn btn-primary" (click)="demoteSong(song)">Demote</span>
           </span>
 
           <span *ngIf="isEditMode()" class="btn btn-primary" routerLink="/edit-song/{{song.id}}">Edit</span>
