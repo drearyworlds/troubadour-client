@@ -1,7 +1,7 @@
 {
   "name": "troubadour-client",
   "description": "Troubadour Song List Client Application",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "author": "drearyworlds",
   "main": "electron/dist/main.js",
   "scripts": {
