@@ -20,8 +20,8 @@ function createWindow() {
     height: 600,
     frame: true,
     darkTheme: true,
-    autoHideMenuBar: true,
-    fullscreen: false,
+    autoHideMenuBar: false,
+    fullscreen: true,
     maximizable: true
   });
 
@@ -35,8 +35,7 @@ function createWindow() {
     })
   )
 
-
-  //win.webContents.openDevTools()
+  win.webContents.setZoomFactor(2);
   win.maximize();
 
   win.on('closed', () => {
