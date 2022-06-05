@@ -126,5 +126,8 @@
       }
     }
   },
-  "defaultProject": "troubadour-client"
+  "defaultProject": "troubadour-client",
+  "cli": {
+    "analytics": false
+  }
 }

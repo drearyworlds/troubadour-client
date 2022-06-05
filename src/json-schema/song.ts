@@ -10,6 +10,7 @@ export class Song {
     album: string = "";
     title: string = "";
     year: number = 0;
+    artistPopularity: number = 0;
 
     // How to play
     capo: number = 0;
@@ -18,6 +19,7 @@ export class Song {
     lyrics: string = "";
     chords: string = "";
     tab: string = "";
+    difficulty: number = 10;
 
     // Status
     active: boolean = false;
