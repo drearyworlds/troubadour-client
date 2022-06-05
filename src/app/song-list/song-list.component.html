@@ -1,18 +1,13 @@
-<div class="tabTitle">Song List</div>
-
-<input *ngIf="isEditMode()" class="btn btn-primary" type="button" value="Add New Song"
-  routerLink="/edit-song/{{getNextValidSongId() + 1}}">
-
 <table class="table table-dark table-hover">
   <thead>
     <tr>
       <!-- Play Mode -->
       <ng-container *ngIf="!isEditMode()">
-        <th width="20%" (click)="sortByArtistYearAlbumTitle()">Artist</th>
-        <th width="32%" (click)="sortBy(eSortBy.TITLE)">Title</th>
-        <th width="8%" (click)="sortBy(eSortBy.DATE_ADDED)">Added</th>
-        <th width="8%" (click)="sortBy(eSortBy.DATE_PLAYED)">Played</th>
-        <th width="4%" (click)="sortBy(eSortBy.PLAY_COUNT)">Count</th>
+        <th width="20%" (click)="performSortByDefault()">Artist</th>
+        <th width="32%" (click)="performSort(eSortBy.TITLE)">Title</th>
+        <th width="8%" (click)="performSort(eSortBy.DATE_ADDED)">Added</th>
+        <th width="8%" (click)="performSort(eSortBy.DATE_PLAYED)">Played</th>
+        <th width="4%" (click)="performSort(eSortBy.PLAY_COUNT)">Count</th>
         <th width="28%">Actions</th>
       </ng-container>
 
@@ -20,13 +15,13 @@
       <ng-container *ngIf="isEditMode()">
         <th width="5%">ID</th>
         <th width="7%">SS ID</th>
-        <th width="14%" (click)="sortByArtistYearAlbumTitle()">Artist</th>
-        <th width="15%" (click)="sortBy(eSortBy.TITLE)">Title</th>
-        <th width="5%" (click)="sortBy(eSortBy.YEAR)">Year</th>
-        <th width="8%" (click)="sortBy(eSortBy.ALBUM)">Album</th>
-        <th width="8%" (click)="sortBy(eSortBy.DATE_ADDED)">Added</th>
-        <th width="8%" (click)="sortBy(eSortBy.DATE_PLAYED)">Played</th>
-        <th width="5%" (click)="sortBy(eSortBy.PLAY_COUNT)">Count</th>
+        <th width="14%" (click)="performSortByDefault()">Artist</th>
+        <th width="15%" (click)="performSort(eSortBy.TITLE)">Title</th>
+        <th width="5%" (click)="performSort(eSortBy.YEAR)">Year</th>
+        <th width="8%" (click)="performSort(eSortBy.ALBUM)">Album</th>
+        <th width="8%" (click)="performSort(eSortBy.DATE_ADDED)">Added</th>
+        <th width="8%" (click)="performSort(eSortBy.DATE_PLAYED)">Played</th>
+        <th width="5%" (click)="performSort(eSortBy.PLAY_COUNT)">Count</th>
         <th width="33%">Actions</th>
       </ng-container>
     </tr>
@@ -34,35 +29,35 @@
 
   <ng-container *ngFor="let song of songs">
     <tbody class="table table-striped table-dark">
-      <tr [class.bg-danger]="!song.active" [class.bg-warning]="isNew(song)">
-        <td [class.bg-danger]="!song.active" [class.bg-warning]="isNew(song)"
-          *ngIf="isEditMode()" routerLink=" /lyrics/{{song.id}}">{{ song.id }}</td>
+      <tr [class.bg-danger]="!song.active" [class.bg-warning]="songIsNew(song)">
+        <td [class.bg-danger]="!song.active" [class.bg-warning]="songIsNew(song)" *ngIf="isEditMode()"
+          routerLink=" /lyrics/{{song.id}}">{{ song.id }}</td>
 
-        <td [class.bg-danger]="!song.active" [class.bg-warning]="isNew(song)"
-          *ngIf="isEditMode()" routerLink="/lyrics/{{song.id}}">{{ song.ssId }}</td>
+        <td [class.bg-danger]="!song.active" [class.bg-warning]="songIsNew(song)" *ngIf="isEditMode()"
+          routerLink="/lyrics/{{song.id}}">{{ song.ssId }}</td>
 
-        <td [class.bg-danger]="!song.active" [class.bg-warning]="isNew(song)"
-          routerLink="/lyrics/{{song.id}}">{{ song.artist }}</td>
+        <td [class.bg-danger]="!song.active" [class.bg-warning]="songIsNew(song)" routerLink="/lyrics/{{song.id}}">{{
+          song.artist }}</td>
 
-        <td [class.bg-danger]="!song.active" [class.bg-warning]="isNew(song)"
-          routerLink="/lyrics/{{song.id}}">{{ song.title }}</td>
+        <td [class.bg-danger]="!song.active" [class.bg-warning]="songIsNew(song)" routerLink="/lyrics/{{song.id}}">{{
+          song.title }}</td>
 
-        <td [class.bg-danger]="!song.active" [class.bg-warning]="isNew(song)"
-          *ngIf="isEditMode()" routerLink="/lyrics/{{song.id}}">{{ song.year }}</td>
+        <td [class.bg-danger]="!song.active" [class.bg-warning]="songIsNew(song)" *ngIf="isEditMode()"
+          routerLink="/lyrics/{{song.id}}">{{ song.year }}</td>
 
-        <td [class.bg-danger]="!song.active" [class.bg-warning]="isNew(song)"
-          *ngIf="isEditMode()" routerLink="/lyrics/{{song.id}}">{{ song.album }}</td>
+        <td [class.bg-danger]="!song.active" [class.bg-warning]="songIsNew(song)" *ngIf="isEditMode()"
+          routerLink="/lyrics/{{song.id}}">{{ song.album }}</td>
 
-        <td [class.bg-danger]="!song.active" [class.bg-warning]="isNew(song)"
-          routerLink="/lyrics/{{song.id}}">{{ formatDate(song.dateAdded) }}</td>
+        <td [class.bg-danger]="!song.active" [class.bg-warning]="songIsNew(song)" routerLink="/lyrics/{{song.id}}">{{
+          formatDate(song.dateAdded) }}</td>
 
-        <td [class.bg-danger]="!song.active" [class.bg-warning]="isNew(song)"
-          routerLink="/lyrics/{{song.id}}">{{ formatDate(song.datePlayed) }}</td>
+        <td [class.bg-danger]="!song.active" [class.bg-warning]="songIsNew(song)" routerLink="/lyrics/{{song.id}}">{{
+          formatDate(song.datePlayed) }}</td>
 
-        <td [class.bg-danger]="!song.active" [class.bg-warning]="isNew(song)"
-          routerLink="/lyrics/{{song.id}}">{{ song.playCount }}</td>
+        <td [class.bg-danger]="!song.active" [class.bg-warning]="songIsNew(song)" routerLink="/lyrics/{{song.id}}">{{
+          song.playCount }}</td>
 
-        <td [class.bg-danger]="!song.active" [class.bg-warning]="isNew(song)">
+        <td [class.bg-danger]="!song.active" [class.bg-warning]="songIsNew(song)">
 
           <span class="btn btn-primary" (click)="addSongToQueue(song)">Queue</span>
 

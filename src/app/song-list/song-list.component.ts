@@ -6,6 +6,7 @@ import { LogService, LogLevel } from '../log.service';
 import { LocalStorageService } from 'app/local-storage.service';
 
 enum SortBy {
+  ACTIVE = "active",
   ARTIST = "artist",
   ALBUM = "album",
   YEAR = "year",
@@ -32,8 +33,8 @@ export class SongListComponent implements OnInit {
   eSortDirection = SortDirection;
 
   songs: Song[] = [];
-  sortedBy: SortBy = SortBy.ARTIST;
-  sortedDirection: SortDirection = SortDirection.ASC;
+  sortBy: SortBy = SortBy.ARTIST;
+  sortDirection: SortDirection = SortDirection.ASC;
 
   constructor(
     private songService: SongService,
@@ -51,115 +52,101 @@ export class SongListComponent implements OnInit {
     return this.localStorageService.isEditMode();
   }
 
-  getNextValidSongId(): number {
-    const methodName = this.getNextValidSongId.name;
+  performSortByDefault() {
+    const methodName = this.performSortByDefault.name;
+    this.log(LogLevel.Verbose, `sorting by active/artist/year/title`, methodName)
 
-    let returnValue = 0
-
-    if (this.songs) {
-      for (let song of this.songs) {
-        if (song.id > returnValue) {
-          returnValue = song.id;
-        }
-      }
-    }
-
-    return returnValue;
+    this.sortDirection = SortDirection.ASC;
+    this.performSortByAll(new Array(SortBy.ACTIVE, SortBy.ARTIST, SortBy.YEAR, SortBy.TITLE));
   }
 
-  sortByArtistYearAlbumTitle() {
-    const methodName = this.sortByArtistYearAlbumTitle.name;
-    this.log(LogLevel.Verbose, `sorting by artist/year/album/title`, methodName)
+  performSortByAll(sortBy: Array<SortBy>) {
+    const methodName = this.performSortByAll.name;
 
-    this.sortedDirection = SortDirection.ASC;
-    this.sortByAll(new Array(SortBy.TITLE, SortBy.ALBUM, SortBy.YEAR, SortBy.ARTIST));
-  }
-
-  sortByAll(sortBy: Array<SortBy>) {
-    const methodName = this.sortByAll.name;
-
-    for (let i = 0; i < sortBy.length; i++) {
-      this.sortBy(sortBy[i])
+    for (let i = sortBy.length - 1; i >= 0; i--) {
+      this.log(LogLevel.Verbose, `sorting by ${this.sortBy}, direction: ${this.sortDirection}`, methodName)
+      this.performSort(sortBy[i], true)
     }
 
-    this.log(LogLevel.Info, `Sorted by ${sortBy}, direction: ${this.sortedDirection}`, methodName)
+    //this.log(LogLevel.Info, `Sorted by ${sortBy}, direction: ${this.sortDirection}`, methodName)
   }
 
-  sortBy(sortBy: SortBy) {
-    const methodName = this.sortBy.name;
+  performSort(sortBy: SortBy, preserveSortDirection : Boolean = false) {
+    const methodName = this.performSort.name;
 
-    // If we are already sorted by this column, just change sort direction
-    if (sortBy == this.sortedBy) {
-      this.sortedDirection = (this.sortedDirection == SortDirection.ASC) ? SortDirection.DESC : SortDirection.ASC;
-      this.log(LogLevel.Info, `already sorted by ${this.sortedBy}, changing direction to: ${this.sortedDirection}`, methodName)
+    // If we are already sorted by this column, just change sort direction (unless we are sorting by multiple fields)
+    if (sortBy == this.sortBy && !preserveSortDirection) {
+      this.sortDirection = (this.sortDirection == SortDirection.ASC) ? SortDirection.DESC : SortDirection.ASC;
+      this.log(LogLevel.Info, `already sorted by ${this.sortBy}, changing direction to: ${this.sortDirection}`, methodName)
     }
 
-    this.sortedBy = sortBy
-    this.log(LogLevel.Verbose, `sorting by ${this.sortedBy}, direction: ${this.sortedDirection}`, methodName)
+    this.sortBy = sortBy
+    this.log(LogLevel.Verbose, `sorting by ${this.sortBy}, direction: ${this.sortDirection}`, methodName)
 
     this.sort();
   }
 
   private getSortValueString(sortField: string, sortValue: string) {
+    const methodName = this.getSortValueString.name;
     const THE_PREFIX = "The ";
 
     try {
       if (sortField == undefined) {
-        console.log(`sortField was undefined`)
+        this.log(LogLevel.Verbose, `sortField was undefined`, methodName);
       }
       if (sortValue == undefined) {
-        console.log(`sortValue was undefined`)
+        this.log(LogLevel.Verbose, `sortValue was undefined`, methodName);
       }
 
       if (sortField.startsWith("date")) {
-        //console.log(`sortField "${sortField}" starts with "date"`)
         sortValue = this.formatDate(new Date(sortValue));
-      }
-
-      if (sortField == "active") {
-        //console.log(`sortField "${sortField}" is "active"`)
+      } else if (sortField == SortBy.ACTIVE) {
         sortValue = (sortValue ? "0" : "1");
-      }
-
-      if ((sortField == "artist" || sortField == "title") && sortValue.startsWith(THE_PREFIX)) {
-        //console.log(`sortValue "${sortValue}" starts with "${THE_PREFIX}"`)
-        sortValue = sortValue.substr(THE_PREFIX.length);
+      } else if ((sortField == SortBy.ARTIST || sortField == SortBy.TITLE) && sortValue.startsWith(THE_PREFIX)) {
+        sortValue = sortValue.substring(THE_PREFIX.length);
       }
     } catch (ex) {
-      console.log(`exception: ${ex} with value ${sortValue}`);
-      console.log(`sortField: ${sortField}`);
-      console.log(`sortValue: ${sortValue}`);
+      this.log(LogLevel.Failure, `exception: ${ex} with value ${sortValue}`, methodName);
+      this.log(LogLevel.Failure, `sortField: ${sortField}`, methodName);
+      this.log(LogLevel.Failure, `sortValue: ${sortValue}`, methodName);
     }
 
     return sortValue;
   }
 
   private sort() {
-    let sortField = this.sortedBy as keyof Song
+    const methodName = this.sort.name;
+    let sortField = this.sortBy as keyof Song
 
-    console.log(`Sorting by ${sortField}`)
+    this.log(LogLevel.Verbose, `Sorting by ${sortField}`, methodName);
 
     this.songs.sort((s1, s2,) => {
       let s1ValueToSort = this.getSortValueString(sortField, s1[sortField] as string);
       let s2ValueToSort = this.getSortValueString(sortField, s2[sortField] as string);
 
-      return (s1.active != s2.active) ? (s1.active ? -1 : 1) :
-        (this.sortedDirection == SortDirection.ASC) ?
-          (s1ValueToSort <= s2ValueToSort ? -1 : 1)
-          : (s1ValueToSort >= s2ValueToSort ? -1 : 1)
+      if (s1ValueToSort < s2ValueToSort) {
+        //this.log(LogLevel.Verbose, s1ValueToSort + " is less than " + s2ValueToSort, methodName);
+        return (this.sortDirection == SortDirection.ASC) ? -1 : 1;
+      } else if (s1ValueToSort > s2ValueToSort) {
+        //this.log(LogLevel.Verbose, s1ValueToSort + " is greater than " + s2ValueToSort, methodName);
+        return (this.sortDirection == SortDirection.ASC) ? 1 : -1;
+      } else {
+        //this.log(LogLevel.Verbose, s1ValueToSort + " is equal to " + s2ValueToSort, methodName);
+        return 0;
+      }
     });
   }
 
-  isNew(song: Song): boolean {
-    const methodName = this.isNew.name;
-    if (song.isNew) {
-      return song.isNew;
-    }
+  songIsNew(song: Song): boolean {
+    const methodName = this.songIsNew.name;
+    // if (song.isNew) {
+    //   return song.isNew;
+    // }
 
     var fourWeeksInMs = 24192e5;
     var dateFourWeeksAgo = new Date(Date.now() - fourWeeksInMs);
     song.isNew = new Date(song.dateAdded) >= dateFourWeeksAgo;
-    this.log(LogLevel.Verbose, `song ${song.title} isNew: ${song.isNew}`, methodName)
+    //this.log(LogLevel.Verbose, `song ${song.title} isNew: ${song.isNew}`, methodName)
     return (song.isNew);
   }
 
@@ -184,8 +171,9 @@ export class SongListComponent implements OnInit {
       .getList()
       .subscribe((songList) => {
         this.songs = songList;
-        this.sortByArtistYearAlbumTitle();
+        this.performSortByDefault();
         this.log(LogLevel.Verbose, 'Fetched song list', methodName);
+        this.localStorageService.setSongList(this.songs);
       });
   }
 

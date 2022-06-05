@@ -9,7 +9,20 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   constructor(
-    private localStorageService: LocalStorageService) {
+    private localStorageService: LocalStorageService,
+    private router : Router) {
+  }
+
+  navigateBack() {
+    window.history.back();
+  }
+
+  navigateForward() {
+    window.history.forward();
+  }
+
+  refreshPage() {
+    window.location.reload();
   }
 
   private modifyFontSize(amount: number) {
@@ -38,6 +51,44 @@ export class AppComponent {
 
   decreaseColumnCount() {
     this.modifyColumnCount(-1);
+  }
+
+  navigateToRandomSong(): void {
+    let songIsActive = false;
+    let randomSongId = 0;
+    let songs = this.localStorageService.getSongList();
+
+    if (songs) {
+      while (randomSongId == 0 || !songIsActive) {
+        var randomSong = songs[Math.floor(Math.random() * songs.length)]
+
+        if (randomSong.active) {
+          randomSongId = randomSong.id;
+          songIsActive = randomSong.active;
+        }
+      }
+
+      if (randomSongId != 0) {
+        this.router.navigate(['/lyrics', randomSongId]);
+      }
+    }
+  }
+  
+  getNextValidSongId(): number {
+    const methodName = this.getNextValidSongId.name;
+    let returnValue = 0
+
+    let songs = this.localStorageService.getSongList();
+
+    if (songs) {
+      for (let song of songs) {
+        if (song.id > returnValue) {
+          returnValue = song.id;
+        }
+      }
+    }
+
+    return returnValue;
   }
 
   isEditMode(): boolean {

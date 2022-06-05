@@ -29,6 +29,7 @@ nav {
   vertical-align: middle;
   text-align: middle;
   display: inline-block;
+  user-select : none;
 }
 
 nav .navButton:visited,
