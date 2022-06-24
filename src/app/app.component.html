@@ -7,11 +7,11 @@
     <a class="navButton navButtonLeft" routerLink="/drink-list">Drink List</a>
     <a class="navButton navButtonLeft" *ngIf="isEditMode()" routerLink="/import-export">Import/Export</a>
     <a class="navButton navButtonLeft" *ngIf="isEditMode()" routerLink="/messages">Log</a>
-    <a class="navButton navButtonLeft" *ngIf="isEditMode()" (click)="decreaseFontSize()">Font -</a>
-    <a class="navButton navButtonLeft" *ngIf="isEditMode()" (click)="increaseFontSize()">Font +</a>
-    <a class="navButton navButtonLeft" *ngIf="isEditMode()" (click)="decreaseColumnCount()">Cols -</a>
-    <a class="navButton navButtonLeft" *ngIf="isEditMode()" (click)="increaseColumnCount()">Cols +</a>
 
+    <a class="navButton navButtonRight" (click)="decreaseFontSize()">Font -</a>
+    <a class="navButton navButtonRight" (click)="increaseFontSize()">Font +</a>
+    <a class="navButton navButtonRight" (click)="decreaseColumnCount()">Cols -</a>
+    <a class="navButton navButtonRight" (click)="increaseColumnCount()">Cols +</a>
     <div class="form-check navButton navButtonRight">
         <input id="editModeToggle" class="form-switch" type="checkbox" [checked]="isEditMode()" (change)="setEditMode(!isEditMode())">
         <label for="editModeToggle" class="form-check-label">Edit Mode</label>
@@ -19,7 +19,5 @@
     <a class="navButton navButtonRight" (click)="navigateToRandomSong()">Randomize!</a>
     <a *ngIf="isEditMode()" class="navButton navButtonRight" routerLink="/edit-song/{{getNextValidSongId()}}">Add Song</a>
 </nav>
-
-
 
 <router-outlet></router-outlet>

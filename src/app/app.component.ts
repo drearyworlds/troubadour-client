@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { LocalStorageService } from './local-storage.service';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,20 @@ import { Router } from '@angular/router';
 export class AppComponent {
   constructor(
     private localStorageService: LocalStorageService,
-    private router : Router) {
+    private router: Router) {
+  }
+
+  ngOnInit(): void {
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    };
+
+    this.router.events.subscribe((evt) => {
+      if (evt instanceof NavigationEnd) {
+        this.router.navigated = false;
+        window.scrollTo(0, 0);
+      }
+    });
   }
 
   navigateBack() {
@@ -54,11 +67,14 @@ export class AppComponent {
   }
 
   navigateToRandomSong(): void {
+    console.log("navigate to random song");
+
     let songIsActive = false;
     let randomSongId = 0;
     let songs = this.localStorageService.getSongList();
 
     if (songs) {
+      console.log("songs not null");
       while (randomSongId == 0 || !songIsActive) {
         var randomSong = songs[Math.floor(Math.random() * songs.length)]
 
@@ -68,12 +84,17 @@ export class AppComponent {
         }
       }
 
+      console.log("broke out");
+
       if (randomSongId != 0) {
-        this.router.navigate(['/lyrics', randomSongId]);
+        console.log("randomSongId is " + randomSongId);
+        this.router.navigate(['lyrics', randomSongId]);
+      } else {
+        console.log("randomSongId is 0");
       }
     }
   }
-  
+
   getNextValidSongId(): number {
     const methodName = this.getNextValidSongId.name;
     let returnValue = 0

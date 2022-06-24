@@ -14,10 +14,20 @@ app.on('activate', () => {
   }
 })
 
+function loadSongListUrl() {
+  win.loadURL(
+    url.format({
+      pathname: path.join(__dirname, `/../../dist/troubadour-client/index.html`),
+      protocol: 'file:',
+      slashes: true,
+    })
+  )
+}
+
 function createWindow() {
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    //width: 800,
+    //height: 600,
     frame: true,
     darkTheme: true,
     autoHideMenuBar: false,
@@ -27,18 +37,13 @@ function createWindow() {
 
   console.log(`__dirname: ${__dirname}`)
 
-  win.loadURL(
-    url.format({
-      pathname: path.join(__dirname, `/../../dist/troubadour-client/index.html`),
-      protocol: 'file:',
-      slashes: true,
-    })
-  )
-
-  win.webContents.setZoomFactor(2);
-  win.maximize();
+  loadSongListUrl();
+  win.webContents.on('did-fail-load', () => loadSongListUrl());
 
   win.on('closed', () => {
     win = null
   })
+
+  //win.webContents.setZoomFactor(2);
+  //win.maximize();
 }

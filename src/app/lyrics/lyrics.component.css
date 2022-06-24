@@ -9,11 +9,12 @@
 .lyrics {
   display: inline-block;
   width: 100%;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'NovaMono', 'Courier New', Courier, monospace;
   font-size: var(--default-font-size);
   overflow: visible;
   white-space: pre-wrap;
   color: rgb(144, 200, 219);
   column-count: var(--lyrics-column-count);
   column-gap: 7px;
+  line-height: 75% /*normal*/;
 }
