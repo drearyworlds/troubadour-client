@@ -6,15 +6,22 @@
   float: right;
 }
 
-.lyrics {
-  display: inline-block;
+.lyricsColumns {
   width: 100%;
-  font-family: 'NovaMono', 'Courier New', Courier, monospace;
-  font-size: var(--default-font-size);
-  overflow: visible;
-  white-space: pre-wrap;
-  color: rgb(144, 200, 219);
+  text-align: left;
+  display: inline-block;
   column-count: var(--lyrics-column-count);
-  column-gap: 7px;
-  line-height: 75% /*normal*/;
+  column-rule: 1px solid #777777;
+  column-fill: auto;
+  white-space: pre;
+  color: rgb(144, 200, 219);
+  line-height: normal;
+  /*border-style: so;*/
+  /*border: 1px 1px 1px 1px;*/
+}
+
+.lyrics {
+  font-family: 'Courier New';
+  font-size: var(--lyrics-font-size);
+  transform: scale(var(--lyrics-font-h-scale), 1);
 }

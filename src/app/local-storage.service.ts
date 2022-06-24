@@ -26,7 +26,7 @@ export class LocalStorageService {
 
   public setSongList(songList: Song[]) {
     var songListJson = JSON.stringify(songList);
-    console.log(songListJson);
+    //console.log(songListJson);
     localStorage.setItem('songList', songListJson);
   }
 }

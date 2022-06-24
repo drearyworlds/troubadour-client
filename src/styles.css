@@ -3,7 +3,8 @@
 /* Application-wide variables */
 
 :root {
-  --default-font-size: 44px;
+  --lyrics-font-size: 24px;
+  --lyrics-font-h-scale: 0.8;
   --lyrics-column-count: 3;
 }
 

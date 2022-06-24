@@ -39,17 +39,31 @@ export class AppComponent {
   }
 
   private modifyFontSize(amount: number) {
-    let fontSize = getComputedStyle(document.documentElement).getPropertyValue('--default-font-size');
+    let fontSize = getComputedStyle(document.documentElement).getPropertyValue('--lyrics-font-size');
     fontSize = `${+(fontSize.slice(0, -2)) + amount}px`;
-    document.documentElement.style.setProperty('--default-font-size', fontSize);
+    document.documentElement.style.setProperty('--lyrics-font-size', fontSize);
   }
-
+ 
   increaseFontSize() {
     this.modifyFontSize(1);
   }
 
   decreaseFontSize() {
     this.modifyFontSize(-1);
+  }
+
+  private modifyFontHScale(amount: number) {
+    let fontHScale = getComputedStyle(document.documentElement).getPropertyValue('--lyrics-font-h-scale');
+    fontHScale = `${+fontHScale + amount}`;
+    document.documentElement.style.setProperty('--lyrics-font-h-scale', fontHScale);
+  }
+  
+  increaseFontHScale() {
+    this.modifyFontHScale(0.05);
+  }
+
+  decreaseFontHScale() {
+    this.modifyFontHScale(-0.05);
   }
 
   private modifyColumnCount(amount: number) {
