@@ -118,7 +118,7 @@ export class AppComponent {
     if (songs) {
       for (let song of songs) {
         if (song.id > returnValue) {
-          returnValue = song.id;
+          returnValue = song.id + 1;
         }
       }
     }
